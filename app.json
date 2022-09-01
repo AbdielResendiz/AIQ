@@ -7,16 +7,20 @@
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/image/LogoAIQ.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
+    "privacy": "unlisted",
     "updates": {
       "fallbackToCacheTimeout": 0
     },
     "assetBundlePatterns": [
       "**/*"
     ],
+    "notification": {
+			"icon": "./assets/icon.png"
+		},
     "ios": {
       "supportsTablet": true
     },
@@ -28,6 +32,7 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "description": ""
   }
 }

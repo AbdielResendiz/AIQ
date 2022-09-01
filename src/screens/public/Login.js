@@ -1,0 +1,226 @@
+import React, { useState } from 'react';
+import { 	
+    Button,
+	Text,
+	Input,
+	ScrollView,
+	Box,
+	Image,
+	Stack,
+	FormControl,
+	useToast,
+} from 'native-base'
+import { FontAwesome, MaterialIcons } from '@expo/vector-icons';
+import coloresAIQ from '../../styles/coloresAIQ';
+import Procesando from '../components/Procesando';
+
+
+const Login = (props) => {
+    const toast = useToast();
+	const [usuario, setUsuario] = useState('');
+    const borraUser = () => setUsuario('');
+	const [contrasena, setContrasena] = useState('');
+	const [show, setShow] = useState(false);
+	const handleClick = () => setShow(!show);
+	const [cargando, setCargando] = useState(false);
+	const [validoC, setValidoC] = useState(false);
+	const [validoP, setValidoP] = useState(false);
+	const cambioC = () => setValidoC(false);
+	const cambioP = () => setValidoP(false);
+
+    const validarDatos = async () => {
+		if (usuario.length == 0) {
+			setValidoC(true);
+			setUsuario('');
+			return;
+		}
+
+		if (
+			contrasena.length == 0
+		) {
+			setValidoP(true);
+			setContrasena('');
+			return;
+		}
+
+		setCargando(true);
+
+		try {
+			if (usuario !== "01" || contrasena !== "123") {
+				toast.show({
+					status: 'warning',
+					description: "Mesa o contraseña erroneo",
+					placement: 'top',
+				});
+			}
+			if (usuario == "01" && contrasena == "123") {
+				props.navigation.navigate('InicioAds');
+			}
+			setUsuario('');
+			setContrasena('');
+			setCargando(false);
+
+		} catch (e) {			
+			toast.show({
+				status: 'warning',
+				description: "Error, favor de intentarlo más tarde",
+				placement: 'top',
+			});
+			setUsuario('');
+			setContrasena('');
+			setCargando(false);
+		}
+	};
+  return (
+    <>
+    {cargando ? <Procesando /> : null}
+        <ScrollView margin={5} marginTop={1}>
+            {/* Logo */}
+            <Box flex={1}>
+                <Image
+                    source={require('../../../assets/image/LogoAIQ.png')}
+                    alignContent={'center'}
+                    alignSelf={'center'}
+                    resizeMode='center'
+                    alt='AIQ'
+                    size={'2xl'}/>
+            </Box>
+            {/* Text: Indicaciones */}
+            <Box flex={1}>
+                <Text
+                    mt={2}
+                    fontSize='md'
+                    fontFamily='body'
+                    alignSelf='center'
+                    textDecorationLine='underline'
+                    color={coloresAIQ.negro}>
+                    Vincular dispositivo con una mesa
+                </Text>
+            </Box>
+
+            {/* Input Mesa */}
+            <FormControl isInvalid={validoC}>
+                <Stack>
+                    <Text
+                        mt={8}
+                        fontSize='md'
+                        fontFamily='body'
+                        fontWeight={'bold'}
+                        color={coloresAIQ.azulOscuroAIQ}>
+                        MESA
+                    </Text>
+                    <Input
+                        rounded={12}
+                        variant='outline'
+                        placeholder='Escribe el número de mesa'
+                        fontFamily='body'
+                        keyboardType='default'
+                        autoCapitalize='none'
+                        autoCorrect={false}
+                        InputRightElement={(
+                            <Button
+                            ml={1}
+                            variant='link'
+                            roundedLeft={0}
+                            roundedRight='md'
+                            onPress={borraUser}
+                            _pressed={{
+                                bg: coloresAIQ.grisClaroAiq,
+                            }}>
+                            <MaterialIcons
+                                name='cancel'
+                                size={20}
+                                color={coloresAIQ.grisOscuroAIQ}
+                            />
+                        </Button>
+                        )}
+                        value={usuario}
+                        onChangeText={(val) =>
+                            setUsuario(val)
+                        }
+                        onChange={cambioC}
+                    />
+                    <FormControl.ErrorMessage>
+                        Ingresa una mesa valida.
+                    </FormControl.ErrorMessage>
+                </Stack>
+            </FormControl>
+            
+            {/* Input Password */}
+            <FormControl isInvalid={validoP}>
+                <Stack>
+                    <Text
+                        mt={8}
+                        fontSize='md'
+                        fontFamily='body'
+                        fontWeight={'bold'}
+                        color={coloresAIQ.azulOscuroAIQ}>
+                        CONTRASEÑA
+                    </Text>
+                    <Input
+                        rounded={12}
+                        fontFamily='body'
+                        type={
+                            show ? 'text' : 'password'
+                        }
+                        InputRightElement={
+                            <Button
+                                ml={1}
+                                variant='link'
+                                roundedLeft={0}
+                                roundedRight='md'
+                                onPress={handleClick}
+                                _pressed={{
+                                    bg: coloresAIQ.grisClaroAiq,
+                                }}>
+                                {show ? (
+                                    <FontAwesome
+                                        name='eye-slash'
+                                        size={20}
+                                        color={coloresAIQ.grisOscuroAIQ}
+                                    />
+                                ) : (
+                                    <FontAwesome
+                                        name='eye'
+                                        size={20}
+                                        color={coloresAIQ.grisOscuroAIQ}
+                                    />
+                                )}
+                            </Button>
+                        }
+                        placeholder='Escribe tu contraseña'
+                        value={contrasena}
+                        onChangeText={(val) =>
+                            setContrasena(val)
+                        }
+                        onChange={cambioP}
+                    />
+                    <FormControl.ErrorMessage>
+                        Ingresa una contraseña valida.
+                    </FormControl.ErrorMessage>
+                </Stack>
+            </FormControl>
+            
+            {/* Boton Vincular */}
+            <Button
+                bg={coloresAIQ.azulAIQ}
+                mt='10'
+                size='lg'
+                borderRadius={32}
+                onPress={validarDatos}
+                _pressed={{
+                    bg: coloresAIQ.azulBtn}}>
+                <Text
+                    color={coloresAIQ.blanco}
+                    fontSize='md'
+                    fontFamily='body'>
+                    VINCULAR
+                </Text>
+            </Button>
+
+        </ScrollView>
+    </>
+  )
+}
+
+export default Login
