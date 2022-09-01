@@ -23,6 +23,7 @@ import {
 import Login from './src/screens/public/Login';
 import InicioAds from './src/screens/private/InicioAds';
 import GeneralTab from './src/screens/private/GeneralTab';
+import Menu from './src/screens/private/Menu';
 import coloresAIQ from './src/styles/coloresAIQ';
 
 const Stack = createStackNavigator();
@@ -47,7 +48,9 @@ const App = () => {
 		Nunito_900Black_Italic,
 	});
 
-  const theme = extendTheme({
+  if (!fontsLoaded) {
+		return null;
+	} else {const theme = extendTheme({
     fonts: {
       heading: 'Nunito_700Bold',
       body: 'Nunito_400Regular',
@@ -100,10 +103,18 @@ const App = () => {
             }}
             component={GeneralTab}
           />
+
+          <Stack.Screen
+            name='Menu'
+            options={{
+              title: 'Menu',
+            }}
+            component={Menu}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     </NativeBaseProvider>
-  );
+  );}
 };
 
 export default App;
