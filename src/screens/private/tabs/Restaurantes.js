@@ -228,7 +228,7 @@ const Restaurantes = (props) => {
                         onPress={() => menu(item.nombre, item.desc, item.imagen)}>
                         <Image
                           borderRadius={6}
-                          source={require('../../../../assets/Logos/logoStarbucks.png')}
+                          source={{require: item.imagen}}
                           alt='Restaurante'
                           style={{
                             width: '100%',

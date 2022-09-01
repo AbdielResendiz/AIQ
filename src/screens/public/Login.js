@@ -74,7 +74,7 @@ const Login = (props) => {
   return (
     <>
     {cargando ? <Procesando /> : null}
-        <ScrollView margin={5} marginTop={1}>
+        <ScrollView margin={5} marginTop={1} showsVerticalScrollIndicator={false}>
             {/* Logo */}
             <Box flex={1}>
                 <Image
