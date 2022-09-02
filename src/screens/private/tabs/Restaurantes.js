@@ -160,7 +160,7 @@ const Restaurantes = (props) => {
             <Center w='53%' h={8}>
               <Flex direction='row'>
                 <Text
-                  fontSize={24}
+                  fontSize={26}
                   fontFamily='heading'
                   colorScheme={coloresAIQ.negro}>
                   Restaurantes:

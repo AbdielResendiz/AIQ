@@ -1,11 +1,13 @@
 import React, {useState} from 'react'
-import { View, Text, Center, Image, ScrollView, Button, Icon } from 'native-base'
-import {MaterialCommunityIcons} from '@expo/vector-icons'
+import { View, Text, Center, Image, ScrollView, Button, Box, Flex, } from 'native-base'
+import {MaterialCommunityIcons, FontAwesome} from '@expo/vector-icons'
 import coloresAIQ from '../../styles/coloresAIQ'
 import { TextInput } from 'react-native'
 
 const Producto = (props) => {
-  const [comentario, setComentario] = useState('')
+  const [comentario, setComentario] = useState('');
+  const [cantP, setCantp] = useState(1);
+
   const nomProd = props.route.params.nombre
   const precio = props.route.params.precio
   const desc = props.route.params.desc
@@ -16,12 +18,27 @@ const Producto = (props) => {
       comentario: comentario
     });
   }
+  // control spinner cantidad
+  const disminCarrito = async () => {
+    if (cantP <= 1) {
+      setCantp(1);
+    } else {
+      setCantp(cantP - 1);
+    }
+  };
+
+  const upCarrito = async () => {
+    if (cantP >= 9) {
+    } else {
+      setCantp(cantP + 1);
+    }
+  };
   return (
     <ScrollView
       flex={1}
       style={{backgroundColor: coloresAIQ.amarilloFood}}>
         {/* Imagen Producto */}
-        <Center paddingTop={3}>
+        <Center paddingTop={4}>
             <Image
                 style={{
                 resizeMode: "cover",
@@ -93,7 +110,8 @@ const Producto = (props) => {
                     textAlignVertical: 'top', 
                     borderWidth: 1.5, 
                     borderColor: coloresAIQ.grisOscuroAIQ,
-                    borderRadius: 8
+                    borderRadius: 8,
+                    backgroundColor: coloresAIQ.blanco
                  }}
                 numberOfLines={4}
                 placeholder="Escribe tus comentarios"
@@ -102,8 +120,64 @@ const Producto = (props) => {
                 onChangeText={(val) => setComentario(val)}
             />
         </View>
+        {/* Input spinner cantidad */}
+        <Box w='50%' alignContent='center' marginLeft={8} marginTop={3}>
+          <Text                 
+            fontSize={18}
+            fontFamily='body'
+            fontWeight={'bold'}
+            color={coloresAIQ.negro}>
+              Cantidad:
+          </Text>
+          <Flex direction={"row"} alignItems='flex-start'>
+            <Button
+              bg={coloresAIQ.cafeFood}
+              h={12}
+              style={{
+                borderTopRightRadius: 0,
+                borderBottomRightRadius: 0,
+                width: 50,
+              }}
+              startIcon={
+                <FontAwesome
+                  name='minus'
+                  color={coloresAIQ.blanco}
+                />
+              }
+              _pressed={{ bg: coloresAIQ.cafeClaroFood}}
+              onPress={disminCarrito}
+            />
+            <Text
+              h={12}
+              w={10}
+              bg={coloresAIQ.cafeFood}
+              fontSize={"md"}
+              style={{ textAlignVertical: "center", textAlign: "center" }}
+              color={coloresAIQ.blanco}
+            >
+              {cantP}
+            </Text>
+            <Button
+              h={12}
+              bg={coloresAIQ.cafeFood}
+              style={{
+                borderTopLeftRadius: 0,
+                borderBottomLeftRadius: 0,
+                width: 50,
+              }}
+              endIcon={
+                <FontAwesome
+                  name='plus'
+                  color={coloresAIQ.blanco}
+                />
+              }
+              _pressed={{ bg: coloresAIQ.cafeClaroFood }}
+              onPress={upCarrito}
+            />
+          </Flex>
+        </Box>
         {/* btn AddCarrito */}
-        <Center>
+        <Center marginY={4}>
             <Button
                 leftIcon={<MaterialCommunityIcons
                     name='cart-plus'

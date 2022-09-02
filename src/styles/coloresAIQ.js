@@ -16,6 +16,7 @@ const coloresAIQ = StyleSheet.create({
     naranjaBtnFood: '#EF4B04',
     cremaFood: '#FFEFCF',
     cafeFood: '#864000',
+    cafeClaroFood: '#A04C00'
 
 })
 
