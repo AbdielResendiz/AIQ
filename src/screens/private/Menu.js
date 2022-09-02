@@ -30,7 +30,7 @@ const Menu = (props) => {
       idRes: 1,
       nombre: "Capuchino",
       desc: "Cafe caliente",
-      precio: 100.00,
+      precio: "100.00",
       tiempo: 30,
       imagen: '../../../assets/Alimentos/cafe.jpeg'
     },
@@ -38,7 +38,7 @@ const Menu = (props) => {
       idRes: 2,
       nombre: "Frappe",
       desc: "Cafe frio",
-      precio: 100.00,
+      precio: "100.00",
       tiempo: 30,
       imagen: '../../../assets/Alimentos/cafe.jpeg'
     },
@@ -46,7 +46,7 @@ const Menu = (props) => {
       idRes: 3,
       nombre: "Expresso",
       desc: "Cafe caliente",
-      precio: 80.00,
+      precio: "80.00",
       tiempo: 30,
       imagen: '../../../assets/Alimentos/cafe.jpeg'
     },
@@ -54,7 +54,7 @@ const Menu = (props) => {
       idRes: 4,
       nombre: "Té",
       desc: "Bebida caliente",
-      precio: 80.00,
+      precio: "80.00",
       tiempo: 30,
       imagen: '../../../assets/Alimentos/cafe.jpeg'
     },
@@ -62,7 +62,7 @@ const Menu = (props) => {
       idRes: 5,
       nombre: "Frape Moca",
       desc: "Frappe frio, elegir leche entera o light",
-      precio: 130.00,
+      precio: "130.00",
       tiempo: 30,
       imagen: '../../../assets/Alimentos/cafe.jpeg'
     },
@@ -70,7 +70,7 @@ const Menu = (props) => {
       idRes: 6,
       nombre: "Americano",
       desc: "Cafe caliente",
-      precio: 130.00,
+      precio: "130.00",
       tiempo: 30,
       imagen: '../../../assets/Alimentos/cafe.jpeg'
     },
@@ -81,7 +81,7 @@ const Menu = (props) => {
       idRes: 1,
       nombre: "Hamburgueza",
       desc: "Con lechuga y carne de res",
-      precio: 100.00,
+      precio: "100.00",
       tiempo: 30,
       imagen: '../../../assets/Alimentos/comida.jpeg'
     },
@@ -89,7 +89,7 @@ const Menu = (props) => {
       idRes: 2,
       nombre: "Pizza",
       desc: "Pepperonni o Jamón",
-      precio: 100.00,
+      precio: "100.00",
       tiempo: 30,
       imagen: '../../../assets/Alimentos/comida.jpeg'
     },
@@ -97,7 +97,7 @@ const Menu = (props) => {
       idRes: 3,
       nombre: "Enchiladas",
       desc: "Rojas o verdes",
-      precio: 80.00,
+      precio: "80.00",
       tiempo: 30,
       imagen: '../../../assets/Alimentos/comida.jpeg'
     },
@@ -105,7 +105,7 @@ const Menu = (props) => {
       idRes: 4,
       nombre: "Taco",
       desc: "Pastor",
-      precio: 80.00,
+      precio: "80.00",
       tiempo: 30,
       imagen: '../../../assets/Alimentos/comida.jpeg'
     },
@@ -113,7 +113,7 @@ const Menu = (props) => {
       idRes: 5,
       nombre: "Baguette",
       desc: "Verduras frescas",
-      precio: 130.00,
+      precio: "130.00",
       tiempo: 30,
       imagen: '../../../assets/Alimentos/comida.jpeg'
     },
@@ -121,7 +121,7 @@ const Menu = (props) => {
       idRes: 6,
       nombre: "Rebanada de pastel",
       desc: "Sabor Chocolate",
-      precio: 130.00,
+      precio: "130.00",
       tiempo: 30,
       imagen: '../../../assets/Alimentos/comida.jpeg'
     },
@@ -132,7 +132,7 @@ const Menu = (props) => {
       idRes: 1,
       nombre: "Hamburguesa con papas y refresco",
       desc: "elegir: Cocacola, Fanta o Mundet",
-      precio: 100.00,
+      precio: "100.00",
       tiempo: 30,
       imagen: '../../../assets/Alimentos/combo.jpeg'
     },
@@ -140,7 +140,7 @@ const Menu = (props) => {
       idRes: 2,
       nombre: "Dos rebanadas pizzas",
       desc: "Pepperonni o Jamón",
-      precio: 100.00,
+      precio: "100.00",
       tiempo: 30,
       imagen: '../../../assets/Alimentos/combo.jpeg'
     },
@@ -148,7 +148,7 @@ const Menu = (props) => {
       idRes: 3,
       nombre: "Enchiladas y postre",
       desc: "Rojas o verdes",
-      precio: 80.00,
+      precio: "80.00",
       tiempo: 30,
       imagen: '../../../assets/Alimentos/combo.jpeg'
     },
@@ -156,7 +156,7 @@ const Menu = (props) => {
       idRes: 4,
       nombre: "orden 5 tacos",
       desc: "Pastor",
-      precio: 80.00,
+      precio: "80.00",
       tiempo: 30,
       imagen: '../../../assets/Alimentos/combo.jpeg'
     },
@@ -164,7 +164,7 @@ const Menu = (props) => {
       idRes: 5,
       nombre: "Baguette con galleta",
       desc: "Verduras frescas",
-      precio: 130.00,
+      precio: "130.00",
       tiempo: 30,
       imagen: '../../../assets/Alimentos/combo.jpeg'
     },
@@ -172,7 +172,7 @@ const Menu = (props) => {
       idRes: 6,
       nombre: "Rebanada de pastel y malteada",
       desc: "Sabor Chocolate",
-      precio: 130.00,
+      precio: "130.00",
       tiempo: 30,
       imagen: '../../../assets/Alimentos/combo.jpeg'
     },
@@ -379,7 +379,7 @@ const Menu = (props) => {
                         }}>
                             <TouchableOpacity
                             onPress={() => {
-                                detalleProducto(item.idRes);
+                              detalleProducto(item.idRes, item.nombre, item.desc, item.precio, item.imagen, item.tiempo);
                             }}><Flex direction='row'>
                                 <Image
                                 style={{
@@ -433,7 +433,7 @@ const Menu = (props) => {
                         }}>
                             <TouchableOpacity
                             onPress={() => {
-                                detalleProducto(item.idRes);
+                              detalleProducto(item.idRes, item.nombre, item.desc, item.precio, item.imagen, item.tiempo);
                             }}><Flex direction='row'>
                                 <Image
                                 style={{

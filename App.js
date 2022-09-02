@@ -24,6 +24,7 @@ import Login from './src/screens/public/Login';
 import InicioAds from './src/screens/private/InicioAds';
 import GeneralTab from './src/screens/private/GeneralTab';
 import Menu from './src/screens/private/Menu';
+import Producto from './src/screens/private/Producto';
 import coloresAIQ from './src/styles/coloresAIQ';
 
 const Stack = createStackNavigator();
@@ -107,10 +108,19 @@ const App = () => {
           <Stack.Screen
             name='Menu'
             options={{
-              title: 'Menu',
+              title: 'MENU',
             }}
             component={Menu}
           />
+
+          <Stack.Screen
+            name='Producto'
+            options={{
+              title: 'PRODUCTO',
+            }}
+            component={Producto}
+          />
+
         </Stack.Navigator>
       </NavigationContainer>
     </NativeBaseProvider>
