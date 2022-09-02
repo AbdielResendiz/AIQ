@@ -3,17 +3,17 @@ import coloresAIQ from "./coloresAIQ";
 
 const estilosAIQ = StyleSheet.create({
     textCategoriasSelect: {
-      color: coloresAIQ.azulAIQ,
-      fontSize: 18,
+      color: coloresAIQ.naranjaOscuroFood,
+      fontSize: 16,
       fontWeight: 'bold',
       textAlign: 'center',
       textShadowColor: 'gray',
-      textShadowOffset: {width: -1, height: 1},
-      textShadowRadius: 2
+      textShadowOffset: {width: -0.5, height: 1},
+      textShadowRadius: 1
     },
     textCategorias: {
       color: 'gray',
-      fontSize: 18,
+      fontSize: 16,
       fontWeight: 'bold',
       textAlign: 'center',
     },
@@ -39,7 +39,21 @@ const estilosAIQ = StyleSheet.create({
       color: coloresAIQ.blanco, 
       fontWeight: '600', 
       fontSize: 18
-    }
+    },
+    containerCategorias: {
+      marginTop: 12,
+      marginHorizontal: 12,
+      textAlign: 'center',
+      alignItems: 'center',
+      flexDirection: 'row',
+      justifyContent: 'center'
+    },
+    textUps: {
+      color: coloresAIQ.naranjaOscuroFood,
+      fontSize: 20,
+      fontWeight: 'normal',
+      textAlign: 'center',
+    },
 })
 
 export default estilosAIQ
