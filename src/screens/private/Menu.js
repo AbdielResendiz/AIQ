@@ -199,7 +199,7 @@ const Menu = (props) => {
   return (
     <>
       {cargando ? <Procesando /> : null}
-      <SafeAreaView flex={1} style={{backgroundColor: coloresAIQ.amarilloFood}}>
+      <SafeAreaView flex={1}>
             {/* Datos restaurante */}
             <Box>
                 <Center paddingTop={3}>
@@ -348,7 +348,7 @@ const Menu = (props) => {
                                 <Text
                                 fontFamily='heading'
                                 fontSize='xl'
-                                color={coloresAIQ.naranjaOscuroFood}>
+                                color={coloresAIQ.azulOscuroAIQ}>
                                 {item.nombre}
                                 </Text>
                                 {/* Costo de platillo */}
@@ -402,7 +402,7 @@ const Menu = (props) => {
                                 <Text
                                 fontFamily='heading'
                                 fontSize='xl'
-                                color={coloresAIQ.naranjaOscuroFood}>
+                                color={coloresAIQ.azulOscuroAIQ}>
                                 {item.nombre}
                                 </Text>
                                 {/* Costo de platillo */}
@@ -456,7 +456,7 @@ const Menu = (props) => {
                                 <Text
                                 fontFamily='heading'
                                 fontSize='xl'
-                                color={coloresAIQ.naranjaOscuroFood}>
+                                color={coloresAIQ.azulOscuroAIQ}>
                                 {item.nombre}
                                 </Text>
                                 {/* Costo de platillo */}

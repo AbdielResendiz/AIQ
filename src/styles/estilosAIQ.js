@@ -3,7 +3,7 @@ import coloresAIQ from "./coloresAIQ";
 
 const estilosAIQ = StyleSheet.create({
     textCategoriasSelect: {
-      color: coloresAIQ.naranjaOscuroFood,
+      color: coloresAIQ.azulOscuroAIQ,
       fontSize: 16,
       fontWeight: 'bold',
       textAlign: 'center',

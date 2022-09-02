@@ -1,7 +1,6 @@
 import React from 'react';
 import { TouchableOpacity, Text, View} from 'react-native';
 import estilosAIQ from '../../styles/estilosAIQ';
-import coloresAIQ from '../../styles/coloresAIQ';
 
 const InicioAds = (props) => {
   return (

@@ -34,9 +34,7 @@ const Producto = (props) => {
     }
   };
   return (
-    <ScrollView
-      flex={1}
-      style={{backgroundColor: coloresAIQ.amarilloFood}}>
+    <ScrollView flex={1}>
         {/* Imagen Producto */}
         <Center paddingTop={4}>
             <Image
@@ -61,7 +59,7 @@ const Producto = (props) => {
             <Text                   
               fontSize={20}
               fontFamily='heading'
-              color={coloresAIQ.naranjaOscuroFood}>
+              color={coloresAIQ.azulOscuroAIQ}>
                 ${precio}
             </Text>
         </Center>
@@ -131,7 +129,7 @@ const Producto = (props) => {
           </Text>
           <Flex direction={"row"} alignItems='flex-start'>
             <Button
-              bg={coloresAIQ.cafeFood}
+              bg={coloresAIQ.azulOscuroAIQ}
               h={12}
               style={{
                 borderTopRightRadius: 0,
@@ -144,13 +142,13 @@ const Producto = (props) => {
                   color={coloresAIQ.blanco}
                 />
               }
-              _pressed={{ bg: coloresAIQ.cafeClaroFood}}
+              _pressed={{ bg: coloresAIQ.azulBtn}}
               onPress={disminCarrito}
             />
             <Text
               h={12}
               w={10}
-              bg={coloresAIQ.cafeFood}
+              bg={coloresAIQ.azulOscuroAIQ}
               fontSize={"md"}
               style={{ textAlignVertical: "center", textAlign: "center" }}
               color={coloresAIQ.blanco}
@@ -159,7 +157,7 @@ const Producto = (props) => {
             </Text>
             <Button
               h={12}
-              bg={coloresAIQ.cafeFood}
+              bg={coloresAIQ.azulOscuroAIQ}
               style={{
                 borderTopLeftRadius: 0,
                 borderBottomLeftRadius: 0,
@@ -171,7 +169,7 @@ const Producto = (props) => {
                   color={coloresAIQ.blanco}
                 />
               }
-              _pressed={{ bg: coloresAIQ.cafeClaroFood }}
+              _pressed={{ bg: coloresAIQ.azulBtn }}
               onPress={upCarrito}
             />
           </Flex>
@@ -183,14 +181,14 @@ const Producto = (props) => {
                     name='cart-plus'
                     size={24}
                     color={coloresAIQ.blanco}/>}
-                bg={coloresAIQ.naranjaOscuroFood}
+                bg={coloresAIQ.azulAIQ}
                 mt='3'
                 width={250}
                 height={55}
                 borderRadius={32}
                 onPress={() => {enviaDatos(comentario)}}
                 _pressed={{
-                    bg: coloresAIQ.naranjaOscuroFood}}>
+                    bg: coloresAIQ.azulBtn}}>
                 <Text
                     color={coloresAIQ.blanco}
                     fontSize='md'

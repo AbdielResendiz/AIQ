@@ -39,7 +39,7 @@ const Carrito = (props) => {
     },
   ];
   return (
-    <View flex={1} style={{backgroundColor: coloresAIQ.amarilloFood}}>
+    <View flex={1}>
       {/* Titulo: Carrito */}
       <Text
         paddingX={4}
@@ -84,7 +84,7 @@ const Carrito = (props) => {
                         <Text
                         fontFamily='heading'
                         fontSize='xl'
-                        color={coloresAIQ.naranjaOscuroFood}>
+                        color={coloresAIQ.azulOscuroAIQ}>
                         {item.nombre}
                         </Text>
                         {/* Costo de platillo */}
