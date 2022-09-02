@@ -26,7 +26,7 @@ const estilosAIQ = StyleSheet.create({
       justifyContent: 'center'
     },
     botonTouch: {
-      backgroundColor: coloresAIQ.naranjaOscuroFood,
+      backgroundColor: coloresAIQ.azulAIQ,
       margin: 24,
       textAlign: 'center',
       padding:16,

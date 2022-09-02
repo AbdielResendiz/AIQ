@@ -24,23 +24,6 @@ const GeneralTab = (props) => {
     })}>
       <Tab.Screen
 				options={{
-					title: 'SELECCIONAR',
-					tabBarIcon: (tabProps) => {
-						return (
-							<FontAwesome5
-								name='utensils'
-								size={23}
-								color={tabProps.color}
-							/>
-						);
-					},
-				}}
-				name='Restaurantes'
-				component={Restaurantes}
-			/>
-
-      <Tab.Screen
-				options={{
 					title: 'CARRITO',
 					tabBarIcon: (tabProps) => (
 						<Fontisto
