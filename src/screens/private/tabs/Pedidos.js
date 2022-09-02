@@ -36,13 +36,13 @@ const Pedidos = () => {
       {foods.map((food, index) => (
         <View key={index}>
              <View style={styles.cardView}>
-              <View style={{flexDirection:'column'}}> 
-                  <Text style={{textTransform: 'uppercase', color:'#07B83A'}} >Humedad:
+                 <View style={{flexDirection:'row'}}> 
+                  <Text style={{textTransform: 'uppercase', color:'#07B83A'}} >
                   {food.description}</Text>  
-                   <Text style={{textTransform: 'uppercase', color:'#07B83A'}} >temperatura:
-                    {props.price}</Text>          
-                         </View>    
-                </View>
+                   <Text style={{textTransform: 'uppercase', color:'#07B83A'}} >
+                    {food.price}</Text>          
+                </View>    
+               </View>
           <Divider width={0.5} />
         </View>
       ))}
