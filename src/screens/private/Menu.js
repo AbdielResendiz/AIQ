@@ -4,7 +4,6 @@ import { Box, Center, Image, Text, Flex } from 'native-base';
 import coloresAIQ from '../../styles/coloresAIQ';
 import estilosAIQ from '../../styles/estilosAIQ';
 import Procesando from '../components/Procesando';
-import { Item } from '@react-stately/collections';
 
 const wait = (timeout) => {
     return new Promise((resolve) => setTimeout(resolve, timeout));
@@ -412,7 +411,7 @@ const Menu = (props) => {
                                 color={coloresAIQ.grisAIQ}
                                 fontSize='md'
                                 fontFamily='body'>
-                                $ {item.precio}
+                                costo: ${item.precio}
                                 </Text>
                                 </Box>
                             </Flex></TouchableOpacity>
@@ -466,7 +465,7 @@ const Menu = (props) => {
                                 color={coloresAIQ.grisAIQ}
                                 fontSize='md'
                                 fontFamily='body'>
-                                $ {item.precio}
+                                costo: ${item.precio}
                                 </Text>
                                 </Box>
                             </Flex></TouchableOpacity>

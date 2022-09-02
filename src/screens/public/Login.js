@@ -78,7 +78,7 @@ const Login = (props) => {
             {/* Logo */}
             <Box flex={1}>
                 <Image
-                    source={require('../../../assets/image/LogoAIQ.png')}
+                    source={require('../../../assets/image/AIQ.png')}
                     alignContent={'center'}
                     alignSelf={'center'}
                     resizeMode='center'

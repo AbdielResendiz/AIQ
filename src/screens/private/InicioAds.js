@@ -9,11 +9,10 @@ const InicioAds = (props) => {
         flex: 1,
         flexDirection: 'column',
         justifyContent: 'center',
-        backgroundColor: coloresAIQ.amarilloFood
     }}>
         <TouchableOpacity 
             style={estilosAIQ.botonTouch}
-            onPress={() => {props.navigation.navigate('GeneralTab')}}>
+            onPress={() => {props.navigation.navigate('Restaurante')}}>
             <Text style={estilosAIQ.textBtn}>Ver restaurantes</Text>
         </TouchableOpacity>
     </View>

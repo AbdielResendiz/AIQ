@@ -81,13 +81,13 @@ const Restaurantes = (props) => {
       idRes: 7,
       nombre: "Prueba1",
       desc: "Pizzas",
-      imagen: '../../../../assets/Logos/logoHKG.jpeg'
+      imagen: '/assets/Logos/1.png'
     },
     {
       idRes: 8,
       nombre: "Prueba2",
       desc: "Hamburguesas",
-      imagen: '../../../../assets/Logos/logoHKG.jpeg'
+      imagen: "require('../../../../assets/Logos/logoStarbucks.png')"
     },
   ];
 
@@ -105,7 +105,7 @@ const Restaurantes = (props) => {
 
   return (
     <>
-      {cargando ? <Procesando /> : null}
+      {cargando ? <Procesando /> : null}   
       <SafeAreaView flex={1} flexDirection={'column'} style={{backgroundColor: coloresAIQ.amarilloFood}}>
         {/* Scroll anuncios */}
         <ScrollView 
@@ -160,7 +160,7 @@ const Restaurantes = (props) => {
             <Center w='53%' h={8}>
               <Flex direction='row'>
                 <Text
-                  fontSize={24}
+                  fontSize={26}
                   fontFamily='heading'
                   colorScheme={coloresAIQ.negro}>
                   Restaurantes:
@@ -228,7 +228,7 @@ const Restaurantes = (props) => {
                         onPress={() => menu(item.nombre, item.desc, item.imagen)}>
                         <Image
                           borderRadius={6}
-                          source={{require: item.imagen}}
+                          source={require('../../../../assets/Logos/logoStarbucks.png')}
                           alt='Restaurante'
                           style={{
                             width: '100%',
