@@ -1,6 +1,8 @@
 import React, {useState, useEffect, useCallback} from 'react'
 import { SafeAreaView, ScrollView, TouchableOpacity } from 'react-native';
 import { Box, Center, Image, Text, Flex } from 'native-base';
+import { FAB } from 'react-native-elements';
+import { AntDesign } from '@expo/vector-icons';
 import coloresAIQ from '../../styles/coloresAIQ';
 import estilosAIQ from '../../styles/estilosAIQ';
 import Procesando from '../components/Procesando';
@@ -186,6 +188,11 @@ const Menu = (props) => {
       nomRes: restaurante
     });
   };
+  const enviaDatos = async (nombreRes) => {
+    props.navigation.navigate("Carrito", {
+      nombreRes: nombreRes
+    });
+  }
 
   const navCategoria = ((tipCat) => {
     setCategoria(tipCat)
@@ -466,6 +473,12 @@ const Menu = (props) => {
                 })) : (null)}
               </Box>
             </ScrollView>
+            <FAB
+                placement='right'
+                color={coloresAIQ.azulAIQ}
+                onPress={() => {enviaDatos(idRest)}}
+                icon={<AntDesign name="shoppingcart" size={24} color={coloresAIQ.blanco}/>}
+              />
       </SafeAreaView>
     </>
   )
