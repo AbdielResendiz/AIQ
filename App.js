@@ -28,6 +28,7 @@ import Restaurantes from './src/screens/private/tabs/Restaurantes';
 import Carrito from './src/screens/private/tabs/Carrito';
 import Pedidos from './src/screens/private/tabs/Pedidos';
 import MetodoPago from './src/screens/private/MetodoPago';
+import ConfirmarPedido from './src/screens/private/ConfirmarPedido';
 import coloresAIQ from './src/styles/coloresAIQ';
 
 const Stack = createStackNavigator();
@@ -100,7 +101,7 @@ const App = () => {
           <Stack.Screen
             name='Menu'
             options={{
-              title: 'MENU',
+              title: 'MENÚ',
             }}
             component={Menu}
           />
@@ -135,6 +136,14 @@ const App = () => {
               title: 'METODO DE PAGO',
             }}
             component={MetodoPago}
+          />
+
+          <Stack.Screen
+            name='ConfirmaPedido'
+            options={{
+              title: 'CONFIRMA PEDIDO',
+            }}
+            component={ConfirmarPedido}
           />
 
           <Stack.Screen
