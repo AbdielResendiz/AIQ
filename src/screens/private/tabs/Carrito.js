@@ -4,6 +4,7 @@ import coloresAIQ from '../../../styles/coloresAIQ'
 import { ScrollView, TouchableOpacity } from 'react-native'
 
 const Carrito = (props) => {
+
   const arrCombos = [
     {
       idRes: 1,
@@ -38,6 +39,7 @@ const Carrito = (props) => {
       imagen: '../../../../assets/Alimentos/combo.jpeg'
     },
   ];
+  
   return (
     <View flex={1}>
       {/* Titulo: Carrito */}
@@ -64,7 +66,7 @@ const Carrito = (props) => {
                 }}>
                     <TouchableOpacity
                     onPress={() => {
-                      detalleProducto(item.idRes, item.nombre, item.desc, item.precio, item.imagen, item.tiempo);
+                      props.navigation.navigate('MetodoPago');
                     }}><Flex direction='row'>
                         <Image
                         style={{

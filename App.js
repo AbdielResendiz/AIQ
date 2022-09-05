@@ -27,6 +27,7 @@ import Producto from './src/screens/private/Producto';
 import Restaurantes from './src/screens/private/tabs/Restaurantes';
 import Carrito from './src/screens/private/tabs/Carrito';
 import Pedidos from './src/screens/private/tabs/Pedidos';
+import MetodoPago from './src/screens/private/MetodoPago';
 import coloresAIQ from './src/styles/coloresAIQ';
 
 const Stack = createStackNavigator();
@@ -126,6 +127,14 @@ const App = () => {
               title: 'CARRITO',
             }}
             component={Carrito}
+          />
+
+          <Stack.Screen
+            name='MetodoPago'
+            options={{
+              title: 'METODO DE PAGO',
+            }}
+            component={MetodoPago}
           />
 
           <Stack.Screen
