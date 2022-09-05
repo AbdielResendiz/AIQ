@@ -1,23 +1,24 @@
 import React, {useState} from 'react'
-import { View, Text, Center, Image, ScrollView, Button, Box, Flex, } from 'native-base'
-import {MaterialCommunityIcons, FontAwesome} from '@expo/vector-icons'
+import { View, Text, Center, Image, ScrollView, Button} from 'native-base'
+import {MaterialCommunityIcons} from '@expo/vector-icons'
 import coloresAIQ from '../../styles/coloresAIQ'
 import { TextInput } from 'react-native'
 
 const Producto = (props) => {
   const [comentario, setComentario] = useState('');
-  const [cantP, setCantp] = useState(1);
 
   const nomProd = props.route.params.nombre
   const precio = props.route.params.precio
   const desc = props.route.params.desc
   const tiempo = props.route.params.tiempo
+  const nombreRes = props.route.params.nomRes
 
-  const enviaDatos = async (comentario, nombre, precio) => {
+  const enviaDatos = async (comentario, nombre, precio, nombreRes) => {
     props.navigation.navigate("Carrito", {
       comentario: comentario,
       nombre: nombre,
       precio: precio,
+      nombreRes: nombreRes
     });
   }
   return (
@@ -118,7 +119,7 @@ const Producto = (props) => {
                 width={250}
                 height={55}
                 borderRadius={32}
-                onPress={() => {enviaDatos(comentario, nomProd, precio, cantP)}}
+                onPress={() => {enviaDatos(comentario, nomProd, precio, nombreRes)}}
                 _pressed={{
                     bg: coloresAIQ.azulBtn}}>
                 <Text

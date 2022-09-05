@@ -1,9 +1,12 @@
 import React from 'react'
-import { View, Text, Box, Flex, Image,} from 'native-base'
-import coloresAIQ from '../../../styles/coloresAIQ'
+import { View, Text, Box, Flex, Image, Center, Button} from 'native-base'
 import { ScrollView, TouchableOpacity } from 'react-native'
+import {AntDesign, MaterialCommunityIcons} from '@expo/vector-icons'
+import coloresAIQ from '../../../styles/coloresAIQ'
 
 const Carrito = (props) => {
+
+  const nombreRes = props.route.params.nombreRes
 
   const arrCombos = [
     {
@@ -40,6 +43,12 @@ const Carrito = (props) => {
     },
   ];
   
+  const enviaDatos = async (nombreRes) => {
+    props.navigation.navigate("Menu", {
+      idRes: nombreRes
+    });
+  }
+
   return (
     <View flex={1}>
       {/* Titulo: Carrito */}
@@ -51,58 +60,118 @@ const Carrito = (props) => {
         colorScheme={coloresAIQ.negro}>
         Mi carrito
       </Text>
+      {/* Scroll: carrito */}
       <ScrollView>
       {arrCombos.length > 0 ? 
         (arrCombos.map((item) => {
             return(
                 <Box                       
-                style={{ borderRadius: 12 }}
-                key={item.idRes}
-                shadow={3}
-                m={2}
-                mt={2}
-                _light={{
-                  backgroundColor: coloresAIQ.blanco,
-                }}>
-                    <TouchableOpacity
-                    onPress={() => {
-                      props.navigation.navigate('MetodoPago');
-                    }}><Flex direction='row'>
-                        <Image
-                        style={{
-                            resizeMode: "cover",
-                            justifyContent: "center",
-                            borderTopLeftRadius: 12,
-                            borderBottomLeftRadius: 12,
-                            borderTopRightRadius: 0,
-                            borderBottomRightRadius: 0,
-                        }}
-                        source={require('../../../../assets/Alimentos/combo.jpeg')}
-                        alt={item.nombre}
-                        size={"lg"}
-                        />
-                        <Box m={2} style={{width: 0, flexGrow: 1, flex: 1}}>
-                        {/* Nombre platillo */}
-                        <Text
+                  style={{ borderRadius: 12 }}
+                  key={item.idRes}
+                  shadow={3}
+                  m={2}
+                  mt={2}
+                  _light={{
+                    backgroundColor: coloresAIQ.blanco,
+                  }}>
+                  <Flex direction='row'>
+                    <Image
+                    style={{
+                        resizeMode: "cover",
+                        justifyContent: "center",
+                        borderTopLeftRadius: 12,
+                        borderBottomLeftRadius: 12,
+                        borderTopRightRadius: 0,
+                        borderBottomRightRadius: 0,
+                    }}
+                    source={require('../../../../assets/Alimentos/combo.jpeg')}
+                    alt={item.nombre}
+                    size={"lg"}/>
+                    <Box m={2} style={{width: 0, flexGrow: 1, flex: 1}}>
+                      {/* Nombre platillo */}
+                      <Text
                         fontFamily='heading'
                         fontSize='xl'
                         color={coloresAIQ.azulOscuroAIQ}>
                         {item.nombre}
-                        </Text>
+                      </Text>
                         {/* Costo de platillo */}
-                        <Text
+                      <Text
                         ml={1}
                         color={coloresAIQ.grisAIQ}
                         fontSize='md'
                         fontFamily='body'>
                         costo: ${item.precio}
-                        </Text>
-                        </Box>
-                    </Flex></TouchableOpacity>
-                </Box>
-            )
+                      </Text>
+                    </Box>
+                    <TouchableOpacity 
+                      style={{justifyContent:'center', alignItems: 'center', margin: 8}}
+                      onPress={() => {}}>
+                      <MaterialCommunityIcons name="delete-empty-outline" size={36} color={coloresAIQ.azulOscuroAIQ}/>
+                    </TouchableOpacity>
+                  </Flex>
+                </Box>)
         })) : (null)}
       </ScrollView>
+
+      {/* Total */}
+      <Center>
+        <Text
+          paddingX={4}
+          paddingTop={3}
+          fontSize={22}
+          fontFamily='heading'
+          colorScheme={coloresAIQ.negro}>
+          Total: $000.00
+        </Text>
+      </Center>
+      {/* btn Confirmar compra */}
+      <Center marginTop={2}>
+        <Button
+            leftIcon={<AntDesign
+                name='check'
+                size={24}
+                color={coloresAIQ.blanco}/>}
+            bg={coloresAIQ.azulAIQ}
+            mt='3'
+            width={250}
+            height={55}
+            borderRadius={32}
+            onPress={() => props.navigation.navigate("MetodoPago")}
+            _pressed={{
+                bg: coloresAIQ.azulBtn}}>
+            <Text
+                color={coloresAIQ.blanco}
+                fontSize='md'
+                fontFamily='body'>
+                Confirmar compra
+            </Text>
+        </Button>
+      </Center>
+
+      {/* btn Volver menu */}
+      <Center marginTop={2} marginBottom={4}>
+        <Button
+            leftIcon={<AntDesign
+                name='arrowleft'
+                size={24}
+                color={coloresAIQ.blanco}/>}
+            bg={coloresAIQ.azulAIQ}
+            mt='3'
+            width={250}
+            height={55}
+            borderRadius={32}
+            onPress={() => {enviaDatos(nombreRes)}}
+            _pressed={{
+                bg: coloresAIQ.azulBtn}}>
+            <Text
+                color={coloresAIQ.blanco}
+                fontSize='md'
+                fontFamily='body'>
+                Volver al menú
+            </Text>
+        </Button>
+      </Center>
     </View>
   )
 }

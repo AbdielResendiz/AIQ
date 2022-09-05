@@ -16,8 +16,6 @@ const Menu = (props) => {
   
   //Datos restaurante
   const idRest = props.route.params.idRes
-  const descripcion = props.route.params.desc
-  const imagen = props.route.params.imagen
   
   const onRefresh = useCallback(() => {
     setRefreshing(true);
@@ -177,14 +175,15 @@ const Menu = (props) => {
     },
   ];
 
-  const detalleProducto = (idRes, nombre, desc, precio, imagen, tiempo) => {
+  const detalleProducto = (idRes, nombre, desc, precio, imagen, tiempo, restaurante) => {
     props.navigation.navigate("Producto", {
       idProd: idRes,
       nombre: nombre,
       desc: desc,
       imagen: imagen,
       precio: precio,
-      tiempo: tiempo
+      tiempo: tiempo,
+      nomRes: restaurante
     });
   };
 
@@ -202,39 +201,32 @@ const Menu = (props) => {
       <SafeAreaView flex={1}>
             {/* Datos restaurante */}
             <Box>
-                <Center paddingTop={3}>
-                    {/* Logo */}
-                    <Image
-                        style={{
-                        resizeMode: "cover",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        borderTopLeftRadius: 5,
-                        borderBottomLeftRadius: 5,
-                        borderTopRightRadius: 0,
-                        borderBottomRightRadius: 0,
-                        }}
-                        imageStyle={{
-                        borderRadius: 55,
-                        }}
-                        source={require('../../../assets/Logos/logoStarbucks.png')}
-                        alt={"Logo restaurante"}
-                        size={"xl"}/>
-                    {/* Nombre */}
-                    <Text
-                        fontFamily='heading'
-                        fontSize='2xl'
-                        color={coloresAIQ.negro}>
-                        {idRest}
-                    </Text>
-                    {/* Descripcion */}
-                    <Text
-                        color={coloresAIQ.grisOscuroAIQ}
-                        fontSize='md'
-                        fontFamily='body'>
-                        {descripcion}
-                    </Text>
-                </Center>
+              <Center paddingTop={3}>
+                {/* Logo */}
+                <Image
+                    style={{
+                    resizeMode: "cover",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    borderTopLeftRadius: 5,
+                    borderBottomLeftRadius: 5,
+                    borderTopRightRadius: 0,
+                    borderBottomRightRadius: 0,
+                    }}
+                    imageStyle={{
+                    borderRadius: 55,
+                    }}
+                    source={require('../../../assets/Logos/logoStarbucks.png')}
+                    alt={"Logo restaurante"}
+                    size={"xl"}/>
+                {/* Nombre */}
+                <Text
+                    fontFamily='heading'
+                    fontSize='2xl'
+                    color={coloresAIQ.negro}>
+                    {idRest}
+                </Text>
+              </Center>
             </Box>
 
             {/* Categorias */}
@@ -324,7 +316,7 @@ const Menu = (props) => {
                         }}>
                             <TouchableOpacity
                             onPress={() => {
-                                detalleProducto(item.idRes, item.nombre, item.desc, item.precio, item.imagen, item.tiempo);
+                                detalleProducto(item.idRes, item.nombre, item.desc, item.precio, item.imagen, item.tiempo, idRest);
                             }}><Flex direction='row'>
                                 <Image
                                 style={{
