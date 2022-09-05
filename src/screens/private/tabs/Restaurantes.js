@@ -14,14 +14,16 @@ const wait = (timeout) => {
 
 const Restaurantes = (props) => {
 
-  const baseUrl = 'https://reqres.in';
-  const url = `${baseUrl}/api/users?per_page=12`
+  const baseUrl = 'https://v-csoft.com/AIQ/MovilR';
+  const url = `${baseUrl}/getRestaurantes`
+  const url2 = `${baseUrl}/getPublicidad`
   const source = axios.CancelToken.source();
   const [hasError, setErrorFlag] = useState(false);
   const [cargando, setCargando] = useState(true);
 	const [refreshing, setRefreshing] = useState(false);
   const [car, setCar] = useState({});
   const [arrRestaurantes, setArrRestaurantes] = useState([]);
+  const [arrAnuncios, setArrAnuncios] = useState([]);
   const onRefresh = useCallback(() => {
 		setRefreshing(true);
 		wait(1500).then(() => setRefreshing(false));
@@ -32,7 +34,7 @@ const Restaurantes = (props) => {
       setCargando(true);
       const response = await axios.get(url, {cancelToken: source.token});
       if (response.status === 200) {
-        setArrRestaurantes(response.data.data);
+        setArrRestaurantes(response.data);
         setCargando(false);
         return;
       } else {
@@ -48,88 +50,38 @@ const Restaurantes = (props) => {
     }
   }
 
-  const arrAnuncios = [
-    {
-      idAd: 1,
-      imagen: '../../../../assets/Logos/1.png'
-    },
-    {
-      idAd: 2,
-      imagen: '../../../../assets/Logos/2.png'
-    },
-    {
-      idAd: 3,
-      imagen: '../../../../assets/Logos/1.png'
-    },
-    {
-      idAd: 4,
-      imagen: '../../../../assets/Logos/2.png'
-    },
-  ];
-
-  /*
-  const arrRestaurantes = [
-    {
-      idRes: 1,
-      nombre: "Starbucks",
-      desc: "Cafetería",
-      imagen: '../../../../assets/Logos/logoStarbucks.png'
-    },
-    {
-      idRes: 2,
-      nombre: "Brije",
-      desc: "Postrería",
-      imagen: '../../../../assets/Logos/logoBrije.png'
-    },
-    {
-      idRes: 3,
-      nombre: "Puerta de Serra",
-      desc: "Restaurante",
-      imagen: '../../../../assets/Logos/logoPuertaSerra.png'
-    },
-    {
-      idRes: 4,
-      nombre: "The Lounge",
-      desc: "Restaurante",
-      imagen: '../../../../assets/Logos/logoLounge.png'
-    },
-    {
-      idRes: 5,
-      nombre: "Mi México",
-      desc: "Cafetería",
-      imagen: '../../../../assets/Logos/logoStarbucks.png'
-    },
-    {
-      idRes: 6,
-      nombre: "HKG",
-      desc: "Tienda",
-      imagen: '../../../../assets/Logos/logoHKG.jpeg'
-    },
-    {
-      idRes: 7,
-      nombre: "Prueba1",
-      desc: "Pizzas",
-      imagen: '/assets/Logos/1.png'
-    },
-    {
-      idRes: 8,
-      nombre: "Prueba2",
-      desc: "Hamburguesas",
-      imagen: "require('../../../../assets/Logos/logoStarbucks.png')"
-    },
-  ];
-  */
+  const publicidad = async () => {
+    try{
+      setCargando(true);
+      const response = await axios.get(url2, {cancelToken: source.token});
+      if (response.status === 200) {
+        setArrAnuncios(response.data);
+        setCargando(false);
+        return;
+      } else {
+        throw new Error("Fallo en fetch array anuncio")
+      }
+    } catch (error) {
+      if(axios.isCancel(error)) {
+        console.log('Data fetching cancelado')
+      } else {
+        setErrorFlag(true);
+        setCargando(false);
+      }
+    }
+  }
 
   useEffect(() => {
     datosRes();
+    publicidad();
     setCargando(false);
   }, []);
 
-  const menu = (nombre, descripcion, imagen) => {
+  const menu = (id, nombre, logo) => {
 		props.navigation.navigate('Menu', {
-			idRes: nombre,
-      desc: descripcion,
-      imagen: imagen
+			idRes: id,
+      nombre: nombre,
+      imagen: logo
 		});
 	};
 
@@ -158,17 +110,17 @@ const Restaurantes = (props) => {
             }}>
             {arrAnuncios.map((item) => {
               return (
-                <Box key={item.idAd} mb={4}>
+                <Box key={item.id_ad} mb={4}>
                   <TouchableOpacity
                     style={{
                       width: 200,
                       height: 100,
                       marginRight: 8
                     }}
-                    onPress={() => {console.log(item.idAd)}}>
+                    onPress={() => {console.log(item.id_ad)}}>
                     <Image
                       borderRadius={5}
-                      source={require('../../../../assets/Logos/1.png')}
+                      source={{uri: item.imagen}}
                       alt='Anuncio'
                       style={{
                         width: '100%',
@@ -245,7 +197,7 @@ const Restaurantes = (props) => {
                 {arrRestaurantes.map((item) => {
                   return (
                     <Box
-                      key={item.id}
+                      key={item.id_res}
                       mb={4}
                       style={{ backgroundColor: coloresAIQ.blanco, borderRadius: 6 }}>
                       {/* Cambiar por idRes onPress cuando esten los WS */}
@@ -255,10 +207,10 @@ const Restaurantes = (props) => {
                           height: 150,
                           marginRight: 3,
                         }}
-                        onPress={() => menu(item.nombre, item.desc, item.imagen)}>
+                        onPress={() => menu(item.id_res, item.nombre, item.logo)}>
                         <Image
                           borderRadius={6}
-                          source={{uri: item.avatar}}
+                          source={{uri: item.logo}}
                           alt='Restaurante'
                           style={{
                             width: '100%',
@@ -276,7 +228,7 @@ const Restaurantes = (props) => {
                           px={2}
                           py={1}
                           borderRadius={6}>
-                          {item.first_name}
+                          {item.nombre}
                         </Center>
                       </TouchableOpacity>
                     </Box>

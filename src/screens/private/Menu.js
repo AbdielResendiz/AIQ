@@ -18,12 +18,23 @@ const Menu = (props) => {
   
   //Datos restaurante
   const idRest = props.route.params.idRes
+  const nombreRes = props.route.params.nombre
+  const logo = props.route.params.imagen
   
+  const baseUrl = 'https://v-csoft.com/AIQ/MovilR';
+  const url = `${baseUrl}/getMenu?id_res=${idRest}`
+  const source = axios.CancelToken.source();
+  const [hasError, setErrorFlag] = useState(false);
+  const [arrBebidas, setArrBebidas] = useState([]);
+  const [arrPlatillos, setArrPlatillos] = useState([]);
+  const [arrCombos, setArrCombos] = useState([]);
+
   const onRefresh = useCallback(() => {
     setRefreshing(true);
     wait(1500).then(() => setRefreshing(false));
   }, []);
-
+  
+  /*
   const arrBebidas = [
     {
       idRes: 1,
@@ -176,6 +187,28 @@ const Menu = (props) => {
       imagen: '../../../assets/Alimentos/combo.jpeg'
     },
   ];
+  */
+
+  const getMenu = async () => {
+    try{
+      setCargando(true);
+      const response = await axios.get(url, {cancelToken: source.token});
+      if (response.status === 200) {
+        setArrRestaurantes(response.data.idCat);
+        setCargando(false);
+        return;
+      } else {
+        throw new Error("Fallo en fetch array restaurantes")
+      }
+    } catch (error) {
+      if(axios.isCancel(error)) {
+        console.log('Data fetching cancelado')
+      } else {
+        setErrorFlag(true);
+        setCargando(false);
+      }
+    }
+  }
 
   const detalleProducto = (idRes, nombre, desc, precio, imagen, tiempo, restaurante) => {
     props.navigation.navigate("Producto", {
