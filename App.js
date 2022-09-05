@@ -25,6 +25,7 @@ import InicioAds from './src/screens/private/InicioAds';
 import GeneralTab from './src/screens/private/GeneralTab';
 import Menu from './src/screens/private/Menu';
 import Producto from './src/screens/private/Producto';
+import Restaurantes from './src/screens/private/tabs/Restaurantes';
 import coloresAIQ from './src/styles/coloresAIQ';
 
 const Stack = createStackNavigator();
@@ -63,7 +64,7 @@ const App = () => {
     <NativeBaseProvider theme={theme}>
       <StatusBar
         barStyle='light-content'
-        backgroundColor={coloresAIQ.naranjaFood}
+        backgroundColor={coloresAIQ.azulClaroAIQ}
       />
       <NavigationContainer>
         <Stack.Navigator
@@ -71,7 +72,7 @@ const App = () => {
             headerMode:'float',
             headerStyle: {
               backgroundColor:
-                coloresAIQ.naranjaFood
+                coloresAIQ.azulClaroAIQ
             },
             headerTintColor: '#FFF',
             headerBackTitleVisible: false,
@@ -82,9 +83,6 @@ const App = () => {
             name='Principal'
             options={{
               title: 'VINCULAR',
-              headerStyle: {
-                backgroundColor: coloresAIQ.azulClaroAIQ
-              }
             }}
             component={Login}
           />
@@ -119,6 +117,14 @@ const App = () => {
               title: 'PRODUCTO',
             }}
             component={Producto}
+          />
+
+          <Stack.Screen
+            name='Restaurante'
+            options={{
+              title: 'SELECCIONAR',
+            }}
+            component={Restaurantes}
           />
 
         </Stack.Navigator>

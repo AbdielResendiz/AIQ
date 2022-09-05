@@ -7,7 +7,7 @@
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/image/LogoAIQ.png",
+      "image": "./assets/image/AIQ.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
