@@ -1,10 +1,10 @@
 import React, {useState, useEffect, useCallback} from 'react'
 import {Text, Box, Button, Image, Flex, Center, View} from 'native-base';
 import {ScrollView, TouchableOpacity, RefreshControl, SafeAreaView} from 'react-native';
+import axios from 'axios';
 import Procesando from '../../components/Procesando';
 import { AntDesign } from '@expo/vector-icons';
 import coloresAIQ from '../../../styles/coloresAIQ';
-import { paddingBottom } from 'styled-system';
 
 const wait = (timeout) => {
 	return new Promise((resolve) =>
@@ -13,13 +13,40 @@ const wait = (timeout) => {
 };
 
 const Restaurantes = (props) => {
+
+  const baseUrl = 'https://reqres.in';
+  const url = `${baseUrl}/api/users?per_page=12`
+  const source = axios.CancelToken.source();
+  const [hasError, setErrorFlag] = useState(false);
   const [cargando, setCargando] = useState(true);
 	const [refreshing, setRefreshing] = useState(false);
   const [car, setCar] = useState({});
+  const [arrRestaurantes, setArrRestaurantes] = useState([]);
   const onRefresh = useCallback(() => {
 		setRefreshing(true);
 		wait(1500).then(() => setRefreshing(false));
 	}, []);
+
+  const datosRes = async () => {
+    try{
+      setCargando(true);
+      const response = await axios.get(url, {cancelToken: source.token});
+      if (response.status === 200) {
+        setArrRestaurantes(response.data.data);
+        setCargando(false);
+        return;
+      } else {
+        throw new Error("Fallo en fetch array restaurantes")
+      }
+    } catch (error) {
+      if(axios.isCancel(error)) {
+        console.log('Data fetching cancelado')
+      } else {
+        setErrorFlag(true);
+        setCargando(false);
+      }
+    }
+  }
 
   const arrAnuncios = [
     {
@@ -40,6 +67,7 @@ const Restaurantes = (props) => {
     },
   ];
 
+  /*
   const arrRestaurantes = [
     {
       idRes: 1,
@@ -90,8 +118,10 @@ const Restaurantes = (props) => {
       imagen: "require('../../../../assets/Logos/logoStarbucks.png')"
     },
   ];
+  */
 
   useEffect(() => {
+    datosRes();
     setCargando(false);
   }, []);
 
@@ -215,7 +245,7 @@ const Restaurantes = (props) => {
                 {arrRestaurantes.map((item) => {
                   return (
                     <Box
-                      key={item.idRes}
+                      key={item.id}
                       mb={4}
                       style={{ backgroundColor: coloresAIQ.blanco, borderRadius: 6 }}>
                       {/* Cambiar por idRes onPress cuando esten los WS */}
@@ -228,7 +258,7 @@ const Restaurantes = (props) => {
                         onPress={() => menu(item.nombre, item.desc, item.imagen)}>
                         <Image
                           borderRadius={6}
-                          source={require('../../../../assets/Logos/logoStarbucks.png')}
+                          source={{uri: item.avatar}}
                           alt='Restaurante'
                           style={{
                             width: '100%',
@@ -246,7 +276,7 @@ const Restaurantes = (props) => {
                           px={2}
                           py={1}
                           borderRadius={6}>
-                          {item.nombre}
+                          {item.first_name}
                         </Center>
                       </TouchableOpacity>
                     </Box>
