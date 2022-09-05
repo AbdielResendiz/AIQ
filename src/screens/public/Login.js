@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { 	
     Button,
 	Text,
@@ -19,8 +19,10 @@ import { ActivityIndicator } from 'react-native';
 
 const Login = (props) => {
     const toast = useToast();
+
 	const [usuario, setUsuario] = useState('');
     const borraUser = () => setUsuario('');
+
 	const [contrasena, setContrasena] = useState('');
 	const [show, setShow] = useState(false);
 	const handleClick = () => setShow(!show);
@@ -31,42 +33,33 @@ const Login = (props) => {
 	const cambioP = () => setValidoP(false);
 
     const [loader, setLoader] = useState('none');
+    const [login, setLogin] = useState()
+   
+
+    useEffect(()=>{
+        
+    }, [])
 
 	const demoServiciosAxios = async () => {
 		
 			setLoader('flex');
             var data = new FormData()
-            data.append('idUInv', 20001)
+            data.append('id_mesa',usuario)
+            data.append('password',contrasena)
           
-            await fetch('https://campocultivo.com/back/App/getRecoleccionesInvernadero', {
+            await fetch('https://v-csoft.com/AIQ/Mesas/existsTable/', {
                 method: 'post',
-
                   body: data,
                   
               })
                 .then((response) => response.json())
                 .then((result) => {
                   console.log('Success:', result);
-                  Alert.alert(result['mensaje']);
-         
-                
-                })
-                .catch((ex) => {
-                    Alert.alert('ERROR', ex.toString());
-                });
-
-
-                setLoader('none')
-		 
-		
-	
-	};
-
-
-
-
-
-    const validarDatos = async () => {
+               
+                  
+                var acceso = result.res
+                //setLogin(acceso)
+  
 		if (usuario.length == 0) {
 			setValidoC(true);
 			setUsuario('');
@@ -84,15 +77,16 @@ const Login = (props) => {
 		setCargando(true);
 
 		try {
-			if (usuario !== "01" || contrasena !== "123") {
-				toast.show({
+			if (acceso === true) {
+                props.navigation.navigate('InicioAds');
+			}
+			else {
+                toast.show({
 					status: 'warning',
 					description: "Mesa o contraseña erroneo",
 					placement: 'top',
 				});
-			}
-			if (usuario == "01" && contrasena == "123") {
-				props.navigation.navigate('InicioAds');
+            
 			}
 			setUsuario('');
 			setContrasena('');
@@ -108,7 +102,25 @@ const Login = (props) => {
 			setContrasena('');
 			setCargando(false);
 		}
+
+
+         
+                })
+                .catch((ex) => {
+                    Alert.alert('ERROR', ex.toString());
+                });
+
+
+                setLoader('none')
+		 
+		
+	
 	};
+
+
+
+
+
   return (
     <>
     {cargando ? <Procesando /> : null}
@@ -275,7 +287,10 @@ const Login = (props) => {
                 mt='10'
                 size='lg'
                 borderRadius={32}
-                onPress={validarDatos}
+                onPress={()=>{
+                    demoServiciosAxios();
+                    // validarDatos();
+                }}
                 _pressed={{
                     bg: coloresAIQ.azulBtn}}>
                 <Text
