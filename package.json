@@ -24,7 +24,7 @@
 				"@react-stately/toggle": "^3.2.3",
 				"@stripe/stripe-react-native": "0.13.1",
 				"accordion-collapse-react-native": "^1.1.0",
-				"axios": "^0.24.0",
+				"axios": "^0.27.2",
 				"expo": "~46.0.9",
 				"expo-cli": "^6.0.5",
 				"expo-permissions": "~13.2.0",

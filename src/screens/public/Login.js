@@ -10,10 +10,12 @@ import {
 	FormControl,
 	useToast,
 } from 'native-base'
+import axios from 'axios';
 import { FontAwesome, MaterialIcons } from '@expo/vector-icons';
 import coloresAIQ from '../../styles/coloresAIQ';
 import Procesando from '../components/Procesando';
-
+import { Alert, View } from 'react-native';
+import { ActivityIndicator } from 'react-native';
 
 const Login = (props) => {
     const toast = useToast();
@@ -27,6 +29,42 @@ const Login = (props) => {
 	const [validoP, setValidoP] = useState(false);
 	const cambioC = () => setValidoC(false);
 	const cambioP = () => setValidoP(false);
+
+    const [loader, setLoader] = useState('none');
+
+	const demoServiciosAxios = async () => {
+		
+			setLoader('flex');
+            var data = new FormData()
+            data.append('idUInv', 20001)
+          
+            await fetch('https://campocultivo.com/back/App/getRecoleccionesInvernadero', {
+                method: 'post',
+
+                  body: data,
+                  
+              })
+                .then((response) => response.json())
+                .then((result) => {
+                  console.log('Success:', result);
+                  Alert.alert(result['mensaje']);
+         
+                
+                })
+                .catch((ex) => {
+                    Alert.alert('ERROR', ex.toString());
+                });
+
+
+                setLoader('none')
+		 
+		
+	
+	};
+
+
+
+
 
     const validarDatos = async () => {
 		if (usuario.length == 0) {
@@ -200,6 +238,36 @@ const Login = (props) => {
                     </FormControl.ErrorMessage>
                 </Stack>
             </FormControl>
+
+            <Button
+                bg={coloresAIQ.azulAIQ}
+                mt='10'
+                size='lg'
+                borderRadius={32}
+                onPress={demoServiciosAxios}
+                _pressed={{
+                    bg: coloresAIQ.azulBtn}}>
+                <Text
+                    color={coloresAIQ.blanco}
+                    fontSize='md'
+                    fontFamily='body'>
+                    Axios
+                </Text>
+            </Button>
+      
+
+			<View
+				style={{
+					marginVertical: 100,
+					alignItems: 'center',
+					alignContent: 'center',
+					display: loader,
+				}}>
+				<ActivityIndicator
+					size='large'
+					color='#333'
+				/>
+			</View>
             
             {/* Boton Vincular */}
             <Button
@@ -217,6 +285,7 @@ const Login = (props) => {
                     VINCULAR
                 </Text>
             </Button>
+       
 
         </ScrollView>
     </>
