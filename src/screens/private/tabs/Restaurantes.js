@@ -3,6 +3,7 @@ import {Text, Box, Button, Image, Flex, Center, View} from 'native-base';
 import {ScrollView, TouchableOpacity, RefreshControl, SafeAreaView} from 'react-native';
 import axios from 'axios';
 import Procesando from '../../components/Procesando';
+import SearchBar from '../../components/SearchBar';
 import { AntDesign } from '@expo/vector-icons';
 import coloresAIQ from '../../../styles/coloresAIQ';
 
@@ -13,17 +14,23 @@ const wait = (timeout) => {
 };
 
 const Restaurantes = (props) => {
-
+  //ws
   const baseUrl = 'https://v-csoft.com/AIQ/MovilR';
   const url = `${baseUrl}/getRestaurantes`
   const url2 = `${baseUrl}/getPublicidad`
   const source = axios.CancelToken.source();
   const [hasError, setErrorFlag] = useState(false);
+  //Carga datos
   const [cargando, setCargando] = useState(true);
 	const [refreshing, setRefreshing] = useState(false);
   const [car, setCar] = useState({});
+  //arreglos restaurantes y anuncios
   const [arrRestaurantes, setArrRestaurantes] = useState([]);
   const [arrAnuncios, setArrAnuncios] = useState([]);
+  //barra de busqueda
+  const [searchPhrase, setSearchPhrase] = useState("");
+  const [clicked, setClicked] = useState(false);
+  //obtener datos por tiempo
   const onRefresh = useCallback(() => {
 		setRefreshing(true);
 		wait(1500).then(() => setRefreshing(false));
@@ -55,7 +62,7 @@ const Restaurantes = (props) => {
       setCargando(true);
       const response = await axios.get(url2, {cancelToken: source.token});
       if (response.status === 200) {
-        setArrAnuncios(response.data);
+        setArrAnuncios(response.data.Publicidad);
         setCargando(false);
         return;
       } else {
@@ -88,10 +95,10 @@ const Restaurantes = (props) => {
   return (
     <>
       {cargando ? <Procesando /> : null}   
-      <SafeAreaView flex={1} flexDirection={'column'}>
+      <SafeAreaView flex={1} flexDirection={'column'} style={{alignItems: 'flex-start'}}>
         {/* Scroll anuncios */}
         <ScrollView 
-          contentContainerStyle={{paddingBottom: 32}}
+          contentContainerStyle={{paddingBottom: 70}}
           horizontal={true}
           showsHorizontalScrollIndicator={false}
           refreshControl={
@@ -114,8 +121,11 @@ const Restaurantes = (props) => {
                   <TouchableOpacity
                     style={{
                       width: 200,
-                      height: 100,
-                      marginRight: 8
+                      height: 104,
+                      marginRight: 8,
+                      borderColor: coloresAIQ.azulOscuroAIQ,
+                      borderWidth: 2,
+                      borderRadius: 5
                     }}
                     onPress={() => {console.log(item.id_ad)}}>
                     <Image
@@ -134,12 +144,19 @@ const Restaurantes = (props) => {
           </Box>
         </ScrollView>
 
+        {/* Barra busqueda */}
+        <SearchBar
+          searchPhrase={searchPhrase}
+          setSearchPhrase={setSearchPhrase}
+          clicked={clicked}
+          setClicked={setClicked}
+        />
         {/* Titulo: restaurantes */}
-        <Box paddingTop={3} paddingBottom={2} >
+        <Box paddingTop={3} paddingBottom={2} paddingX={4}>
           <Flex
             direction='row'
             justifyContent='flex-start'>
-            <Center w='53%' h={8}>
+            <Center>
               <Flex direction='row'>
                 <Text
                   fontSize={26}
@@ -183,7 +200,7 @@ const Restaurantes = (props) => {
             />
           }>
           {/* Inicio if restaurantes activos */}
-          {arrRestaurantes.length > 0 ? (
+          {arrRestaurantes.length > 0 && searchPhrase === "" ? (
               <Box
                 flex={1}
                 p={3}
