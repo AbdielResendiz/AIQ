@@ -106,7 +106,7 @@ const Restaurantes = (props) => {
   return (
     <>
       {cargando ? <Procesando /> : null}   
-      <SafeAreaView flex={1} flexDirection={'column'} style={{backgroundColor: coloresAIQ.amarilloFood}}>
+      <SafeAreaView flex={1} flexDirection={'column'}>
         {/* Scroll anuncios */}
         <ScrollView 
           contentContainerStyle={{paddingBottom: 32}}
@@ -153,7 +153,7 @@ const Restaurantes = (props) => {
         </ScrollView>
 
         {/* Titulo: restaurantes */}
-        <Box paddingTop={3} paddingBottom={1} >
+        <Box paddingTop={3} paddingBottom={2} >
           <Flex
             direction='row'
             justifyContent='flex-start'>
@@ -235,7 +235,7 @@ const Restaurantes = (props) => {
                             height: 150,
                           }} />
                         <Center
-                          bg={coloresAIQ.cafeFood}
+                          bg={coloresAIQ.azulOscuroAIQ}
                           _text={{
                             color: coloresAIQ.blanco,
                             fontWeight: '700',

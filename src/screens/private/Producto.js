@@ -1,42 +1,28 @@
 import React, {useState} from 'react'
-import { View, Text, Center, Image, ScrollView, Button, Box, Flex, } from 'native-base'
-import {MaterialCommunityIcons, FontAwesome} from '@expo/vector-icons'
+import { View, Text, Center, Image, ScrollView, Button} from 'native-base'
+import {MaterialCommunityIcons} from '@expo/vector-icons'
 import coloresAIQ from '../../styles/coloresAIQ'
 import { TextInput } from 'react-native'
 
 const Producto = (props) => {
   const [comentario, setComentario] = useState('');
-  const [cantP, setCantp] = useState(1);
 
   const nomProd = props.route.params.nombre
   const precio = props.route.params.precio
   const desc = props.route.params.desc
   const tiempo = props.route.params.tiempo
+  const nombreRes = props.route.params.nomRes
 
-  const enviaDatos = async (comentario) => {
+  const enviaDatos = async (comentario, nombre, precio, nombreRes) => {
     props.navigation.navigate("Carrito", {
-      comentario: comentario
+      comentario: comentario,
+      nombre: nombre,
+      precio: precio,
+      nombreRes: nombreRes
     });
   }
-  // control spinner cantidad
-  const disminCarrito = async () => {
-    if (cantP <= 1) {
-      setCantp(1);
-    } else {
-      setCantp(cantP - 1);
-    }
-  };
-
-  const upCarrito = async () => {
-    if (cantP >= 9) {
-    } else {
-      setCantp(cantP + 1);
-    }
-  };
   return (
-    <ScrollView
-      flex={1}
-      style={{backgroundColor: coloresAIQ.amarilloFood}}>
+    <ScrollView flex={1}>
         {/* Imagen Producto */}
         <Center paddingTop={4}>
             <Image
@@ -61,7 +47,7 @@ const Producto = (props) => {
             <Text                   
               fontSize={20}
               fontFamily='heading'
-              color={coloresAIQ.naranjaOscuroFood}>
+              color={coloresAIQ.azulOscuroAIQ}>
                 ${precio}
             </Text>
         </Center>
@@ -95,7 +81,7 @@ const Producto = (props) => {
                 {tiempo}min.
             </Text>
         </View>
-        {/* Descripcion, tiempo de producto y comentarios */}
+        {/* Comentarios */}
         <View paddingY={2} paddingX={8}>
             <Text                   
               fontSize={18}
@@ -120,62 +106,7 @@ const Producto = (props) => {
                 onChangeText={(val) => setComentario(val)}
             />
         </View>
-        {/* Input spinner cantidad */}
-        <Box w='50%' alignContent='center' marginLeft={8} marginTop={3}>
-          <Text                 
-            fontSize={18}
-            fontFamily='body'
-            fontWeight={'bold'}
-            color={coloresAIQ.negro}>
-              Cantidad:
-          </Text>
-          <Flex direction={"row"} alignItems='flex-start'>
-            <Button
-              bg={coloresAIQ.cafeFood}
-              h={12}
-              style={{
-                borderTopRightRadius: 0,
-                borderBottomRightRadius: 0,
-                width: 50,
-              }}
-              startIcon={
-                <FontAwesome
-                  name='minus'
-                  color={coloresAIQ.blanco}
-                />
-              }
-              _pressed={{ bg: coloresAIQ.cafeClaroFood}}
-              onPress={disminCarrito}
-            />
-            <Text
-              h={12}
-              w={10}
-              bg={coloresAIQ.cafeFood}
-              fontSize={"md"}
-              style={{ textAlignVertical: "center", textAlign: "center" }}
-              color={coloresAIQ.blanco}
-            >
-              {cantP}
-            </Text>
-            <Button
-              h={12}
-              bg={coloresAIQ.cafeFood}
-              style={{
-                borderTopLeftRadius: 0,
-                borderBottomLeftRadius: 0,
-                width: 50,
-              }}
-              endIcon={
-                <FontAwesome
-                  name='plus'
-                  color={coloresAIQ.blanco}
-                />
-              }
-              _pressed={{ bg: coloresAIQ.cafeClaroFood }}
-              onPress={upCarrito}
-            />
-          </Flex>
-        </Box>
+
         {/* btn AddCarrito */}
         <Center marginY={4}>
             <Button
@@ -183,14 +114,14 @@ const Producto = (props) => {
                     name='cart-plus'
                     size={24}
                     color={coloresAIQ.blanco}/>}
-                bg={coloresAIQ.naranjaOscuroFood}
+                bg={coloresAIQ.azulAIQ}
                 mt='3'
                 width={250}
                 height={55}
                 borderRadius={32}
-                onPress={() => {enviaDatos(comentario)}}
+                onPress={() => {enviaDatos(comentario, nomProd, precio, nombreRes)}}
                 _pressed={{
-                    bg: coloresAIQ.naranjaOscuroFood}}>
+                    bg: coloresAIQ.azulBtn}}>
                 <Text
                     color={coloresAIQ.blanco}
                     fontSize='md'

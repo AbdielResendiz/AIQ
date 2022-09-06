@@ -22,10 +22,13 @@ import {
 } from '@expo-google-fonts/nunito';
 import Login from './src/screens/public/Login';
 import InicioAds from './src/screens/private/InicioAds';
-import GeneralTab from './src/screens/private/GeneralTab';
 import Menu from './src/screens/private/Menu';
 import Producto from './src/screens/private/Producto';
 import Restaurantes from './src/screens/private/tabs/Restaurantes';
+import Carrito from './src/screens/private/tabs/Carrito';
+import Pedidos from './src/screens/private/tabs/Pedidos';
+import MetodoPago from './src/screens/private/MetodoPago';
+import ConfirmarPedido from './src/screens/private/ConfirmarPedido';
 import coloresAIQ from './src/styles/coloresAIQ';
 
 const Stack = createStackNavigator();
@@ -96,17 +99,9 @@ const App = () => {
           />
 
           <Stack.Screen
-            name='GeneralTab'
-            options={{
-              headerShown: false
-            }}
-            component={GeneralTab}
-          />
-
-          <Stack.Screen
             name='Menu'
             options={{
-              title: 'MENU',
+              title: 'MENÚ',
             }}
             component={Menu}
           />
@@ -125,6 +120,38 @@ const App = () => {
               title: 'SELECCIONAR',
             }}
             component={Restaurantes}
+          />
+
+          <Stack.Screen
+            name='Carrito'
+            options={{
+              title: 'CARRITO',
+            }}
+            component={Carrito}
+          />
+
+          <Stack.Screen
+            name='MetodoPago'
+            options={{
+              title: 'METODO DE PAGO',
+            }}
+            component={MetodoPago}
+          />
+
+          <Stack.Screen
+            name='ConfirmaPedido'
+            options={{
+              title: 'CONFIRMA PEDIDO',
+            }}
+            component={ConfirmarPedido}
+          />
+
+          <Stack.Screen
+            name='Pedidos'
+            options={{
+              title: 'DETALLE PEDIDO',
+            }}
+            component={Pedidos}
           />
 
         </Stack.Navigator>
