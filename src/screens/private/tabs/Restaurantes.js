@@ -174,7 +174,7 @@ const Restaurantes = (props) => {
                           height: 150,
                           marginRight: 3,
                         }}
-                        onPress={() => menu(item.id_res, item.nombre, item.logo)}>
+                        onPress={() => menu(item.id_user, item.nombre, item.avatar)}>
                         <Image
                           borderRadius={6}
                           source={{uri: item.avatar}}

@@ -3,10 +3,11 @@ import { SafeAreaView, ScrollView, TouchableOpacity } from 'react-native';
 import { Box, Center, Image, Text, Flex } from 'native-base';
 import { FAB } from 'react-native-elements';
 import { AntDesign } from '@expo/vector-icons';
+import { getMenu } from '../../api/controlWS';
 import coloresAIQ from '../../styles/coloresAIQ';
 import estilosAIQ from '../../styles/estilosAIQ';
 import Procesando from '../components/Procesando';
-import axios from 'axios';
+
 
 const wait = (timeout) => {
     return new Promise((resolve) => setTimeout(resolve, timeout));
@@ -22,10 +23,6 @@ const Menu = (props) => {
   const nombreRes = props.route.params.nombre
   const logo = props.route.params.imagen
   
-  const baseUrl = 'https://v-csoft.com/AIQ/MovilR';
-  const url = `${baseUrl}/getMenu`
-  const source = axios.CancelToken.source();
-  const [hasError, setErrorFlag] = useState(false);
   const [arrAlimentos, setArrAlimentos] = useState([]);
 
   const onRefresh = useCallback(() => {
@@ -33,7 +30,10 @@ const Menu = (props) => {
     wait(1500).then(() => setRefreshing(false));
   }, []);
   
-  
+  const datosMenu = async() => {
+     const m = await getMenu(idRest);
+     setArrAlimentos(m);
+  }
 
   const detalleProducto = (idRes, nombre, desc, precio, imagen, tiempo, restaurante) => {
     props.navigation.navigate("Producto", {
@@ -57,7 +57,8 @@ const Menu = (props) => {
   })
 
   useEffect(() => {
-    getMenu();
+    setCargando(true);
+    datosMenu();
     setCargando(false);
   }, [])
 

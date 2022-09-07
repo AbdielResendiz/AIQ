@@ -41,14 +41,11 @@ export const getPublicidad = async () => {
 
 export const getMenu = async (idRes) => {
   const idRest = idRes;
-  const urlMenu = `${baseUrl}/getPublicidad$`
+  const urlMenu = `${baseUrl}/getMenu/${idRest}`
   try{
-    setCargando(true);
-    const response = await axios.get(url, {cancelToken: source.token});
+    const response = await axios.get(urlMenu, {cancelToken: source.token});
     if (response.status === 200) {
-      setArrAlimentos(response.data);
-      setCargando(false);
-      return;
+      return response.data;
     } else {
       throw new Error("Fallo en fetch array restaurantes")
     }
@@ -56,8 +53,7 @@ export const getMenu = async (idRes) => {
     if(axios.isCancel(error)) {
       console.log('Data fetching cancelado')
     } else {
-      setErrorFlag(true);
-      setCargando(false);
+      console.log('algo pago en funcion getMenu', error)
     }
   }
 }
