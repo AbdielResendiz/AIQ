@@ -1,16 +1,49 @@
-import React,{useState,useCallback} from 'react';
+import React,{useState,useCallback,useEffect} from 'react';
 import { TouchableOpacity,ScrollView,RefreshControl,SafeAreaView} from 'react-native';
 import estilosAIQ from '../../styles/estilosAIQ';
 import {Text, Box, Button, Image, Flex, Center, View} from 'native-base';
 import { alignItems } from 'styled-system';
+import { getAsync } from 'expo-permissions';
+import axios from 'axios';
 
 const InicioAds = (props) => {
 	const [refreshing, setRefreshing] = useState(false);
-  
+  const [anuncios, setAnuncios] = useState([]);
+
+
   const onRefresh = useCallback(() => {
 		setRefreshing(true);
 		wait(1500).then(() => setRefreshing(false));
 	}, []);
+
+  
+  useEffect(() => {
+  
+    getAnuncios()
+  }, []);
+  
+  const getAnuncios = async() => {
+    await fetch('https://v-csoft.com/AIQ/MovilR/getPublicidad', {
+     method: 'post',
+    
+   })
+     .then((response) => response.json())
+     .then((result) => {
+       console.log('Success:', result['Publicidad']);
+
+       const data = result['Publicidad']
+       setAnuncios(data)
+       // setList()
+     })
+     .catch((error) => {
+       console.error('Error:', error);
+     });
+ 
+   
+
+   };
+
+
 
   const arrAnuncios = [
     {
@@ -32,7 +65,7 @@ const InicioAds = (props) => {
   ];
   return (
     <SafeAreaView flex={5} flexDirection={'column'}>
-    <ScrollView 
+    <ScrollView r
     contentContainerStyle={{paddingBottom:0}}
     horizontal={true}
     showsHorizontalScrollIndicator={false}
@@ -48,9 +81,9 @@ const InicioAds = (props) => {
         alignItems: 'center'
         
       }}>
-      {arrAnuncios.map((item) => {
+      {anuncios.map((item) => {
         return (
-          <Box key={item.idAd} mb={4}>
+          <Box key={item.id_ad} mb={4}>
             <TouchableOpacity
               style={{
                 width: 400 ,
@@ -60,10 +93,10 @@ const InicioAds = (props) => {
                 alignContent: 'center',
                 alignItems: 'center'
               }}
-              onPress={() => {console.log(item.idAd)}}>
+              onPress={() => {console.log(item.id_ad)}}>
               <Image
                 borderRadius={5}
-                source={require('../../../assets/Logos/1.png')}
+                source={{uri: item.imagen}}
                 alt='Anuncio'
                 style={{
                   resizeMode: 'cover',
@@ -111,9 +144,9 @@ const InicioAds = (props) => {
         alignItems: 'center',
         
       }}>
-      {arrAnuncios.map((item) => {
+      {anuncios.map((item) => {
         return (
-          <Box key={item.idAd} mb={4}>
+          <Box key={item.id_ad} mb={4}>
             <TouchableOpacity
               style={{
                 width: 400 ,
@@ -124,10 +157,10 @@ const InicioAds = (props) => {
                 alignContent: 'center',
                 alignItems: 'center'
               }}
-              onPress={() => {console.log(item.idAd)}}>
+              onPress={() => {console.log(item.id_ad)}}>
               <Image
                 borderRadius={5}
-                source={require('../../../assets/Logos/1.png')}
+                source={{uri: item.imagen}}
                 alt='Anuncio'
                 style={{
                   resizeMode: 'cover',
