@@ -7,18 +7,20 @@ import { TextInput } from 'react-native'
 const Producto = (props) => {
   const [comentario, setComentario] = useState('');
 
+  const idRes = props.route.params.idRest
   const nomProd = props.route.params.nombre
-  const precio = props.route.params.precio
   const desc = props.route.params.desc
+  const precio = props.route.params.precio
+  const imagen = props.route.params.imagen
   const tiempo = props.route.params.tiempo
-  const nombreRes = props.route.params.nomRes
+  
 
-  const enviaDatos = async (comentario, nombre, precio, nombreRes) => {
+  const enviaDatos = async (comentario, nombre, precio, idRes) => {
     props.navigation.navigate("Carrito", {
       comentario: comentario,
       nombre: nombre,
       precio: precio,
-      nombreRes: nombreRes
+      idRes: idRes
     });
   }
   return (
@@ -32,12 +34,12 @@ const Producto = (props) => {
                 alignItems: "center",
                 borderRadius: 12,
                 }}
-                source={require('../../../assets/Alimentos/cafe.jpeg')}
+                source={{uri: imagen}}
                 alt={"Imagen producto"}
                 size='180'/>
         </Center>
         {/* Nombre Producto y precio */}
-        <Center p={3}>
+        <Center p={4}>
             <Text                   
               fontSize={22}
               fontFamily='heading'
@@ -119,7 +121,7 @@ const Producto = (props) => {
                 width={250}
                 height={55}
                 borderRadius={32}
-                onPress={() => {enviaDatos(comentario, nomProd, precio, nombreRes)}}
+                onPress={() => {enviaDatos(comentario, nomProd, precio, idRes)}}
                 _pressed={{
                     bg: coloresAIQ.azulBtn}}>
                 <Text

@@ -1,9 +1,9 @@
 import React, {useState, useEffect, useCallback} from 'react'
-import { SafeAreaView, ScrollView, TouchableOpacity } from 'react-native';
+import { SafeAreaView, ScrollView, TouchableOpacity, RefreshControl } from 'react-native';
 import { Box, Center, Image, Text, Flex } from 'native-base';
 import { FAB } from 'react-native-elements';
 import { AntDesign } from '@expo/vector-icons';
-import { getMenu } from '../../api/controlWS';
+import { getMenu, getRestaurantes } from '../../api/controlWS';
 import coloresAIQ from '../../styles/coloresAIQ';
 import estilosAIQ from '../../styles/estilosAIQ';
 import Procesando from '../components/Procesando';
@@ -20,30 +20,35 @@ const Menu = (props) => {
   
   //Datos restaurante
   const idRest = props.route.params.idRes
-  const nombreRes = props.route.params.nombre
-  const logo = props.route.params.imagen
-  
+  const [arrRestaurantes, setArrRestaurantes] = useState([]);
+
+  //Datos menu
   const [arrAlimentos, setArrAlimentos] = useState([]);
+  const [contador, setContador] = useState(false);
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);
-    wait(1500).then(() => setRefreshing(false));
+    wait(1000).then(() => {
+      datosMenu();
+      setRefreshing(false)});
   }, []);
   
   const datosMenu = async() => {
-     const m = await getMenu(idRest);
-     setArrAlimentos(m);
+    const m = await getMenu(idRest);
+    setArrAlimentos(m);
+    const n = await getRestaurantes();
+    setArrRestaurantes(n);
   }
 
-  const detalleProducto = (idRes, nombre, desc, precio, imagen, tiempo, restaurante) => {
+  const detalleProducto = (id_comida, nombre, desc, precio, imagen, tiempo, restaurante) => {
     props.navigation.navigate("Producto", {
-      idProd: idRes,
+      id_comida: id_comida,
       nombre: nombre,
       desc: desc,
-      imagen: imagen,
       precio: precio,
+      imagen: imagen,
       tiempo: tiempo,
-      nomRes: restaurante
+      idRest: restaurante
     });
   };
   const enviaDatos = async (nombreRes) => {
@@ -67,31 +72,37 @@ const Menu = (props) => {
       {cargando ? <Procesando /> : null}
       <SafeAreaView flex={1}>
         {/* Datos restaurante */}
-        <Box>
-          <Center paddingTop={3}>
-            {/* Logo */}
-            <Image
-                style={{
-                resizeMode: "cover", justifyContent: "center",
-                alignItems: "center", borderTopLeftRadius: 5,
-                borderBottomLeftRadius: 5, borderTopRightRadius: 0,
-                borderBottomRightRadius: 0,
-                }}
-                imageStyle={{
-                borderRadius: 55,
-                }}
-                source={{uri: logo}}
-                alt={"Logo restaurante"}
-                size={"xl"}/>
-            {/* Nombre */}
-            <Text
-                fontFamily='heading'
-                fontSize='2xl'
-                color={coloresAIQ.negro}>
-                {nombreRes}
-            </Text>
-          </Center>
-        </Box>
+        {arrRestaurantes.map((item) => {
+          if (item.id_user == idRest) {
+            return(
+              <Box key={item.id_user}>
+                <Center paddingTop={3}>
+                  {/* Logo */}
+                  <Image
+                    style={{
+                    resizeMode: "cover", justifyContent: "center",
+                    alignItems: "center", borderTopLeftRadius: 5,
+                    borderBottomLeftRadius: 5, borderTopRightRadius: 0,
+                    borderBottomRightRadius: 0,
+                    }}
+                    imageStyle={{
+                    borderRadius: 55,
+                    }}
+                    source={{uri: item.avatar}}
+                    alt={"Logo restaurante"}
+                    size={"xl"}/>
+                  {/* Nombre */}
+                  <Text
+                      fontFamily='heading'
+                      fontSize='2xl'
+                      color={coloresAIQ.negro}>
+                      {item.nombre}
+                  </Text>
+                </Center>
+              </Box>
+            )
+          }
+        })}
 
         {/* Categorias */}
         <Box p={2}>
@@ -164,7 +175,12 @@ const Menu = (props) => {
 
         {/* Menu */}
         <ScrollView flex={1}
-          refreshControl={refreshing} onRefresh={onRefresh}>
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={onRefresh}
+            />
+          }>
           <Box flex={2} p={3}>
           {categoria == 'Alimentos' && arrAlimentos.length > 0 ? 
             (arrAlimentos.map((item) => { 
@@ -181,7 +197,7 @@ const Menu = (props) => {
                   }}>
                       <TouchableOpacity
                       onPress={() => {
-                          detalleProducto(item.idRes, item.nombre, item.desc, item.precio, item.imagen, item.tiempo, idRest);
+                          detalleProducto(item.id_comida, item.nombre, item.descripcion, item.precio, item.imagen, item.tiempo, idRest);
                       }}><Flex direction='row'>
                           <Image
                           style={{
@@ -237,7 +253,7 @@ const Menu = (props) => {
                     }}>
                         <TouchableOpacity
                         onPress={() => {
-                          detalleProducto(item.idRes, item.nombre, item.desc, item.precio, item.imagen, item.tiempo);
+                          detalleProducto(item.id_comida, item.nombre, item.descripcion, item.precio, item.imagen, item.tiempo, idRest);
                         }}><Flex direction='row'>
                             <Image
                             style={{
@@ -293,7 +309,7 @@ const Menu = (props) => {
                     }}>
                         <TouchableOpacity
                         onPress={() => {
-                          detalleProducto(item.idRes, item.nombre, item.desc, item.precio, item.imagen, item.tiempo);
+                          detalleProducto(item.id_comida, item.nombre, item.descripcion, item.precio, item.imagen, item.tiempo, idRest);
                         }}><Flex direction='row'>
                             <Image
                             style={{

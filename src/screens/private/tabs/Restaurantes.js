@@ -41,11 +41,9 @@ const Restaurantes = (props) => {
     setCargando(false);
   }, []);
 
-  const menu = (id, nombre, logo) => {
+  const menu = (id) => {
 		props.navigation.navigate('Menu', {
 			idRes: id,
-      nombre: nombre,
-      imagen: logo
 		});
 	};
 
@@ -174,7 +172,7 @@ const Restaurantes = (props) => {
                           height: 150,
                           marginRight: 3,
                         }}
-                        onPress={() => menu(item.id_user, item.nombre, item.avatar)}>
+                        onPress={() => menu(item.id_user)}>
                         <Image
                           borderRadius={6}
                           source={{uri: item.avatar}}

@@ -6,7 +6,7 @@ import coloresAIQ from '../../../styles/coloresAIQ'
 
 const Carrito = (props) => {
 
-  const nombreRes = props.route.params.nombreRes
+  const idRes = props.route.params.idRes
 
   const arrCombos = [
     {
@@ -43,9 +43,9 @@ const Carrito = (props) => {
     },
   ];
   
-  const enviaDatos = async (nombreRes) => {
+  const enviaDatos = async (idRes) => {
     props.navigation.navigate("Menu", {
-      idRes: nombreRes
+      idRes: idRes
     });
   }
 
@@ -161,7 +161,7 @@ const Carrito = (props) => {
             width={250}
             height={55}
             borderRadius={32}
-            onPress={() => {enviaDatos(nombreRes)}}
+            onPress={() => {enviaDatos(idRes)}}
             _pressed={{
                 bg: coloresAIQ.azulBtn}}>
             <Text
