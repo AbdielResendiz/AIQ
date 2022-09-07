@@ -2,6 +2,7 @@ import React, {useState, useEffect, useCallback} from 'react'
 import {Text, Box, Button, Image, Flex, Center, View} from 'native-base';
 import {ScrollView, TouchableOpacity, RefreshControl, SafeAreaView} from 'react-native';
 import axios from 'axios';
+import { getRestaurantes, getPublicidad } from '../../../api/controlWS';
 import Procesando from '../../components/Procesando';
 import SearchBar from '../../components/SearchBar';
 import { AntDesign } from '@expo/vector-icons';
@@ -14,12 +15,6 @@ const wait = (timeout) => {
 };
 
 const Restaurantes = (props) => {
-  //ws
-  const baseUrl = 'https://v-csoft.com/AIQ/MovilR';
-  const url = `${baseUrl}/getRestaurantes`
-  const url2 = `${baseUrl}/getPublicidad`
-  const source = axios.CancelToken.source();
-  const [hasError, setErrorFlag] = useState(false);
   //Carga datos
   const [cargando, setCargando] = useState(true);
 	const [refreshing, setRefreshing] = useState(false);
@@ -27,60 +22,22 @@ const Restaurantes = (props) => {
   //arreglos restaurantes y anuncios
   const [arrRestaurantes, setArrRestaurantes] = useState([]);
   const [arrAnuncios, setArrAnuncios] = useState([]);
-  //barra de busqueda
-  const [searchPhrase, setSearchPhrase] = useState("");
-  const [clicked, setClicked] = useState(false);
   //obtener datos por tiempo
   const onRefresh = useCallback(() => {
 		setRefreshing(true);
 		wait(1500).then(() => setRefreshing(false));
 	}, []);
 
-  const datosRes = async () => {
-    try{
-      setCargando(true);
-      const response = await axios.get(url, {cancelToken: source.token});
-      if (response.status === 200) {
-        setArrRestaurantes(response.data);
-        setCargando(false);
-        return;
-      } else {
-        throw new Error("Fallo en fetch array restaurantes")
-      }
-    } catch (error) {
-      if(axios.isCancel(error)) {
-        console.log('Data fetching cancelado')
-      } else {
-        setErrorFlag(true);
-        setCargando(false);
-      }
-    }
-  }
-
-  const publicidad = async () => {
-    try{
-      setCargando(true);
-      const response = await axios.get(url2, {cancelToken: source.token});
-      if (response.status === 200) {
-        setArrAnuncios(response.data.Publicidad);
-        setCargando(false);
-        return;
-      } else {
-        throw new Error("Fallo en fetch array anuncio")
-      }
-    } catch (error) {
-      if(axios.isCancel(error)) {
-        console.log('Data fetching cancelado')
-      } else {
-        setErrorFlag(true);
-        setCargando(false);
-      }
-    }
+  const datosResAd = async() => {
+    const m = await getRestaurantes();
+    setArrRestaurantes(m);
+    const n = await getPublicidad();
+    setArrAnuncios(n);
   }
 
   useEffect(() => {
-    datosRes();
-    publicidad();
+    setCargando(true);
+    datosResAd();
     setCargando(false);
   }, []);
 
@@ -144,13 +101,6 @@ const Restaurantes = (props) => {
           </Box>
         </ScrollView>
 
-        {/* Barra busqueda */}
-        <SearchBar
-          searchPhrase={searchPhrase}
-          setSearchPhrase={setSearchPhrase}
-          clicked={clicked}
-          setClicked={setClicked}
-        />
         {/* Titulo: restaurantes */}
         <Box paddingTop={3} paddingBottom={2} paddingX={4}>
           <Flex
@@ -200,7 +150,7 @@ const Restaurantes = (props) => {
             />
           }>
           {/* Inicio if restaurantes activos */}
-          {arrRestaurantes.length > 0 && searchPhrase === "" ? (
+          {arrRestaurantes.length > 0 ? (
               <Box
                 flex={1}
                 p={3}
@@ -214,7 +164,7 @@ const Restaurantes = (props) => {
                 {arrRestaurantes.map((item) => {
                   return (
                     <Box
-                      key={item.id_res}
+                      key={item.id_user}
                       mb={4}
                       style={{ backgroundColor: coloresAIQ.blanco, borderRadius: 6 }}>
                       {/* Cambiar por idRes onPress cuando esten los WS */}
@@ -227,7 +177,7 @@ const Restaurantes = (props) => {
                         onPress={() => menu(item.id_res, item.nombre, item.logo)}>
                         <Image
                           borderRadius={6}
-                          source={{uri: item.logo}}
+                          source={{uri: item.avatar}}
                           alt='Restaurante'
                           style={{
                             width: '100%',
