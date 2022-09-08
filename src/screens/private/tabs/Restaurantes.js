@@ -1,10 +1,9 @@
 import React, {useState, useEffect, useCallback} from 'react'
 import {Text, Box, Button, Image, Flex, Center, View} from 'native-base';
 import {ScrollView, TouchableOpacity, RefreshControl, SafeAreaView} from 'react-native';
-import axios from 'axios';
 import { getRestaurantes, getPublicidad } from '../../../api/controlWS';
 import Procesando from '../../components/Procesando';
-import SearchBar from '../../components/SearchBar';
+import LottieSinServ from '../../components/Lotties/LottieSinServ';
 import { AntDesign } from '@expo/vector-icons';
 import coloresAIQ from '../../../styles/coloresAIQ';
 
@@ -25,14 +24,14 @@ const Restaurantes = (props) => {
   //obtener datos por tiempo
   const onRefresh = useCallback(() => {
 		setRefreshing(true);
-		wait(1500).then(() => setRefreshing(false));
+		wait(1000).then(() => setRefreshing(false));
 	}, []);
 
   const datosResAd = async() => {
-    const m = await getRestaurantes();
-    setArrRestaurantes(m);
     const n = await getPublicidad();
     setArrAnuncios(n);
+    const m = await getRestaurantes();
+    setArrRestaurantes(m);
   }
 
   useEffect(() => {
@@ -40,7 +39,7 @@ const Restaurantes = (props) => {
       setCargando(true);
       datosResAd();
       setCargando(false);
-    }, 2000);
+    }, 10000);
     return () => {
       // clean up
       clearInterval(intervalCall);
@@ -56,10 +55,10 @@ const Restaurantes = (props) => {
   return (
     <>
       {cargando ? <Procesando /> : null}   
-      <SafeAreaView flex={1} flexDirection={'column'} style={{alignItems: 'flex-start'}}>
+      <SafeAreaView flex={1}>
         {/* Scroll anuncios */}
-        <ScrollView 
-          contentContainerStyle={{paddingBottom: 70}}
+        <ScrollView
+          contentContainerStyle={{paddingBottom: 32}}
           horizontal={true}
           showsHorizontalScrollIndicator={false}
           refreshControl={
@@ -68,7 +67,6 @@ const Restaurantes = (props) => {
             onRefresh={onRefresh}/>
           }>
           <Box
-            flex={1}
             p={3}
             style={{
               flexDirection: 'row',
@@ -109,7 +107,8 @@ const Restaurantes = (props) => {
         <Box paddingTop={3} paddingBottom={2} paddingX={4}>
           <Flex
             direction='row'
-            justifyContent='flex-start'>
+            justifyContent='flex-start'
+            alignItems={'flex-start'}>
             <Center>
               <Flex direction='row'>
                 <Text
@@ -146,7 +145,7 @@ const Restaurantes = (props) => {
 
         {/* Scroll restaurantes */}
         <ScrollView
-          contentContainerStyle={{paddingBottom: 4}}
+        contentContainerStyle={{paddingBottom: 4}}
           refreshControl={
             <RefreshControl
               refreshing={refreshing}
@@ -206,16 +205,20 @@ const Restaurantes = (props) => {
                       </Box>
                     );
                   }
-
                 })}
               </Box>
-            ) : (<View><Center>
-                  <Text
+            ) : (
+                <Box padding={4}>
+                  <Center>
+                    <LottieSinServ/>
+                    <Text
                     style={{fontWeight: 'bold', fontSize: 18}}>
                     No tenemos servicio en estos momentos</Text>
-                </Center></View>)
+                  </Center>
+                  
+                </Box>
+                )
           }
-
         </ScrollView>
       </SafeAreaView>
     </>

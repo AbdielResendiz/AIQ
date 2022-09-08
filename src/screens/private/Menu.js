@@ -7,7 +7,7 @@ import { getMenu, getRestaurantes, urlImg } from '../../api/controlWS';
 import coloresAIQ from '../../styles/coloresAIQ';
 import estilosAIQ from '../../styles/estilosAIQ';
 import Procesando from '../components/Procesando';
-
+import LottieSinServ from '../components/Lotties/LottieSinServ';
 
 const wait = (timeout) => {
     return new Promise((resolve) => setTimeout(resolve, timeout));

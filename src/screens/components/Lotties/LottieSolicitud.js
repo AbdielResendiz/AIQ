@@ -14,8 +14,8 @@ export default class LottieSolitcitud extends React.Component {
           this.animation = animation;
         }}
         style={{
-          width: 60,
-          height: 62,
+          width: '100%',
+          height: 600,
         }}
         source={require("../../../../assets/animations/solicitud1.json")}
       />

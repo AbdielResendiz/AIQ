@@ -4,6 +4,7 @@ import {MaterialCommunityIcons} from '@expo/vector-icons'
 import { urlImg } from '../../api/controlWS'
 import coloresAIQ from '../../styles/coloresAIQ'
 import { TextInput } from 'react-native'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Producto = (props) => {
   const [comentario, setComentario] = useState('');
@@ -15,7 +16,6 @@ const Producto = (props) => {
   const imagen = props.route.params.imagen
   const tiempo = props.route.params.tiempo
   
-
   const enviaDatos = async (comentario, nombre, precio, idRes) => {
     props.navigation.navigate("Carrito", {
       comentario: comentario,
