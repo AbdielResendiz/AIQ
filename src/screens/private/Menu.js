@@ -3,7 +3,7 @@ import { SafeAreaView, ScrollView, TouchableOpacity, RefreshControl } from 'reac
 import { Box, Center, Image, Text, Flex } from 'native-base';
 import { FAB } from 'react-native-elements';
 import { AntDesign } from '@expo/vector-icons';
-import { getMenu, getRestaurantes } from '../../api/controlWS';
+import { getMenu, getRestaurantes, urlImg } from '../../api/controlWS';
 import coloresAIQ from '../../styles/coloresAIQ';
 import estilosAIQ from '../../styles/estilosAIQ';
 import Procesando from '../components/Procesando';
@@ -24,7 +24,6 @@ const Menu = (props) => {
 
   //Datos menu
   const [arrAlimentos, setArrAlimentos] = useState([]);
-  const [contador, setContador] = useState(false);
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);
@@ -212,7 +211,7 @@ const Menu = (props) => {
                           imageStyle={{
                               borderRadius: 55,
                           }}
-                          source={{uri: item.imagen}}
+                          source={{uri: urlImg+item.imagen}}
                           alt={item.nombre}
                           size={"xl"}
                           />
@@ -268,7 +267,7 @@ const Menu = (props) => {
                             imageStyle={{
                                 borderRadius: 55,
                             }}
-                            source={{uri: item.imagen}}
+                            source={{uri: urlImg+item.imagen}}
                             alt={item.nombre}
                             size={"xl"}
                             />
@@ -324,7 +323,7 @@ const Menu = (props) => {
                             imageStyle={{
                                 borderRadius: 55,
                             }}
-                            source={{uri: item.imagen}}
+                            source={{uri: urlImg+item.imagen}}
                             alt={item.nombre}
                             size={"xl"}
                             />

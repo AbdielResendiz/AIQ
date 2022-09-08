@@ -1,6 +1,7 @@
 import React, {useState} from 'react'
 import { View, Text, Center, Image, ScrollView, Button} from 'native-base'
 import {MaterialCommunityIcons} from '@expo/vector-icons'
+import { urlImg } from '../../api/controlWS'
 import coloresAIQ from '../../styles/coloresAIQ'
 import { TextInput } from 'react-native'
 
@@ -34,7 +35,7 @@ const Producto = (props) => {
                 alignItems: "center",
                 borderRadius: 12,
                 }}
-                source={{uri: imagen}}
+                source={{uri: urlImg+imagen}}
                 alt={"Imagen producto"}
                 size='180'/>
         </Center>

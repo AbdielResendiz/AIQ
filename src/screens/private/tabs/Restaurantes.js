@@ -36,9 +36,15 @@ const Restaurantes = (props) => {
   }
 
   useEffect(() => {
-    setCargando(true);
-    datosResAd();
-    setCargando(false);
+    const intervalCall = setInterval(() => {
+      setCargando(true);
+      datosResAd();
+      setCargando(false);
+    }, 2000);
+    return () => {
+      // clean up
+      clearInterval(intervalCall);
+    };
   }, []);
 
   const menu = (id) => {
@@ -160,44 +166,47 @@ const Restaurantes = (props) => {
                   alignItems: 'center',
                 }}>
                 {arrRestaurantes.map((item) => {
-                  return (
-                    <Box
-                      key={item.id_user}
-                      mb={4}
-                      style={{ backgroundColor: coloresAIQ.blanco, borderRadius: 6 }}>
-                      {/* Cambiar por idRes onPress cuando esten los WS */}
-                      <TouchableOpacity
-                        style={{
-                          width: 150,
-                          height: 150,
-                          marginRight: 3,
-                        }}
-                        onPress={() => menu(item.id_user)}>
-                        <Image
-                          borderRadius={6}
-                          source={{uri: item.avatar}}
-                          alt='Restaurante'
+                  if (item.status == 1) {
+                    return (
+                      <Box
+                        key={item.id_user}
+                        mb={4}
+                        style={{ backgroundColor: coloresAIQ.blanco, borderRadius: 6 }}>
+                        {/* Cambiar por idRes onPress cuando esten los WS */}
+                        <TouchableOpacity
                           style={{
-                            width: '100%',
+                            width: 150,
                             height: 150,
-                          }} />
-                        <Center
-                          bg={coloresAIQ.azulOscuroAIQ}
-                          _text={{
-                            color: coloresAIQ.blanco,
-                            fontWeight: '700',
-                            fontSize: 'sm',
+                            marginRight: 3,
                           }}
-                          position='absolute'
-                          bottom={0}
-                          px={2}
-                          py={1}
-                          borderRadius={6}>
-                          {item.nombre}
-                        </Center>
-                      </TouchableOpacity>
-                    </Box>
-                  );
+                          onPress={() => menu(item.id_user)}>
+                          <Image
+                            borderRadius={6}
+                            source={{uri: item.avatar}}
+                            alt='Restaurante'
+                            style={{
+                              width: '100%',
+                              height: 150,
+                            }} />
+                          <Center
+                            bg={coloresAIQ.azulOscuroAIQ}
+                            _text={{
+                              color: coloresAIQ.blanco,
+                              fontWeight: '700',
+                              fontSize: 'sm',
+                            }}
+                            position='absolute'
+                            bottom={0}
+                            px={2}
+                            py={1}
+                            borderRadius={6}>
+                            {item.nombre}
+                          </Center>
+                        </TouchableOpacity>
+                      </Box>
+                    );
+                  }
+
                 })}
               </Box>
             ) : (<View><Center>

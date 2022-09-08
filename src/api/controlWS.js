@@ -1,5 +1,6 @@
 import axios from "axios";
 
+export const urlImg = 'https://v-csoft.com/AIQ/static/img/'
 const source = axios.CancelToken.source();
 const baseUrl = 'https://v-csoft.com/AIQ/MovilR';
 const urlRes = `${baseUrl}/getRestaurantes`;
