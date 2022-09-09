@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { 	
     Button,
 	Text,
@@ -10,12 +10,10 @@ import {
 	FormControl,
 	useToast,
 } from 'native-base'
-import axios from 'axios';
 import { FontAwesome, MaterialIcons } from '@expo/vector-icons';
 import coloresAIQ from '../../styles/coloresAIQ';
-import Procesando from '../components/Procesando';
-import { Alert, View } from 'react-native';
-import { ActivityIndicator } from 'react-native';
+import { Alert } from 'react-native';
+import ProcesandoAir from '../components/ProcesandoAir';
 
 const Login = (props) => {
     const toast = useToast();
@@ -32,17 +30,12 @@ const Login = (props) => {
 	const cambioC = () => setValidoC(false);
 	const cambioP = () => setValidoP(false);
 
-    const [loader, setLoader] = useState('none');
-    const [login, setLogin] = useState()
    
 
-    useEffect(()=>{
-        
-    }, [])
 
 	const demoServiciosAxios = async () => {
 		
-			setLoader('flex');
+			setCargando(true);
             var data = new FormData()
             data.append('id_mesa',usuario)
             data.append('password',contrasena)
@@ -111,8 +104,7 @@ const Login = (props) => {
                 });
 
 
-                setLoader('none')
-		 
+             setCargando(false)
 		
 	
 	};
@@ -123,7 +115,7 @@ const Login = (props) => {
 
   return (
     <>
-    {cargando ? <Procesando /> : null}
+    {cargando ? <ProcesandoAir /> : null}
         <ScrollView margin={5} marginTop={1} showsVerticalScrollIndicator={false}>
             {/* Logo */}
             <Box flex={1}>
@@ -251,35 +243,7 @@ const Login = (props) => {
                 </Stack>
             </FormControl>
 
-            <Button
-                bg={coloresAIQ.azulAIQ}
-                mt='10'
-                size='lg'
-                borderRadius={32}
-                onPress={demoServiciosAxios}
-                _pressed={{
-                    bg: coloresAIQ.azulBtn}}>
-                <Text
-                    color={coloresAIQ.blanco}
-                    fontSize='md'
-                    fontFamily='body'>
-                    Axios
-                </Text>
-            </Button>
-      
-
-			<View
-				style={{
-					marginVertical: 100,
-					alignItems: 'center',
-					alignContent: 'center',
-					display: loader,
-				}}>
-				<ActivityIndicator
-					size='large'
-					color='#333'
-				/>
-			</View>
+            
             
             {/* Boton Vincular */}
             <Button
