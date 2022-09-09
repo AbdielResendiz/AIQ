@@ -4,7 +4,6 @@ import {MaterialCommunityIcons} from '@expo/vector-icons'
 import { urlImg } from '../../api/controlWS'
 import coloresAIQ from '../../styles/coloresAIQ'
 import { TextInput } from 'react-native'
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Producto = (props) => {
   const [comentario, setComentario] = useState('');
@@ -16,12 +15,13 @@ const Producto = (props) => {
   const imagen = props.route.params.imagen
   const tiempo = props.route.params.tiempo
   
-  const enviaDatos = async (comentario, nombre, precio, idRes) => {
+  const enviaDatos = async (comentario, nombre, precio, idRes, imagen) => {
     props.navigation.navigate("Carrito", {
       comentario: comentario,
       nombre: nombre,
       precio: precio,
-      idRes: idRes
+      idRes: idRes,
+      imagen: imagen
     });
   }
   return (
@@ -122,7 +122,7 @@ const Producto = (props) => {
                 width={250}
                 height={55}
                 borderRadius={32}
-                onPress={() => {enviaDatos(comentario, nomProd, precio, idRes)}}
+                onPress={() => {enviaDatos(comentario, nomProd, precio, idRes, imagen)}}
                 _pressed={{
                     bg: coloresAIQ.azulBtn}}>
                 <Text
