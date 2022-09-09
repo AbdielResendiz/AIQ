@@ -14,8 +14,8 @@ export default class LottieAirplane extends React.Component {
           this.animation = animation;
         }}
         style={{
-          width: 60,
-          height: 62,
+          width: '100%',
+          height: 180,
         }}
         source={require("../../../../assets/animations/loginairplane.json")}
       />
