@@ -30,8 +30,7 @@ const Carrito = (props) => {
     () => {
       AsyncStorage.getItem('CARRITO', (err, result) => {
         setArrCarrito(JSON.parse(result));
-        console.log(JSON.parse(result));
-        console.log(typeof(arrCarrito));
+        console.log(arrCarrito);
       });
     }
   );
