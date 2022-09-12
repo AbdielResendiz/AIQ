@@ -15,7 +15,7 @@ const Carrito = (props) => {
   const imagen = props.route.params.imagen
 
   const [arrCarrito, setArrCarrito] = useState([''])
-  const datosCarrito = [{
+  let datosCarrito = [{
     idRes: idRes,
     nomProd: nomProd,
     precio: precio,
@@ -23,6 +23,10 @@ const Carrito = (props) => {
     imagen: imagen
   }];
   // You only need to define what will be added or updated
+  let datosCarritoAdd = [{
+    age: 31,
+    traits: { eyes: 'blue', shoe_size: 10 }
+  }];
   
   AsyncStorage.setItem(
     'CARRITO',
@@ -30,6 +34,8 @@ const Carrito = (props) => {
     () => {
       AsyncStorage.getItem('CARRITO', (err, result) => {
         setArrCarrito(JSON.parse(result));
+        (JSON.parse(JSON.stringify(datosCarritoAdd)))
+
         console.log(arrCarrito);
       });
     }
