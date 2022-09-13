@@ -1,14 +1,14 @@
 import React, {useState, useEffect, useCallback} from 'react'
-import { SafeAreaView, ScrollView, TouchableOpacity, RefreshControl } from 'react-native';
-import { Box, Center, Image, Text, Flex } from 'native-base';
+import { SafeAreaView, ScrollView, TouchableOpacity, RefreshControl, Alert } from 'react-native';
+import { Box, Center, Image, Text, Flex,View} from 'native-base';
 import { FAB } from 'react-native-elements';
 import { AntDesign } from '@expo/vector-icons';
-import { getMenu, getRestaurantes, urlImg } from '../../api/controlWS';
+import { getMenu, getRestaurantes, urlImg, getCombos, getComidas, getBebidas} from '../../api/controlWS';
 import coloresAIQ from '../../styles/coloresAIQ';
 import estilosAIQ from '../../styles/estilosAIQ';
 import Procesando from '../components/Procesando';
 import LottieSinServ from '../components/Lotties/LottieSinServ';
-
+import ProcesandoAir from '../components/ProcesandoAir';
 const wait = (timeout) => {
     return new Promise((resolve) => setTimeout(resolve, timeout));
   };
@@ -16,11 +16,16 @@ const wait = (timeout) => {
 const Menu = (props) => {
   const [refreshing, setRefreshing] = useState(false);
   const [cargando, setCargando] = useState(true);
+  const [cargandoR, setCargandoR] = useState(true);
   const [categoria, setCategoria] = useState('Alimentos')
   
   //Datos restaurante
   const idRest = props.route.params.idRes
   const [arrRestaurantes, setArrRestaurantes] = useState([]);
+
+  const [arrCombos, setArrCombos] = useState([]);
+  const [arrPlatillos, setPlatillos] = useState([]);
+  const [arrBebidas, setBebidas] = useState([]);
 
   //Datos menu
   const [arrAlimentos, setArrAlimentos] = useState([]);
@@ -37,6 +42,16 @@ const Menu = (props) => {
     setArrAlimentos(m);
     const n = await getRestaurantes();
     setArrRestaurantes(n);
+    const p = await getCombos(idRest);
+    setArrCombos(p);
+    const k = await getComidas(idRest);
+    setPlatillos(k)
+    setCargandoR(false)
+    const l = await getBebidas(idRest)
+    setBebidas(l)
+
+
+
   }
 
   const detalleProducto = (id_comida, nombre, desc, precio, imagen, tiempo, restaurante) => {
@@ -60,10 +75,27 @@ const Menu = (props) => {
     setCategoria(tipCat)
   })
 
+
   useEffect(() => {
-    setCargando(true);
+    const cambiaTamaño = setInterval(() => {
+      
+      datosMenu()
+      // setCargandoR(false)
+      // console.log("reinicio")
+    }, 1500);
+    return () => {
+      // clean up
+     
+      clearInterval(cambiaTamaño);
+    };
+  }, []);
+
+
+  useEffect(() => {
+ 
     datosMenu();
     setCargando(false);
+   
   }, [])
 
   return (
@@ -104,16 +136,21 @@ const Menu = (props) => {
         })}
 
         {/* Categorias */}
+        
         <Box p={2}>
             <Center flexDir={'row'}>
+              {arrAlimentos.length > 0 ? (<> 
+              
             {categoria == 'Alimentos' ? 
             (<>
+            
               {arrAlimentos.length > 0 ? 
                 (<TouchableOpacity
                     style={estilosAIQ.containerCategorias}
                     onPress={() => {navCategoria('Alimentos')}}>
                     <Text style={estilosAIQ.textCategoriasSelect}>Platillos</Text>
-                </TouchableOpacity>) : (null)}
+                </TouchableOpacity>) : 
+                (null)}
               {arrAlimentos.length > 0 ? (
                 <TouchableOpacity
                     style={estilosAIQ.containerCategorias}
@@ -127,6 +164,7 @@ const Menu = (props) => {
                     <Text style={estilosAIQ.textCategorias}>Combos</Text>
                 </TouchableOpacity>) : (null)}
             </>) : (null)}
+
             {categoria == 'Bebidas' ? 
             (<>
                 {arrAlimentos.length > 0 ? 
@@ -148,6 +186,7 @@ const Menu = (props) => {
                         <Text style={estilosAIQ.textCategorias}>Combos</Text>
                     </TouchableOpacity>) : (null)}
                 </>) : (null)}
+       
             {categoria == 'Combos' ? 
             (<>
                 {arrAlimentos.length > 0 ? 
@@ -169,8 +208,12 @@ const Menu = (props) => {
                         <Text style={estilosAIQ.textCategoriasSelect}>Combos</Text>
                     </TouchableOpacity>) : (null)}
                 </>) : (null)}
+                </>):(
+            null)}
             </Center>
         </Box>
+
+
 
         {/* Menu */}
         <ScrollView flex={1}
@@ -180,10 +223,11 @@ const Menu = (props) => {
               onRefresh={onRefresh}
             />
           }>
+            {cargandoR ? <ProcesandoAir /> : null}
           <Box flex={2} p={3}>
-          {categoria == 'Alimentos' && arrAlimentos.length > 0 ? 
+          {categoria == 'Alimentos' && arrPlatillos.length > 0? 
             (arrAlimentos.map((item) => { 
-              if (item.id_categoria == 2) {
+              if (item.id_categoria == 2 ) {
                 return(
                   <Box                       
                   style={{ borderRadius: 12 }}
@@ -236,8 +280,15 @@ const Menu = (props) => {
                   </Box>
               )
               }
-            })) : (null)}
-          {categoria == 'Bebidas' && arrAlimentos.length > 0 ? 
+            })) : ( (<View>
+               {(categoria != 'Alimentos' && arrCombos.length >= 1) || (categoria != 'Alimentos' && arrBebidas.length >= 1 ) || (categoria != 'Alimentos' && arrPlatillos.length ==0) ? 
+            (<View></View>) : (<Center>
+                                    <LottieSinServ></LottieSinServ>
+                                    <Text>Ups....Intentalo mas tarde</Text>
+                              </Center>)}
+
+            </View>))}
+          {categoria == 'Bebidas' && arrBebidas.length > 0 ? 
             (arrAlimentos.map((item) => {
                 if (item.id_categoria == 3) {
                   return(
@@ -292,10 +343,17 @@ const Menu = (props) => {
                     </Box>
                 )
                 }
-            })) : (null)}
-          {categoria == 'Combos' && arrAlimentos.length > 0 ? 
+            })) : ((<View>
+             {(categoria != 'Bebidas' && arrCombos.length >= 1) || (categoria != 'Bebidas' && arrBebidas.length == 0 ) || (categoria != 'Bebidas' && arrPlatillos.length >=1 ) ? 
+          (<View></View>) : (<Center>
+            <LottieSinServ></LottieSinServ>
+            <Text>Ups....Intentalo mas tarde</Text>
+      </Center>)}
+
+          </View>))}
+          {categoria == 'Combos' && arrCombos.length > 0 ? 
             (arrAlimentos.map((item) => {
-                if (item.id_categoria == 1) {
+               if (item.id_categoria == 1 ) {
                   return(
                     <Box                       
                     style={{ borderRadius: 12 }}
@@ -348,7 +406,14 @@ const Menu = (props) => {
                     </Box>
                 )
                 }
-            })) : (null)}
+            })) : (<View>
+                {(categoria != 'Combos' && arrCombos.length == 0 ) || (categoria != 'Combos' && arrBebidas.length >= 1 ) || (categoria != 'Combos' && arrPlatillos.length >=1 ) ? 
+            (<View></View>) : (<Center>
+              <LottieSinServ></LottieSinServ>
+              <Text>Ups....Intentalo mas tarde</Text>
+        </Center>)}
+
+            </View>)}
           </Box>
         </ScrollView>
         <FAB
