@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { View, Text, Box, Flex, Image, Center, Button} from 'native-base'
 import { ScrollView, TouchableOpacity } from 'react-native'
 import {AntDesign, MaterialCommunityIcons} from '@expo/vector-icons'
@@ -13,35 +13,31 @@ const Carrito = (props) => {
   const precio = props.route.params.precio
   const comentario = props.route.params.comentario
   const imagen = props.route.params.imagen
+  const cantP = props.route.params.cantP
 
-  const [arrCarrito, setArrCarrito] = useState([''])
-  let datosCarrito = [{
+  const [arrCarrito, setArrCarrito] = useState([])
+  let datosCarrito = {
     idRes: idRes,
     nomProd: nomProd,
     precio: precio,
     comentario: comentario,
-    imagen: imagen
-  }];
+    imagen: imagen,
+    cantP: cantP,
+    subtotal: cantP * precio
+  };
   // You only need to define what will be added or updated
-  let datosCarritoAdd = [{
-    age: 31,
-    traits: { eyes: 'blue', shoe_size: 10 }
-  }];
-  
-  AsyncStorage.setItem(
-    'CARRITO',
-    JSON.stringify(datosCarrito),
-    () => {
-      AsyncStorage.getItem('CARRITO', (err, result) => {
-        setArrCarrito(JSON.parse(result));
-        (JSON.parse(JSON.stringify(datosCarritoAdd)))
 
-        console.log(arrCarrito);
-      });
-    }
-  );
-
-  
+  const generaArray = async () => {
+    AsyncStorage.setItem(
+      'CARRITO',
+      JSON.stringify(datosCarrito),
+      () => {
+        AsyncStorage.getItem('CARRITO', (err, result) => {
+          setArrCarrito([JSON.parse(result)]);
+        });
+      }
+    );
+  }
   
   const enviaDatos = async (idRes) => {
     props.navigation.navigate("Menu", {
@@ -49,6 +45,9 @@ const Carrito = (props) => {
     });
   }
 
+  useEffect(() => {
+    generaArray()
+  }, [])
   return (
     <View flex={1}>
       {/* Titulo: Carrito */}
@@ -96,13 +95,29 @@ const Carrito = (props) => {
                         color={coloresAIQ.azulOscuroAIQ}>
                         {item.nomProd}
                       </Text>
-                        {/* Costo de platillo */}
+                      {/* Costo de platillo */}
                       <Text
                         ml={1}
                         color={coloresAIQ.grisAIQ}
                         fontSize='md'
                         fontFamily='body'>
-                        costo: ${item.precio}
+                        Costo: ${item.precio}
+                      </Text>
+                      {/* Cantidad */}
+                      <Text
+                        ml={1}
+                        color={coloresAIQ.grisAIQ}
+                        fontSize='md'
+                        fontFamily='body'>
+                        Cantidad: {item.cantP}
+                      </Text>
+                      {/* Cantidad */}
+                      <Text
+                        ml={1}
+                        color={coloresAIQ.grisAIQ}
+                        fontSize='md'
+                        fontFamily='body'>
+                        Subtotal: ${item.subtotal}
                       </Text>
                     </Box>
                     <TouchableOpacity 
@@ -113,19 +128,19 @@ const Carrito = (props) => {
                   </Flex>
                 </Box>)
         })) : (null)}
+        {/* Total */}
+        <Center>
+          <Text
+            paddingX={4}
+            paddingTop={3}
+            fontSize={22}
+            fontFamily='heading'
+            colorScheme={coloresAIQ.negro}>
+            Total: $000.00
+          </Text>
+        </Center>
       </ScrollView>
 
-      {/* Total */}
-      <Center>
-        <Text
-          paddingX={4}
-          paddingTop={3}
-          fontSize={22}
-          fontFamily='heading'
-          colorScheme={coloresAIQ.negro}>
-          Total: $000.00
-        </Text>
-      </Center>
       {/* btn Confirmar compra */}
       <Center marginTop={2}>
         <Button

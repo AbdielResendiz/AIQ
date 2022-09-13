@@ -1,27 +1,47 @@
 import React, {useState} from 'react'
-import { View, Text, Center, Image, ScrollView, Button} from 'native-base'
-import {MaterialCommunityIcons} from '@expo/vector-icons'
+import { View, Text, Center, Image, ScrollView, Button, Box, Flex} from 'native-base'
+import {MaterialCommunityIcons, FontAwesome} from '@expo/vector-icons'
 import { urlImg } from '../../api/controlWS'
 import coloresAIQ from '../../styles/coloresAIQ'
 import { TextInput } from 'react-native'
 
 const Producto = (props) => {
   const [comentario, setComentario] = useState('');
+  //Cantidad de producto
+  const [cantP, setCantp] = useState(1);
 
+  //datos recibidos de Menu.js
   const idRes = props.route.params.idRest
   const nomProd = props.route.params.nombre
   const desc = props.route.params.desc
   const precio = props.route.params.precio
   const imagen = props.route.params.imagen
   const tiempo = props.route.params.tiempo
+
+  // control spinner cantidad
+  const disminCarrito = async () => {
+    if (cantP <= 1) {
+      setCantp(1);
+    } else {
+      setCantp(cantP - 1);
+    }
+  };
+
+  const upCarrito = async () => {
+    if (cantP >= 9) {
+    } else {
+      setCantp(cantP + 1);
+    }
+  };
   
-  const enviaDatos = async (comentario, nombre, precio, idRes, imagen) => {
+  const enviaDatos = async (comentario, nombre, precio, idRes, imagen, cantP) => {
     props.navigation.navigate("Carrito", {
       comentario: comentario,
       nombre: nombre,
       precio: precio,
       idRes: idRes,
-      imagen: imagen
+      imagen: imagen,
+      cantP: cantP
     });
   }
   return (
@@ -110,6 +130,63 @@ const Producto = (props) => {
             />
         </View>
 
+        {/* Input spinner cantidad */}
+        <Box w='50%' alignContent='center' marginLeft={8} marginTop={3}>
+          <Text                 
+            fontSize={18}
+            fontFamily='body'
+            fontWeight={'bold'}
+            color={coloresAIQ.negro}>
+              Cantidad:
+          </Text>
+          <Flex direction={"row"} alignItems='flex-start'>
+            <Button
+              bg={coloresAIQ.azulOscuroAIQ}
+              h={12}
+              style={{
+                borderTopRightRadius: 0,
+                borderBottomRightRadius: 0,
+                width: 50,
+              }}
+              startIcon={
+                <FontAwesome
+                  name='minus'
+                  color={coloresAIQ.blanco}
+                />
+              }
+              _pressed={{ bg: coloresAIQ.azulBtn}}
+              onPress={disminCarrito}
+            />
+            <Text
+              h={12}
+              w={10}
+              bg={coloresAIQ.azulOscuroAIQ}
+              fontSize={"md"}
+              style={{ textAlignVertical: "center", textAlign: "center" }}
+              color={coloresAIQ.blanco}
+            >
+              {cantP}
+            </Text>
+            <Button
+              h={12}
+              bg={coloresAIQ.azulOscuroAIQ}
+              style={{
+                borderTopLeftRadius: 0,
+                borderBottomLeftRadius: 0,
+                width: 50,
+              }}
+              endIcon={
+                <FontAwesome
+                  name='plus'
+                  color={coloresAIQ.blanco}
+                />
+              }
+              _pressed={{ bg: coloresAIQ.azulBtn }}
+              onPress={upCarrito}
+            />
+          </Flex>
+        </Box>
+
         {/* btn AddCarrito */}
         <Center marginY={4}>
             <Button
@@ -122,7 +199,7 @@ const Producto = (props) => {
                 width={250}
                 height={55}
                 borderRadius={32}
-                onPress={() => {enviaDatos(comentario, nomProd, precio, idRes, imagen)}}
+                onPress={() => {enviaDatos(comentario, nomProd, precio, idRes, imagen, cantP)}}
                 _pressed={{
                     bg: coloresAIQ.azulBtn}}>
                 <Text
