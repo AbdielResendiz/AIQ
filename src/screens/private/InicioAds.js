@@ -33,11 +33,7 @@ const getAnuncios = async() => {
      };
 
   
-  useEffect(()=>{
- 
-     getAnuncios()
-  },[])
-
+  
 
    useEffect(() => {
     const cambiaTamaño = setInterval(() => {

@@ -6,6 +6,7 @@ import Procesando from '../../components/Procesando';
 import LottieSinServ from '../../components/Lotties/LottieSinServ';
 import { AntDesign } from '@expo/vector-icons';
 import coloresAIQ from '../../../styles/coloresAIQ';
+import ProcesandoAir from '../../components/ProcesandoAir';
 
 const wait = (timeout) => {
 	return new Promise((resolve) =>
@@ -22,29 +23,42 @@ const Restaurantes = (props) => {
   const [arrRestaurantes, setArrRestaurantes] = useState([]);
   const [arrAnuncios, setArrAnuncios] = useState([]);
   //obtener datos por tiempo
+
   const onRefresh = useCallback(() => {
 		setRefreshing(true);
 		wait(1000).then(() => setRefreshing(false));
 	}, []);
 
   const datosResAd = async() => {
+    
     const n = await getPublicidad();
     setArrAnuncios(n);
     const m = await getRestaurantes();
     setArrRestaurantes(m);
+    setCargando(false)
+   
   }
 
+  useEffect(()=>{
+    datosResAd()
+  },[])
+ 
+
   useEffect(() => {
+    
     const intervalCall = setInterval(() => {
-      setCargando(true);
+   
       datosResAd();
-      setCargando(false);
-    }, 10000);
+      console.log ("estamos cargando")
+   
+
+    }, 5000);
     return () => {
       // clean up
       clearInterval(intervalCall);
     };
   }, []);
+
 
   const menu = (id) => {
 		props.navigation.navigate('Menu', {
@@ -54,7 +68,7 @@ const Restaurantes = (props) => {
 
   return (
     <>
-      {cargando ? <Procesando /> : null}   
+      {cargando ? <ProcesandoAir /> : null}   
       <SafeAreaView flex={1}>
         {/* Scroll anuncios */}
         <ScrollView
@@ -207,16 +221,19 @@ const Restaurantes = (props) => {
                   }
                 })}
               </Box>
-            ) : (
-                <Box padding={4}>
-                  <Center>
-                    <LottieSinServ/>
-                    <Text
-                    style={{fontWeight: 'bold', fontSize: 18}}>
-                    No tenemos servicio en estos momentos</Text>
-                  </Center>
+            ) 
+            : 
+              (
+                // <Box padding={4}>
+                //   <Center>
+                //     <LottieSinServ/>
+                //     <Text
+                //     style={{fontWeight: 'bold', fontSize: 18}}>
+                //     No tenemos servicio en estos momentos</Text>
+                //   </Center>
                   
-                </Box>
+                // </Box>
+                null
                 )
           }
         </ScrollView>
