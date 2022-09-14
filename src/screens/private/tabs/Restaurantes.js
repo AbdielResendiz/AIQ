@@ -2,9 +2,7 @@ import React, {useState, useEffect, useCallback} from 'react'
 import {Text, Box, Button, Image, Flex, Center, View} from 'native-base';
 import {ScrollView, TouchableOpacity, RefreshControl, SafeAreaView} from 'react-native';
 import { getRestaurantes, getPublicidad } from '../../../api/controlWS';
-import Procesando from '../../components/Procesando';
 import LottieSinServ from '../../components/Lotties/LottieSinServ';
-import { AntDesign } from '@expo/vector-icons';
 import coloresAIQ from '../../../styles/coloresAIQ';
 import ProcesandoAir from '../../components/ProcesandoAir';
 
@@ -18,17 +16,16 @@ const Restaurantes = (props) => {
   //Carga datos
   const [cargando, setCargando] = useState(true);
 	const [refreshing, setRefreshing] = useState(false);
-  const [car, setCar] = useState({});
   //arreglos restaurantes y anuncios
   const [arrRestaurantes, setArrRestaurantes] = useState([]);
   const [arrAnuncios, setArrAnuncios] = useState([]);
   //obtener datos por tiempo
-
   const onRefresh = useCallback(() => {
 		setRefreshing(true);
 		wait(1000).then(() => setRefreshing(false));
 	}, []);
 
+  //Funcion consume ws
   const datosResAd = async() => {
     
     const n = await getPublicidad();
@@ -43,15 +40,9 @@ const Restaurantes = (props) => {
     datosResAd()
   },[])
  
-
   useEffect(() => {
-    
-    const intervalCall = setInterval(() => {
-   
+    const intervalCall = setInterval(() => {  
       datosResAd();
-      console.log ("estamos cargando")
-   
-
     }, 5000);
     return () => {
       // clean up
@@ -59,7 +50,7 @@ const Restaurantes = (props) => {
     };
   }, []);
 
-
+  //navegacion a menu y envio de id restaurante
   const menu = (id) => {
 		props.navigation.navigate('Menu', {
 			idRes: id,
@@ -133,27 +124,6 @@ const Restaurantes = (props) => {
                 </Text>
               </Flex>
             </Center>
-            {car.length != 0 &&
-            car.length !== undefined ? (
-              <Center>
-                <Box>
-                  <Button
-                    variant='ghost'
-                    onPress={() =>
-                      props.navigation.navigate(
-                        'Carrito'
-                      )
-                    }
-                    _pressed={coloresAIQ.grisOscuroAIQ}>
-                    <AntDesign
-                      name='shoppingcart'
-                      color={coloresAIQ.negro}
-                      size={24}
-                    />
-                  </Button>
-                </Box>
-              </Center>
-            ) : null}
           </Flex>
         </Box>
 
@@ -224,17 +194,17 @@ const Restaurantes = (props) => {
             ) 
             : 
               (
-                // <Box padding={4}>
-                //   <Center>
-                //     <LottieSinServ/>
-                //     <Text
-                //     style={{fontWeight: 'bold', fontSize: 18}}>
-                //     No tenemos servicio en estos momentos</Text>
-                //   </Center>
+                <Box padding={4}>
+                  <Center>
+                    <LottieSinServ/>
+                    <Text
+                    style={{fontWeight: 'bold', fontSize: 18}}>
+                    No tenemos servicio en estos momentos</Text>
+                  </Center>
                   
-                // </Box>
-                null
-                )
+                </Box>
+                
+              )
           }
         </ScrollView>
       </SafeAreaView>

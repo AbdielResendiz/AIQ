@@ -4,11 +4,15 @@ import {MaterialCommunityIcons, FontAwesome} from '@expo/vector-icons'
 import { urlImg } from '../../api/controlWS'
 import coloresAIQ from '../../styles/coloresAIQ'
 import { TextInput } from 'react-native'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import { creaCarrito } from '../../api/controlWS'
 
 const Producto = (props) => {
   const [comentario, setComentario] = useState('');
   //Cantidad de producto
   const [cantP, setCantp] = useState(1);
+  //const para crear carrito
+  const [mesa, setMesa] = useState(null);
 
   //datos recibidos de Menu.js
   const idRes = props.route.params.idRest
@@ -42,6 +46,10 @@ const Producto = (props) => {
       idRes: idRes,
       imagen: imagen,
       cantP: cantP
+    });
+    AsyncStorage.getItem('ID_MESA', (err, result) => {
+      const m = JSON.parse(result);
+      creaCarrito(m);
     });
   }
   return (

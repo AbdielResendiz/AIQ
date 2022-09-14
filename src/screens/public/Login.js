@@ -1,117 +1,103 @@
 import React, { useState } from 'react';
-import { 	
-    Button,
-	Text,
-	Input,
-	ScrollView,
-	Box,
-	Image,
-	Stack,
-	FormControl,
-	useToast,
-} from 'native-base'
+import { Button, Text, Input, ScrollView, Box, Image, Stack, FormControl, useToast } from 'native-base'
 import { FontAwesome, MaterialIcons } from '@expo/vector-icons';
 import coloresAIQ from '../../styles/coloresAIQ';
 import { Alert } from 'react-native';
 import ProcesandoAir from '../components/ProcesandoAir';
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 const Login = (props) => {
+    //para mensaje mesa o pass erroneo
     const toast = useToast();
-
+    //datos mesa
 	const [usuario, setUsuario] = useState('');
     const borraUser = () => setUsuario('');
-
 	const [contrasena, setContrasena] = useState('');
+    //show/hide pass
 	const [show, setShow] = useState(false);
 	const handleClick = () => setShow(!show);
+    //carga
 	const [cargando, setCargando] = useState(false);
+    //validaciones C=Mesa, P=Password
 	const [validoC, setValidoC] = useState(false);
 	const [validoP, setValidoP] = useState(false);
 	const cambioC = () => setValidoC(false);
 	const cambioP = () => setValidoP(false);
 
-   
-
-
 	const demoServiciosAxios = async () => {
 		
-			setCargando(true);
-            var data = new FormData()
-            data.append('id_mesa',usuario)
-            data.append('password',contrasena)
+		setCargando(true);
+        var data = new FormData()
+        data.append('id_mesa',usuario)
+        data.append('password',contrasena)
           
-            await fetch('https://v-csoft.com/AIQ/Mesas/existsTable/', {
+        //conexion con wb login
+        await fetch('https://v-csoft.com/AIQ/Mesas/existsTable/', {
                 method: 'post',
                   body: data,
                   
-              })
-                .then((response) => response.json())
-                .then((result) => {
-                  console.log('Success:', result);
-               
-                  
-                var acceso = result.res
-                //setLogin(acceso)
+        })
+        .then((response) => response.json())
+        .then((result) => {
+            console.log('Success:', result);
+            var acceso = result.res
+            //setLogin(acceso)
   
-		if (usuario.length == 0) {
-			setValidoC(true);
-			setUsuario('');
-			return;
-		}
+            if (usuario.length == 0) {
+                setValidoC(true);
+                setUsuario('');
+                return;
+            }
 
-		if (
-			contrasena.length == 0
-		) {
-			setValidoP(true);
-			setContrasena('');
-			return;
-		}
+            if (contrasena.length == 0) {
+                setValidoP(true);
+                setContrasena('');
+                return;
+            }
 
-		setCargando(true);
+		    setCargando(true);
 
-		try {
-			if (acceso === true) {
-                props.navigation.navigate('InicioAds');
-			}
-			else {
-                toast.show({
-					status: 'warning',
-					description: "Mesa o contraseña erroneo",
-					placement: 'top',
-				});
+            try {
+                //datos login correctos
+                if (acceso === true) {
+                    //navegacion inicioAds
+                    props.navigation.navigate('InicioAds');
+                    //guarda sesion localStorage
+                    AsyncStorage.setItem(
+                        'ID_MESA',
+                        JSON.stringify(usuario),
+                    );
+                }
+                //datos login incorrectos
+                else {
+                    toast.show({
+                        status: 'warning',
+                        description: "Mesa o contraseña erroneo",
+                        placement: 'top',
+                    });
+                
+                }
+                setUsuario('');
+                setContrasena('');
+                setCargando(false);
             
-			}
-			setUsuario('');
-			setContrasena('');
-			setCargando(false);
-
-		} catch (e) {			
-			toast.show({
-				status: 'warning',
-				description: "Error, favor de intentarlo más tarde",
-				placement: 'top',
-			});
-			setUsuario('');
-			setContrasena('');
-			setCargando(false);
-		}
-
-
-         
-                })
-                .catch((ex) => {
-                    Alert.alert('ERROR', ex.toString());
+            //error en la conexion
+            } catch (e) {			
+                toast.show({
+                    status: 'warning',
+                    description: "Error, favor de intentarlo más tarde",
+                    placement: 'top',
                 });
-
-
-             setCargando(false)
-		
-	
-	};
-
-
-
-
+                setUsuario('');
+                setContrasena('');
+                setCargando(false);
+            }
+        })
+        .catch((ex) => {
+            Alert.alert('ERROR', ex.toString());
+        });
+        setCargando(false)
+	}; //fin demoServiciosAxios
 
   return (
     <>
@@ -243,8 +229,6 @@ const Login = (props) => {
                 </Stack>
             </FormControl>
 
-            
-            
             {/* Boton Vincular */}
             <Button
                 bg={coloresAIQ.azulAIQ}

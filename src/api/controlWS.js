@@ -1,10 +1,10 @@
 import axios from "axios";
-import ProcesandoAir from "../screens/components/ProcesandoAir";
 export const urlImg = 'https://v-csoft.com/AIQ/static/img/'
 const source = axios.CancelToken.source();
-const baseUrl = 'https://v-csoft.com/AIQ/MovilR';
-const urlRes = `${baseUrl}/getRestaurantes`;
-const urlAD = `${baseUrl}/getPublicidad`;
+const baseUrl = 'https://v-csoft.com/AIQ';
+const urlRes = `${baseUrl}/MovilR/getRestaurantes`;
+const urlAD = `${baseUrl}/MovilR/getPublicidad`;
+const urlCreaCart = `${baseUrl}/Carrito/createCart/`;
 
 export const getRestaurantes = async() => {
   try{
@@ -42,7 +42,7 @@ export const getPublicidad = async () => {
 
 export const getMenu = async (idRes) => {
   const idRest = idRes;
-  const urlMenu = `${baseUrl}/getMenu/${idRest}`
+  const urlMenu = `${baseUrl}/MovilR/getMenu/${idRest}`
   try{
     const response = await axios.get(urlMenu, {cancelToken: source.token});
     if (response.status === 200) {
@@ -61,7 +61,7 @@ export const getMenu = async (idRes) => {
   // traemos todo el arreeglo de comidas de cada restaurante
 export const getCombos = async (idRes) => {
   const idRest = idRes;
-  const urlCombos = `${baseUrl}/getCombos/${idRest}`
+  const urlCombos = `${baseUrl}/MovilR/getCombos/${idRest}`
 
   try{
     const response = await axios.get(urlCombos, {cancelToken: source.token});
@@ -83,7 +83,7 @@ export const getCombos = async (idRes) => {
 export const getComidas = async (idRes) => {
 
   const idRest = idRes;
-  const urlPlatillos = `${baseUrl}/getComidas/${idRest}`
+  const urlPlatillos = `${baseUrl}/MovilR/getComidas/${idRest}`
 
   try{
     const response = await axios.get(urlPlatillos, {cancelToken: source.token});
@@ -104,7 +104,7 @@ export const getComidas = async (idRes) => {
 export const getBebidas = async (idRes) => {
 
   const idRest = idRes;
-  const urlBebidas = `${baseUrl}/getBebidas/${idRest}`
+  const urlBebidas = `${baseUrl}/MovilR/getBebidas/${idRest}`
 
   try{
     const response = await axios.get(urlBebidas, {cancelToken: source.token});
@@ -120,4 +120,25 @@ export const getBebidas = async (idRes) => {
       console.log('algo pago en funcion getMenu', error)
     }
   }
+}
+
+export const creaCarrito = async (idMesa) => {
+  const datoMesa = idMesa;
+  const urlIdmesa = `${urlCreaCart}/${datoMesa}`;
+  try{
+    const response = await axios.get(urlIdmesa, {cancelToken: source.token});
+    if (response.status === 200) {
+      console.log(response.data)
+      return response.data;
+    } else {
+      throw new Error("Fallo en fetch data")
+    }
+  } catch (error) {
+    if(axios.isCancel(error)) {
+      console.log('Data fetching cancelado')
+    } else {
+      console.log('algo pago en funcion creaCarrito', error)
+    }
+  }
+
 }
