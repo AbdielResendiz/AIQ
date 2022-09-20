@@ -1,10 +1,11 @@
 import React, {useState, useEffect, useCallback} from 'react'
-import {Text, Box, Button, Image, Flex, Center, View} from 'native-base';
+import {Text, Box, Image, Flex, Center, View} from 'native-base';
 import {ScrollView, TouchableOpacity, RefreshControl, SafeAreaView} from 'react-native';
-import { getRestaurantes, getPublicidad } from '../../../api/controlWS';
+import { getRestaurantes, getPublicidad, urlImg } from '../../../api/controlWS';
 import LottieSinServ from '../../components/Lotties/LottieSinServ';
 import coloresAIQ from '../../../styles/coloresAIQ';
 import ProcesandoAir from '../../components/ProcesandoAir';
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 const wait = (timeout) => {
 	return new Promise((resolve) =>
@@ -27,7 +28,6 @@ const Restaurantes = (props) => {
 
   //Funcion consume ws
   const datosResAd = async() => {
-    
     const n = await getPublicidad();
     setArrAnuncios(n);
     const m = await getRestaurantes();
@@ -55,6 +55,10 @@ const Restaurantes = (props) => {
 		props.navigation.navigate('Menu', {
 			idRes: id,
 		});
+    AsyncStorage.setItem(
+      'ID_REST',
+      JSON.stringify(id),
+  );
 	};
 
   return (
@@ -94,7 +98,7 @@ const Restaurantes = (props) => {
                     onPress={() => {console.log(item.id_ad)}}>
                     <Image
                       borderRadius={5}
-                      source={{uri: item.imagen}}
+                      source={{uri: urlImg + item.imagen}}
                       alt='Anuncio'
                       style={{
                         width: '100%',
@@ -165,7 +169,7 @@ const Restaurantes = (props) => {
                           onPress={() => menu(item.id_user)}>
                           <Image
                             borderRadius={6}
-                            source={{uri: item.avatar}}
+                            source={{uri: urlImg + item.avatar}}
                             alt='Restaurante'
                             style={{
                               width: '100%',

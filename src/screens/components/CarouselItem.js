@@ -1,5 +1,6 @@
 import React from 'react'
 import { View, StyleSheet, Text, Image, Dimensions } from 'react-native'
+import { urlImg } from '../../api/controlWS'
 
 const { width, height } = Dimensions.get('window')
 
@@ -7,7 +8,7 @@ const { width, height } = Dimensions.get('window')
 const CarouselItem = ({ item }) => {
     return (
         <View style={styles.cardView}>
-            <Image style={styles.image} source={{ uri: item.imagen}} />
+            <Image style={styles.image} source={{ uri: urlImg + item.imagen}} />
             <View style={styles.textView}>
                 <Text style={styles.itemTitle}> {item.id_ad}</Text>
                 <Text style={styles.itemDescription}>{item.fecha_fin}</Text>

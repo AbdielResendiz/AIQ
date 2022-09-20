@@ -9,6 +9,7 @@ import estilosAIQ from '../../styles/estilosAIQ';
 import Procesando from '../components/Procesando';
 import LottieSinServ from '../components/Lotties/LottieSinServ';
 import ProcesandoAir from '../components/ProcesandoAir';
+
 const wait = (timeout) => {
     return new Promise((resolve) => setTimeout(resolve, timeout));
   };
@@ -37,7 +38,7 @@ const Menu = (props) => {
       setRefreshing(false)});
   }, []);
   
-  const datosMenu = async() => {
+  const datosMenu = async(idRes) => {
     const m = await getMenu(idRest);
     setArrAlimentos(m);
     const n = await getRestaurantes();
@@ -62,9 +63,9 @@ const Menu = (props) => {
       idRest: restaurante
     });
   };
-  const enviaDatos = async (nombreRes) => {
+  const enviaDatos = async (idRes) => {
     props.navigation.navigate("Carrito", {
-      nombreRes: nombreRes
+      idRes: idRes
     });
   }
 
@@ -75,7 +76,6 @@ const Menu = (props) => {
 
   useEffect(() => {
     const cambiaTamaño = setInterval(() => {
-      
       datosMenu()
       // setCargandoR(false)
       // console.log("reinicio")
@@ -89,10 +89,8 @@ const Menu = (props) => {
 
 
   useEffect(() => {
- 
-    datosMenu();
+    datosMenu()
     setCargando(false);
-   
   }, [])
 
   return (
@@ -116,7 +114,7 @@ const Menu = (props) => {
                     imageStyle={{
                     borderRadius: 55,
                     }}
-                    source={{uri: item.avatar}}
+                    source={{uri: urlImg + item.avatar}}
                     alt={"Logo restaurante"}
                     size={"xl"}/>
                   {/* Nombre */}
@@ -132,15 +130,12 @@ const Menu = (props) => {
           }
         })}
 
-        {/* Categorias */}
-        
+        {/* Categorias */}  
         <Box p={2}>
             <Center flexDir={'row'}>
-              {arrAlimentos.length > 0 ? (<> 
-              
+              {arrAlimentos.length > 0 ? (<>    
             {categoria == 'Alimentos' ? 
             (<>
-            
               {arrPlatillos.length > 0 ? 
                 (<TouchableOpacity
                     style={estilosAIQ.containerCategorias}

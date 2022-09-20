@@ -28,11 +28,11 @@ const Login = (props) => {
 		
 		setCargando(true);
         var data = new FormData()
-        data.append('id_mesa',usuario)
+        data.append('nombre',usuario)
         data.append('password',contrasena)
           
         //conexion con wb login
-        await fetch('https://v-csoft.com/AIQ/Mesas/existsTable/', {
+        await fetch('https://v-csoft.com/AIQ/Mesas/existsMesa/', {
                 method: 'post',
                   body: data,
                   
@@ -63,9 +63,10 @@ const Login = (props) => {
                     //navegacion inicioAds
                     props.navigation.navigate('InicioAds');
                     //guarda sesion localStorage
+                    const idMesa = result.user.id_mesa;
                     AsyncStorage.setItem(
                         'ID_MESA',
-                        JSON.stringify(usuario),
+                        JSON.stringify(idMesa),
                     );
                 }
                 //datos login incorrectos
@@ -248,8 +249,6 @@ const Login = (props) => {
                     VINCULAR
                 </Text>
             </Button>
-       
-
         </ScrollView>
     </>
   )

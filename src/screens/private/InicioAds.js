@@ -4,9 +4,8 @@ import estilosAIQ from '../../styles/estilosAIQ';
 import {Text, View} from 'native-base';
 import Carousel from '../components/Carousel';
 import Carousel2 from '../components/Carousel2';
+
 const InicioAds = (props) => {
-
-
   const [anuncios, setAnuncios] = useState(['']);
 
 // const construye = async () =>{
@@ -14,26 +13,21 @@ const InicioAds = (props) => {
 //       getAnuncios()
 //      }
 
-const getAnuncios = async() => {
-      await fetch('https://v-csoft.com/AIQ/MovilR/getPublicidad', {
-       method: 'post',
-      
-     })
-       .then((response) => response.json())
-       .then((result) => {
-        //  console.log('Success:', result['Publicidad']);
-    
-         const dataa = result['Publicidad']
-         setAnuncios(dataa);
-         // setList()
-       })
-       .catch((error) => {
-         console.error('Error:', error);
-       });
-     };
-
-  
-  
+  const getAnuncios = async() => {
+    await fetch('https://v-csoft.com/AIQ/MovilR/getPublicidad', {
+      method: 'post',
+    })
+    .then((response) => response.json())
+    .then((result) => {
+    // console.log('Success:', result['Publicidad']);  
+      const dataa = result['Publicidad']
+      setAnuncios(dataa);
+      // setList()
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+    });
+  };
 
    useEffect(() => {
     const cambiaTamaño = setInterval(() => {
@@ -47,37 +41,34 @@ const getAnuncios = async() => {
     };
   }, []);
   
-
   return (
     <SafeAreaView flex={5} flexDirection={'column'}>
+      {/*Carrusel 1*/}
       <ScrollView>
         <Carousel data= {anuncios}></Carousel>
       </ScrollView>
-
+      {/*btn ver restauresntes*/}
       <ScrollView>
-<View style={{
-  flex: 1,
-  flexDirection: 'column',
-  justifyContent: 'center',
-  flexWrap: 'nowrap',
-  alignContent: 'center',
-  alignItems: 'center'
-
-}}>
-  
-  <TouchableOpacity 
-      style={estilosAIQ.botonTouch}
-      onPress={() => {props.navigation.navigate('Restaurante')}}>
-      <Text style={estilosAIQ.textBtn}>Ver restaurantes</Text>
-  </TouchableOpacity>
-
-</View>
-</ScrollView>
+        <View style={{
+          flex: 1,
+          flexDirection: 'column',
+          justifyContent: 'center',
+          flexWrap: 'nowrap',
+          alignContent: 'center',
+          alignItems: 'center'
+        }}>
+          <TouchableOpacity 
+              style={estilosAIQ.botonTouch}
+              onPress={() => {props.navigation.navigate('Restaurante')}}>
+              <Text style={estilosAIQ.textBtn}>Ver restaurantes</Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
+      {/*Carrusel 2*/}
       <ScrollView>
         <Carousel2 data= {anuncios}></Carousel2>
       </ScrollView>
-
-</SafeAreaView>
+    </SafeAreaView>
   )
 }
 

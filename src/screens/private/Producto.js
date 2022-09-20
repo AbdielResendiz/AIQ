@@ -1,26 +1,32 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import { View, Text, Center, Image, ScrollView, Button, Box, Flex} from 'native-base'
 import {MaterialCommunityIcons, FontAwesome} from '@expo/vector-icons'
 import { urlImg } from '../../api/controlWS'
 import coloresAIQ from '../../styles/coloresAIQ'
 import { TextInput } from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { creaCarrito } from '../../api/controlWS'
+import { addCarrito } from '../../api/controlWS'
 
 const Producto = (props) => {
   const [comentario, setComentario] = useState('');
   //Cantidad de producto
   const [cantP, setCantp] = useState(1);
-  //const para crear carrito
-  const [mesa, setMesa] = useState(null);
+  //obtener idMesa
+  const [mesa, setMesa] = useState('');
 
   //datos recibidos de Menu.js
+  const idComida = props.route.params.id_comida
   const idRes = props.route.params.idRest
   const nomProd = props.route.params.nombre
   const desc = props.route.params.desc
   const precio = props.route.params.precio
   const imagen = props.route.params.imagen
   const tiempo = props.route.params.tiempo
+  //idMesa en local sotarege
+  const getMesa = async() => {
+    const m = await AsyncStorage.getItem('ID_MESA');
+    setMesa(m);
+  }
 
   // control spinner cantidad
   const disminCarrito = async () => {
@@ -38,20 +44,18 @@ const Producto = (props) => {
     }
   };
   
-  const enviaDatos = async (comentario, nombre, precio, idRes, imagen, cantP) => {
-    props.navigation.navigate("Carrito", {
-      comentario: comentario,
-      nombre: nombre,
-      precio: precio,
+  useEffect(()=>{
+    getMesa()
+  },[])
+
+  const enviaDatos = async (comentario, precio, idRes, cantP, idComida) => {
+    await addCarrito(JSON.parse(mesa), idComida, cantP, cantP*precio, comentario);
+    await props.navigation.navigate("Carrito", {
       idRes: idRes,
-      imagen: imagen,
-      cantP: cantP
-    });
-    AsyncStorage.getItem('ID_MESA', (err, result) => {
-      const m = JSON.parse(result);
-      creaCarrito(m);
     });
   }
+
+  
   return (
     <ScrollView flex={1}>
         {/* Imagen Producto */}
@@ -207,7 +211,7 @@ const Producto = (props) => {
                 width={250}
                 height={55}
                 borderRadius={32}
-                onPress={() => {enviaDatos(comentario, nomProd, precio, idRes, imagen, cantP)}}
+                onPress={() => {enviaDatos(comentario, precio, idRes, cantP, idComida)}}
                 _pressed={{
                     bg: coloresAIQ.azulBtn}}>
                 <Text
