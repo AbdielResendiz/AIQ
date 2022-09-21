@@ -1,19 +1,32 @@
-import React from 'react'
+import React, {useState, useEffect} from 'react'
 import { Text, View, Box, Flex, Center, Button } from 'native-base'
 import coloresAIQ from '../../styles/coloresAIQ'
 import RadioButtonRN from 'radio-buttons-react-native'; 
-import {AntDesign} from '@expo/vector-icons'
+import {AntDesign} from '@expo/vector-icons';
+import { getTotalCart } from '../../api/controlWS';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const MetodoPago = (props) => {
+  const [total, setTotal] = useState('');
+  //idMesa en local sotarege
+  const getMesa = async() => {
+    const m = await AsyncStorage.getItem('ID_MESA');
+    const p = await getTotalCart(JSON.parse(m));
+    setTotal(p);
+  }
   
-    const opcRadioButton = [
-        {
-          label: 'Efectivo'
-        },
-        {
-          label: 'Tarjeta'
-        },
-      ]
+  const opcRadioButton = [
+    {
+      label: 'Efectivo'
+    },
+    {
+      label: 'Tarjeta'
+    },
+  ]
+
+  useEffect(() => {
+    getMesa();
+  })
 
   return (
     <View flex={1}>
@@ -53,7 +66,7 @@ const MetodoPago = (props) => {
           fontSize={22}
           fontFamily='heading'
           colorScheme={coloresAIQ.negro}>
-          Total: $000.00
+          Total: ${total}
         </Text>
       </Center>
 

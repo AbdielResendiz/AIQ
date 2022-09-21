@@ -3,7 +3,7 @@ import { View, Text, Box, Flex, Image, Center, Button} from 'native-base';
 import { ScrollView, TouchableOpacity } from 'react-native';
 import {AntDesign, MaterialCommunityIcons} from '@expo/vector-icons';
 import coloresAIQ from '../../../styles/coloresAIQ';
-import { getCart, urlImg, deteleItemCart, getTotalCart } from '../../../api/controlWS';
+import { getCart, urlImg, deteleItemCart, getTotalCart, getMenu } from '../../../api/controlWS';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Carrito = (props) => {
@@ -24,6 +24,7 @@ const Carrito = (props) => {
 
   const deleteItem = async(idComida) => {
     const m = await AsyncStorage.getItem('ID_MESA');
+    console.log('mesa', JSON.parse(m), 'comida', idComida);
     await deteleItemCart(JSON.parse(m), idComida);
     getMesa();
   }
@@ -77,7 +78,7 @@ const Carrito = (props) => {
                           borderBottomRightRadius: 0,
                       }}
                       source={{uri: urlImg+item.imagen}}
-                      alt={item.nomProd}
+                      alt={item.nombre}
                       size={"lg"}/>
                       <Box m={2} style={{width: 0, flexGrow: 1, flex: 1}}>
                         {/* Nombre platillo */}
@@ -114,7 +115,9 @@ const Carrito = (props) => {
                       </Box>
                       <TouchableOpacity 
                         style={{justifyContent:'center', alignItems: 'center', margin: 8}}
-                        onPress={() => {deleteItem(item.id_comida)}}>
+                        onPress={() => {
+                          deleteItem(item.id_comida)
+                          }}>
                         <MaterialCommunityIcons name="delete-empty-outline" size={36} color={coloresAIQ.azulOscuroAIQ}/>
                       </TouchableOpacity>
                     </Flex>
@@ -128,7 +131,7 @@ const Carrito = (props) => {
               fontSize={22}
               fontFamily='heading'
               colorScheme={coloresAIQ.negro}>
-              Total: {total}
+              Total: ${total}
             </Text>
           </Center>
         </ScrollView>

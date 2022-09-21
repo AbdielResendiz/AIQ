@@ -177,7 +177,6 @@ export const addCarrito = async (idMesa, idComida, cantP, subtotal, comentario) 
 export const getCart = async (idMesa) => {
   const mesa = idMesa;
   const urlGetCarrito = `${urlGetCart}${mesa}`;
-  console.log(urlGetCarrito);
   try{
     const response = await axios.get(urlGetCarrito, {cancelToken: source.token});
     if (response.status === 200) {
@@ -204,7 +203,7 @@ export const deteleItemCart = async(idMesa, idComida) => {
   })
   .then((response) => {response.json()})
   .then((result) => {
-    let acceso = result.prod
+    let acceso = result
     try{
       if (acceso === true) {
         console.log('Success:', result);

@@ -38,7 +38,7 @@ const Menu = (props) => {
       setRefreshing(false)});
   }, []);
   
-  const datosMenu = async(idRes) => {
+  const datosMenu = async() => {
     const m = await getMenu(idRest);
     setArrAlimentos(m);
     const n = await getRestaurantes();
@@ -47,9 +47,9 @@ const Menu = (props) => {
     setArrCombos(p);
     const k = await getComidas(idRest);
     setPlatillos(k)
-    setCargandoR(false)
     const l = await getBebidas(idRest)
     setBebidas(l)
+    setCargandoR(false)
   }
 
   const detalleProducto = (id_comida, nombre, desc, precio, imagen, tiempo, restaurante) => {
@@ -151,9 +151,9 @@ const Menu = (props) => {
                 </TouchableOpacity>) : (null)}
               {arrCombos.length > 0 ? (                 
                 <TouchableOpacity
-                    style={estilosAIQ.containerCategorias}
-                    onPress={() => {navCategoria('Combos')}}>
-                    <Text style={estilosAIQ.textCategorias}>Combos</Text>
+                  style={estilosAIQ.containerCategorias}
+                  onPress={() => {navCategoria('Combos')}}>
+                  <Text style={estilosAIQ.textCategorias}>Combos</Text>
                 </TouchableOpacity>) : (null)}
             </>) : (null)}
 
@@ -181,19 +181,19 @@ const Menu = (props) => {
        
             {categoria == 'Combos' ? 
             (<>
-                {arrAlimentos.length > 0 ? 
+                {arrPlatillos.length > 0 ? 
                     (<TouchableOpacity
                         style={estilosAIQ.containerCategorias}
                         onPress={() => {navCategoria('Alimentos')}}>
                         <Text style={estilosAIQ.textCategorias}>Platillos</Text>
                     </TouchableOpacity>) : (null)}
-                {arrAlimentos.length > 0 ? (
+                {arrBebidas.length > 0 ? (
                     <TouchableOpacity
                         style={estilosAIQ.containerCategorias}
                         onPress={() => {navCategoria('Bebidas')}}>
                         <Text style={estilosAIQ.textCategorias}>Bebidas</Text>
                     </TouchableOpacity>) : (null)}
-                {arrAlimentos.length > 0 ? (                 
+                {arrCombos.length > 0 ? (                 
                     <TouchableOpacity
                         style={estilosAIQ.containerCategorias}
                         onPress={() => {navCategoria('Combos')}}>
