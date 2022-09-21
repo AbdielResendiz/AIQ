@@ -156,12 +156,12 @@ const Login = (props) => {
                             _pressed={{
                                 bg: coloresAIQ.grisClaroAiq,
                             }}>
-                            <MaterialIcons
-                                name='cancel'
-                                size={20}
-                                color={coloresAIQ.grisOscuroAIQ}
-                            />
-                        </Button>
+                                <MaterialIcons
+                                    name='cancel'
+                                    size={20}
+                                    color={coloresAIQ.grisOscuroAIQ}
+                                />
+                            </Button>
                         )}
                         value={usuario}
                         onChangeText={(val) =>
