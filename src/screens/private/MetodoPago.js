@@ -1,11 +1,12 @@
 import React, {useState, useEffect} from 'react'
-import { Text, View, Box, Flex, Center, Button, Stack, Input } from 'native-base'
+import { Text, Box, Flex, Center, Button, Stack, Input, ScrollView, FormControl } from 'native-base'
 import coloresAIQ from '../../styles/coloresAIQ'
 import RadioButtonRN from 'radio-buttons-react-native'; 
-import {AntDesign, FontAwesome5} from '@expo/vector-icons';
+import {AntDesign, FontAwesome5, FontAwesome} from '@expo/vector-icons';
 import { getTotalCart } from '../../api/controlWS';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import Logo from '../components/Logo';
+import { Indicaciones, Titulos } from '../components/Textos';
 
 const MetodoPago = (props) => {
   const [total, setTotal] = useState('');
@@ -19,7 +20,7 @@ const MetodoPago = (props) => {
     const p = await getTotalCart(JSON.parse(m));
     setTotal(p);
   }
-  
+  // opciones metodo de pago
   const opcRadioButton = [
     {
       label: 'Efectivo'
@@ -29,23 +30,40 @@ const MetodoPago = (props) => {
     },
   ]
 
+  const enviaMetodo = async() => {
+    //validando metodos
+    if (metodo == 'Efectivo') {
+      //si es efectivo y monto vacio, retorna mensaje error
+      if (monto.length == 0) {
+        setValidoC(true);
+        setMonto('');
+        return;
+      } else {
+        //en caso de llenar todo, pasar a la sig. screen
+        props.navigation.navigate("ConfirmaPedido", {
+          datoMetodo: metodo,
+          datoMonto: monto
+        });
+      }
+    } else {
+      //en caso de usar tarjeta, solo mandar el metodo
+      props.navigation.navigate("ConfirmaPedido", {
+        datoMetodo: metodo,
+        datoMonto: ''
+      });
+    }
+  }
+
   useEffect(() => {
     getMesa();
   }, [])
 
   return (
-    <View flex={1} margin={5} marginTop={1}>
+    <ScrollView flex={1} margin={5} marginTop={1} showsVerticalScrollIndicator={false}>
+      {/* Component Logo*/}
+      <Logo/>
       {/* Titulo: Metodo */}
-      <Text
-        paddingX={4}
-        paddingTop={4}
-        paddingBottom={2}
-        fontSize={24}
-        fontFamily='heading'
-        colorScheme={coloresAIQ.negro}>
-        Selecciona metodo de pago
-      </Text>
-      
+      <Titulos titulo='Selecciona metodo de pago:'/>
       {/* Box metodo */}
       <Box                       
         style={{ borderRadius: 12 }}
@@ -57,18 +75,17 @@ const MetodoPago = (props) => {
         <Flex direction='row'>
             <Box m={2} style={{width: 0, flexGrow: 1, flex: 1}}>
                 <RadioButtonRN 
-                    data={opcRadioButton}
+                    data={opcRadioButton} //llama arreglo metodo de pago
+                    initial={1} //valor predefinido, efectivo
                     selectedBtn={(e) => {
-                      setMetodo(e.label)
-                      console.log('console', e.label);
-                    }}
+                      setMetodo(e.label);
+                    }} //manda metodo seleccionado
                     icon={
-                      <Icon
-                        name="check-circle"
-                        size={25}
-                        color="#2c9dd1"
-                      />
-                    }
+                      <FontAwesome
+                      name="check-circle"
+                      size={25}
+                      color={coloresAIQ.azulClaroAIQ}/>
+                    } //personalizar icono de seleccion
                 />
             </Box>
         </Flex>
@@ -76,28 +93,22 @@ const MetodoPago = (props) => {
 
       {/* Total */}
       <Center>
+        {/* Monto total */}
         <Text
-          paddingX={4}
           paddingTop={3}
           fontSize={22}
           fontFamily='heading'
           colorScheme={coloresAIQ.negro}>
           Total: ${total}
         </Text>
-        {/* prueba, escucha metodo */}
-        <Text
-          paddingX={4}
-          paddingTop={3}
-          fontSize={22}
-          fontFamily='heading'
-          colorScheme={coloresAIQ.negro}>
-          Selecciono: {metodo}
-        </Text>
+        {/* IVA */}
+        <Indicaciones indicacion='*IVA incluido'/>
       </Center>
 
+      {/*input monto efectivo */}
       {metodo == 'Efectivo' ? 
       (
-        //<FormControl> 
+        <FormControl isInvalid={validoC}> 
           <Stack>
             <Text
                 mt={8}
@@ -112,9 +123,9 @@ const MetodoPago = (props) => {
                 variant='outline'
                 placeholder='Ingresa el monto de los billetes'
                 fontFamily='body'
-                keyboardType='default'
-                autoCapitalize='none'
+                keyboardType='numeric'
                 autoCorrect={false}
+                backgroundColor={coloresAIQ.blanco}
                 InputRightElement={(
                   <Button
                   ml={1}
@@ -122,23 +133,23 @@ const MetodoPago = (props) => {
                   roundedLeft={0}
                   roundedRight='md'>
                     <FontAwesome5
-                        name='money-bill-alt'
-                        size={20}
-                        color={coloresAIQ.grisOscuroAIQ}
+                      name='money-bill-alt'
+                      size={20}
+                      color={coloresAIQ.azulClaroAIQ}
                     />
                   </Button>
                 )}
                 value={monto}
                 onChangeText={(val) =>
-                    setUsuario(val)
+                    setMonto(val)
                 }
                 onChange={cambioC}
             />
-            {/* <FormControl.ErrorMessage>
+            <FormControl.ErrorMessage>
                 Ingresa una cantidad.
-            </FormControl.ErrorMessage> */}
+            </FormControl.ErrorMessage>
           </Stack>
-        // </FormControl> 
+        </FormControl> 
       ) : null}
 
       {/* btn continuar */}
@@ -153,7 +164,9 @@ const MetodoPago = (props) => {
             width={250}
             height={55}
             borderRadius={32}
-            onPress={() => props.navigation.navigate("ConfirmaPedido")}
+            onPress={() => {
+              enviaMetodo();
+            }}
             _pressed={{
                 bg: coloresAIQ.azulBtn}}>
             <Text
@@ -164,7 +177,7 @@ const MetodoPago = (props) => {
             </Text>
         </Button>
       </Center>
-    </View>
+    </ScrollView>
   )
 }
 

@@ -3,7 +3,8 @@ import { View, Text, Box, Flex, Image, Center, Button} from 'native-base';
 import { ScrollView, TouchableOpacity } from 'react-native';
 import {AntDesign, MaterialCommunityIcons} from '@expo/vector-icons';
 import coloresAIQ from '../../../styles/coloresAIQ';
-import { getCart, urlImg, deteleItemCart, getTotalCart, getMenu } from '../../../api/controlWS';
+import { Titulos } from '../../components/Textos';
+import { getCart, urlImg, deteleItemCart, getTotalCart } from '../../../api/controlWS';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Carrito = (props) => {
@@ -44,14 +45,7 @@ const Carrito = (props) => {
     <>
       <View flex={1}>
         {/* Titulo: Carrito */}
-        <Text
-          paddingX={4}
-          paddingY={3}
-          fontSize={26}
-          fontFamily='heading'
-          colorScheme={coloresAIQ.negro}>
-          Mi carrito
-        </Text>
+        <Titulos titulo='Mi carrito'/>
         {/* Scroll: carrito */}
         <ScrollView>
         {arrCarrito.length > 0 ? 

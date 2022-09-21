@@ -1,11 +1,16 @@
 import React, {useState, useEffect} from 'react'
-import { ScrollView, Text, View, Box, Image, Center, Button } from 'native-base'
+import { ScrollView, Text, View, Box, Center, Button } from 'native-base'
 import { TextInput } from 'react-native';
 import {AntDesign, FontAwesome} from '@expo/vector-icons';
 import Procesando from '../components/Procesando';
 import coloresAIQ from '../../styles/coloresAIQ';
+import Logo from '../components/Logo';
+import { Indicaciones } from '../components/Textos';
 
 const ConfirmarPedido = (props) => {
+  const metodo = props.route.params.datoMetodo;
+  const monto = props.route.params.datoMonto;
+  console.log(metodo, monto);
   const [cargando, setCargando] = useState(true);
   const [alias, setAlias] = useState('');
   const [celular, setCelular] = useState('');
@@ -20,16 +25,7 @@ const ConfirmarPedido = (props) => {
       {cargando ? <Procesando /> : null}
       <ScrollView>
         {/* Logo */}
-        <Box>
-            <Image
-                source={require('../../../assets/image/AIQ.png')}
-                alignContent={'center'}
-                alignSelf={'center'}
-                resizeMode='center'
-                alt='AIQ'
-                size={'2xl'}/>
-        </Box>
-
+        <Logo/>
         {/* Indicaciones */}
         <Box>
             <Center>
@@ -69,12 +65,7 @@ const ConfirmarPedido = (props) => {
         {/* Indicaciones celular */}
         <Box flex={1} paddingTop={3} paddingX={8}>
             <Center>
-                <Text
-                fontSize={18}
-                fontFamily='body'
-                colorScheme={coloresAIQ.negro}>
-                Te enviaremos un codigo de verificacion a tu celular
-                </Text>
+                <Indicaciones indicacion='Te enviaremos un codigo de verifiación vía Whatsapp'/>
             </Center>
         </Box>
 

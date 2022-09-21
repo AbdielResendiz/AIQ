@@ -5,6 +5,7 @@ import { getRestaurantes, getPublicidad, urlImg } from '../../../api/controlWS';
 import LottieSinServ from '../../components/Lotties/LottieSinServ';
 import coloresAIQ from '../../../styles/coloresAIQ';
 import ProcesandoAir from '../../components/ProcesandoAir';
+import { Titulos } from '../../components/Textos';
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
 const wait = (timeout) => {
@@ -32,8 +33,7 @@ const Restaurantes = (props) => {
     setArrAnuncios(n);
     const m = await getRestaurantes();
     setArrRestaurantes(m);
-    setCargando(false)
-   
+    setCargando(false)   
   }
 
   useEffect(()=>{
@@ -113,23 +113,7 @@ const Restaurantes = (props) => {
         </ScrollView>
 
         {/* Titulo: restaurantes */}
-        <Box paddingTop={3} paddingBottom={2} paddingX={4}>
-          <Flex
-            direction='row'
-            justifyContent='flex-start'
-            alignItems={'flex-start'}>
-            <Center>
-              <Flex direction='row'>
-                <Text
-                  fontSize={26}
-                  fontFamily='heading'
-                  colorScheme={coloresAIQ.negro}>
-                  Restaurantes:
-                </Text>
-              </Flex>
-            </Center>
-          </Flex>
-        </Box>
+        <Titulos titulo='Restaurantes:'/>
 
         {/* Scroll restaurantes */}
         <ScrollView

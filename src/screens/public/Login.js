@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
-import { Button, Text, Input, ScrollView, Box, Image, Stack, FormControl, useToast } from 'native-base'
+import { Button, Text, Input, ScrollView, Stack, FormControl, useToast } from 'native-base'
 import { FontAwesome, MaterialIcons } from '@expo/vector-icons';
 import coloresAIQ from '../../styles/coloresAIQ';
 import { Alert } from 'react-native';
 import ProcesandoAir from '../components/ProcesandoAir';
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import Logo from '../components/Logo';
+import {Indicaciones} from '../components/Textos';
 
 const Login = (props) => {
     //para mensaje mesa o pass erroneo
@@ -105,28 +107,9 @@ const Login = (props) => {
     {cargando ? <ProcesandoAir /> : null}
         <ScrollView margin={5} marginTop={1} showsVerticalScrollIndicator={false}>
             {/* Logo */}
-            <Box flex={1}>
-                <Image
-                    source={require('../../../assets/image/AIQ.png')}
-                    alignContent={'center'}
-                    alignSelf={'center'}
-                    resizeMode='center'
-                    alt='AIQ'
-                    size={'2xl'}/>
-            </Box>
+            <Logo/>
             {/* Text: Indicaciones */}
-            <Box flex={1}>
-                <Text
-                    mt={2}
-                    fontSize='md'
-                    fontFamily='body'
-                    alignSelf='center'
-                    textDecorationLine='underline'
-                    color={coloresAIQ.negro}>
-                    Vincular dispositivo con una mesa
-                </Text>
-            </Box>
-
+            <Indicaciones indicacion='Vincular dispositivo con una mesa'/>
             {/* Input Mesa */}
             <FormControl isInvalid={validoC}>
                 <Stack>
