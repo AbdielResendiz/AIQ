@@ -9,6 +9,8 @@ const urlAddCart = `${baseUrl}/Carrito/addCart/`;
 const urlGetCart = `${baseUrl}/Carrito/getCart/`;
 const urlDeleteItem = `${baseUrl}/Carrito/deteleItemCart/`;
 const urlGetTotalCart = `${baseUrl}/Carrito/getTotalCart/`;
+const urlGetCodigo = `${baseUrl}/Carrito/validaCodigo/`;
+const urlDeleteCodigo = `${baseUrl}/Carrito/borraCodigo/`;
 
 export const getRestaurantes = async() => {
   try{
@@ -234,4 +236,49 @@ export const getTotalCart = async (idMesa) => {
       console.log('algo pago en funcion getMenu', error)
     }
   }
+}
+
+export const getCodigo = async(cod) => {
+  const codi = cod;
+  const urlCodigo = `${urlGetCodigo}${codi}`;
+
+  try{
+    const response = await axios.get(urlCodigo, {cancelToken: source.token});
+    if (response.status === 200) {
+      console.log(response.data.res)
+      return response.data;
+    } else {
+      throw new Error("Fallo en fetch get codigo")
+    }
+  } catch (error) {
+    if(axios.isCancel(error)) {
+      console.log('Data fetching cancelado')
+    } else {
+      console.log('algo pago en funcion getCodigo', error)
+    }
+  }
+}
+
+export const deletecodigo = async(codigo) => {
+  let data = new FormData();
+  data.append('codigo', codigo);
+  await fetch(urlDeleteCodigo, {
+    method: 'POST',
+    body: data,
+  })
+  .then((response) => {response.json()})
+  .then((result) => {
+    let acceso = result.res
+    try{
+      if (acceso === true) {
+        console.log('Success:', result);
+        return acceso;
+      } else {
+        console.log('Error:', result);
+        return acceso;
+      }
+    } catch (e) {
+      console.log("esto no sirve", e);
+    }
+  }) 
 }

@@ -1,11 +1,12 @@
 import React, {useState, useEffect} from 'react'
 import { ScrollView, Text, View, Box, Center, Button, FormControl } from 'native-base'
-import { TextInput } from 'react-native';
-import {AntDesign, FontAwesome} from '@expo/vector-icons';
+import { TextInput, Alert } from 'react-native';
+import {AntDesign, FontAwesome, FontAwesome5} from '@expo/vector-icons';
 import Procesando from '../components/Procesando';
 import coloresAIQ from '../../styles/coloresAIQ';
 import Logo from '../components/Logo';
 import { Indicaciones } from '../components/Textos';
+import { getCodigo } from '../../api/controlWS';
 
 const ConfirmarPedido = (props) => {
   const metodo = props.route.params.datoMetodo;
@@ -45,6 +46,60 @@ const ConfirmarPedido = (props) => {
     }
   }
 
+  const enviaWhats = async() => {
+    if (alias.length == 0) {
+        setValidoN(true);
+        setAlias('');
+        return;
+    } //validando celular
+    if (celular.length == 0) {
+        setValidoP(true);
+        setCelular('');
+        return;
+    } else {
+        Alert.alert(
+            'Mensaje enviado',
+            'Favor de revisar mensajes.',
+          )
+    }
+  }
+
+  const enviaMesero = async() => {
+    Alert.alert(
+        'Mesero en camino',
+        'Favor de esperar.',
+      )
+  }
+
+  const validarCodigo = async(cod) => {
+    if (codigo.length == 0) {
+        setValidoC(true);
+        setCodigo('');
+        return;
+    } else {
+        const m = getCodigo(cod);
+        console.log('prueba', m);
+    
+        if (codigo == 5678) {
+            setCodigo('');
+            Alert.alert(
+                'Codigo valido',
+                'El codigo es correcto.' ,
+                [{
+                  text: 'Continuar',
+                  onPress: () => {props.navigation.navigate("Pedidos")},
+                  style: 'default',
+                }]);
+        } else {
+            setCodigo('');
+            Alert.alert(
+                'ERROR',
+                'El codigo es invalido, vuelve a intentarlo.' ,
+            );
+        }
+    }
+  }
+
   useEffect(() => {
     setCargando(false);
   }, [])
@@ -79,6 +134,7 @@ const ConfirmarPedido = (props) => {
                     Nombre/Alias:
                 </Text>
                 <TextInput
+                    keyboardType='default'
                     style={{ 
                         padding: 4,
                         borderWidth: 1.5, 
@@ -89,6 +145,7 @@ const ConfirmarPedido = (props) => {
                     placeholder="Ingresa un nombre/apellido o alias"
                     value={alias}
                     onChangeText={(val) => setAlias(val)}
+                    onChange={cambioN}
                 />
                 <FormControl.ErrorMessage>
                     Ingresa un nombre o alias.
@@ -98,7 +155,7 @@ const ConfirmarPedido = (props) => {
         {/* Indicaciones celular */}
         <Box flex={1} paddingTop={3} paddingX={8}>
             <Center>
-                <Indicaciones indicacion='Te enviaremos un codigo de verifiación vía Whatsapp'/>
+                <Indicaciones indicacion='Te enviaremos un código de verifiación vía Whatsapp.'/>
             </Center>
         </Box>
 
@@ -114,6 +171,7 @@ const ConfirmarPedido = (props) => {
                     Celular:
                 </Text>
                 <TextInput
+                    keyboardType='phone-pad'
                     style={{ 
                         padding: 4,
                         borderWidth: 1.5, 
@@ -124,6 +182,7 @@ const ConfirmarPedido = (props) => {
                     placeholder="Ingresa tu celular"
                     value={celular}
                     onChangeText={(val) => setCelular(val)}
+                    onChange={cambioP}
                 />
                 <FormControl.ErrorMessage>
                     Ingresa un numero valido.
@@ -134,7 +193,7 @@ const ConfirmarPedido = (props) => {
         <Center>
             <Button
                 leftIcon={<FontAwesome
-                    name='send'
+                    name={'send'}
                     size={16}
                     color={coloresAIQ.blanco}/>}
                 bg={coloresAIQ.azulAIQ}
@@ -142,7 +201,7 @@ const ConfirmarPedido = (props) => {
                 width={150}
                 height={42}
                 borderRadius={18}
-                onPress={() => {}}
+                onPress={() => {enviaWhats()}}
                 _pressed={{
                     bg: coloresAIQ.azulBtn}}>
                 <Text
@@ -150,6 +209,40 @@ const ConfirmarPedido = (props) => {
                     fontSize='sm'
                     fontFamily='body'>
                     Enviar código
+                </Text>
+            </Button>
+        </Center>
+
+        {/* margen */}
+        <View margin={2}/>
+
+        {/* Indicaciones sin Whats */}
+        <Box flex={1} paddingTop={3} paddingX={8}>
+            <Center>
+                <Indicaciones indicacion='¿No cuentas con Whatsapp? Un mesero te compartira un código.'/>
+            </Center>
+        </Box>
+
+        {/* Btn envia mesero */}
+        <Center>
+            <Button
+                leftIcon={<FontAwesome5
+                    name={'running'}
+                    size={16}
+                    color={coloresAIQ.blanco}/>}
+                bg={coloresAIQ.azulAIQ}
+                mt='1'
+                width={150}
+                height={42}
+                borderRadius={18}
+                onPress={() => {enviaMesero()}}
+                _pressed={{
+                    bg: coloresAIQ.azulBtn}}>
+                <Text
+                    color={coloresAIQ.blanco}
+                    fontSize='sm'
+                    fontFamily='body'>
+                    Solicitar mesero
                 </Text>
             </Button>
         </Center>
@@ -166,6 +259,8 @@ const ConfirmarPedido = (props) => {
                     Código:
                 </Text>
                 <TextInput
+                    keyboardType='default'
+                    autoCapitalize='none'
                     style={{ 
                         padding: 4,
                         borderWidth: 1.5, 
@@ -176,6 +271,7 @@ const ConfirmarPedido = (props) => {
                     placeholder="Ingresa el código enviado a Whatsapp"
                     value={codigo}
                     onChangeText={(val) => setCodigo(val)}
+                    onChange={cambioC}
                 />
                 <FormControl.ErrorMessage>
                     Codigo erroneo, intentalo nuevamente.
@@ -185,8 +281,8 @@ const ConfirmarPedido = (props) => {
         {/* Btn confirma codigo */}
         <Center>
             <Button
-                leftIcon={<AntDesign
-                    name='check'
+                leftIcon={<FontAwesome
+                    name={'check'}
                     size={16}
                     color={coloresAIQ.blanco}/>}
                 bg={coloresAIQ.azulAIQ}
@@ -194,7 +290,7 @@ const ConfirmarPedido = (props) => {
                 width={150}
                 height={42}
                 borderRadius={18}
-                onPress={() => {}}
+                onPress={() => {validarCodigo(codigo)}}
                 _pressed={{
                     bg: coloresAIQ.azulBtn}}>
                 <Text
@@ -202,32 +298,6 @@ const ConfirmarPedido = (props) => {
                     fontSize='sm'
                     fontFamily='body'>
                     Validar código
-                </Text>
-            </Button>
-        </Center>
-
-        {/* btn continuar */}
-        <Center marginTop={2} marginBottom={4}>
-            <Button
-                leftIcon={<AntDesign
-                    name='arrowright'
-                    size={24}
-                    color={coloresAIQ.blanco}/>}
-                bg={coloresAIQ.azulAIQ}
-                mt='3'
-                width={250}
-                height={55}
-                borderRadius={32}
-                onPress={() => {
-                    generaPedido();
-                }}
-                _pressed={{
-                    bg: coloresAIQ.azulBtn}}>
-                <Text
-                    color={coloresAIQ.blanco}
-                    fontSize='md'
-                    fontFamily='body'>
-                    Continuar
                 </Text>
             </Button>
         </Center>
