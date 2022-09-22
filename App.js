@@ -29,7 +29,6 @@ import Carrito from './src/screens/private/tabs/Carrito';
 import Pedidos from './src/screens/private/tabs/Pedidos';
 import MetodoPago from './src/screens/private/MetodoPago';
 import ConfirmarPedido from './src/screens/private/ConfirmarPedido';
-import ListMenu from './src/screens/components/ListMenu';
 import coloresAIQ from './src/styles/coloresAIQ';
 
 const Stack = createStackNavigator();

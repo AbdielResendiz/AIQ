@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, Box, Flex, Image, Center, Button} from 'native-base';
-import { ScrollView, TouchableOpacity } from 'react-native';
+import { ScrollView, TouchableOpacity, Alert } from 'react-native';
 import {AntDesign, MaterialCommunityIcons} from '@expo/vector-icons';
 import coloresAIQ from '../../../styles/coloresAIQ';
 import { Titulos } from '../../components/Textos';
@@ -35,6 +35,35 @@ const Carrito = (props) => {
     props.navigation.navigate("Menu", {
       idRes: idRes
     });
+  }
+
+  //Ir seleccion metodo de pago
+  const irPago = async() => {
+    //validando carrito con articulos
+    if (arrCarrito.length > 0) {
+      props.navigation.navigate("MetodoPago")
+    } else { //en caso de cart vacio, regresar a menu o restaurantes
+      Alert.alert(
+        'Carrito vacio',
+        'No has seleccionado ningun articulo, ¿Donde deseas ir?',
+        [
+          {
+            text: 'Menu',
+            onPress: () => {    
+              props.navigation.navigate("Menu", {
+                idRes: idRes
+              });
+            },
+            style: 'default',
+          },
+          {
+            text: 'Restaurantes',
+            onPress: () => {props.navigation.navigate("Restaurante")},
+            style: 'default',
+          }
+        ]
+      )
+    }
   }
 
   useEffect(() => {
@@ -143,7 +172,7 @@ const Carrito = (props) => {
               width={250}
               height={55}
               borderRadius={32}
-              onPress={() => props.navigation.navigate("MetodoPago")}
+              onPress={() => {irPago();}}
               _pressed={{
                   bg: coloresAIQ.azulBtn}}>
               <Text

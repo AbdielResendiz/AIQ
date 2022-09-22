@@ -51,7 +51,7 @@ const MetodoPago = (props) => {
         datoMetodo: metodo,
         datoMonto: ''
       });
-    }
+    } 
   }
 
   useEffect(() => {

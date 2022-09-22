@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react'
-import { ScrollView, Text, View, Box, Center, Button } from 'native-base'
+import { ScrollView, Text, View, Box, Center, Button, FormControl } from 'native-base'
 import { TextInput } from 'react-native';
 import {AntDesign, FontAwesome} from '@expo/vector-icons';
 import Procesando from '../components/Procesando';
@@ -10,11 +10,40 @@ import { Indicaciones } from '../components/Textos';
 const ConfirmarPedido = (props) => {
   const metodo = props.route.params.datoMetodo;
   const monto = props.route.params.datoMonto;
-  console.log(metodo, monto);
   const [cargando, setCargando] = useState(true);
   const [alias, setAlias] = useState('');
   const [celular, setCelular] = useState('');
   const [codigo, setCodigo] = useState('');
+  //validaciones N=Name, P=Phone, C=Code
+  const [validoN, setValidoN] = useState(false);
+  const [validoP, setValidoP] = useState(false);
+  const [validoC, setValidoC] = useState(false);
+  const cambioN = () => setValidoN(false);
+  const cambioP = () => setValidoP(false);
+  const cambioC = () => setValidoC(false);
+
+  const generaPedido = async() => {
+    //validando nombre
+    if (alias.length == 0) {
+        setValidoN(true);
+        setAlias('');
+        return;
+    } //validando celular
+    if (celular.length == 0) {
+        setValidoP(true);
+        setCelular('');
+        return;
+    } //validando codigo
+    if (codigo.length == 0) {
+        setValidoC(true);
+        setCodigo('');
+        return;
+    }
+    else {
+        console.log('nombre valido');
+        props.navigation.navigate("Pedidos")
+    }
+  }
 
   useEffect(() => {
     setCargando(false);
@@ -39,29 +68,33 @@ const ConfirmarPedido = (props) => {
         </Box>
 
         {/* Input nombre */}
-        <View paddingY={2} paddingX={8}>
-            <Text
-              marginY={2}                 
-              fontSize={18}
-              fontFamily='body'
-              fontWeight={'bold'}
-              color={coloresAIQ.negro}>
-                Nombre/Alias:
-            </Text>
-            <TextInput
-                style={{ 
-                    padding: 4,
-                    borderWidth: 1.5, 
-                    borderColor: coloresAIQ.grisOscuroAIQ,
-                    borderRadius: 8,
-                    backgroundColor: coloresAIQ.blanco
-                 }}
-                placeholder="Ingresa un nombre/apellido o alias"
-                value={alias}
-                onChangeText={(val) => setAlias(val)}
-            />
-        </View>
-
+        <FormControl isInvalid={validoN}>
+            <View paddingY={2} paddingX={8}>
+                <Text
+                marginY={2}                 
+                fontSize={18}
+                fontFamily='body'
+                fontWeight={'bold'}
+                color={coloresAIQ.negro}>
+                    Nombre/Alias:
+                </Text>
+                <TextInput
+                    style={{ 
+                        padding: 4,
+                        borderWidth: 1.5, 
+                        borderColor: coloresAIQ.grisOscuroAIQ,
+                        borderRadius: 8,
+                        backgroundColor: coloresAIQ.blanco
+                    }}
+                    placeholder="Ingresa un nombre/apellido o alias"
+                    value={alias}
+                    onChangeText={(val) => setAlias(val)}
+                />
+                <FormControl.ErrorMessage>
+                    Ingresa un nombre o alias.
+                </FormControl.ErrorMessage>
+            </View>
+        </FormControl>
         {/* Indicaciones celular */}
         <Box flex={1} paddingTop={3} paddingX={8}>
             <Center>
@@ -70,29 +103,33 @@ const ConfirmarPedido = (props) => {
         </Box>
 
         {/* Input celular */}
-        <View paddingY={2} paddingX={8}>
-            <Text
-              marginY={2}                 
-              fontSize={18}
-              fontFamily='body'
-              fontWeight={'bold'}
-              color={coloresAIQ.negro}>
-                Celular:
-            </Text>
-            <TextInput
-                style={{ 
-                    padding: 4,
-                    borderWidth: 1.5, 
-                    borderColor: coloresAIQ.grisOscuroAIQ,
-                    borderRadius: 8,
-                    backgroundColor: coloresAIQ.blanco
-                 }}
-                placeholder="Ingresa tu celular"
-                value={celular}
-                onChangeText={(val) => setCelular(val)}
-            />
-        </View>
-        
+        <FormControl isInvalid={validoP}>
+            <View paddingY={2} paddingX={8}>
+                <Text
+                marginY={2}                 
+                fontSize={18}
+                fontFamily='body'
+                fontWeight={'bold'}
+                color={coloresAIQ.negro}>
+                    Celular:
+                </Text>
+                <TextInput
+                    style={{ 
+                        padding: 4,
+                        borderWidth: 1.5, 
+                        borderColor: coloresAIQ.grisOscuroAIQ,
+                        borderRadius: 8,
+                        backgroundColor: coloresAIQ.blanco
+                    }}
+                    placeholder="Ingresa tu celular"
+                    value={celular}
+                    onChangeText={(val) => setCelular(val)}
+                />
+                <FormControl.ErrorMessage>
+                    Ingresa un numero valido.
+                </FormControl.ErrorMessage>
+            </View>
+        </FormControl>
         {/* Btn envia codigo */}
         <Center>
             <Button
@@ -118,29 +155,33 @@ const ConfirmarPedido = (props) => {
         </Center>
 
         {/* Input codigo */}
-        <View paddingY={2} paddingX={8}>
-            <Text
-              marginY={2}                 
-              fontSize={18}
-              fontFamily='body'
-              fontWeight={'bold'}
-              color={coloresAIQ.negro}>
-                Código:
-            </Text>
-            <TextInput
-                style={{ 
-                    padding: 4,
-                    borderWidth: 1.5, 
-                    borderColor: coloresAIQ.grisOscuroAIQ,
-                    borderRadius: 8,
-                    backgroundColor: coloresAIQ.blanco
-                 }}
-                placeholder="Ingresa el código enviado a Whatsapp"
-                value={codigo}
-                onChangeText={(val) => setCodigo(val)}
-            />
-        </View>
-
+        <FormControl isInvalid={validoC}>
+            <View paddingY={2} paddingX={8}>
+                <Text
+                marginY={2}                 
+                fontSize={18}
+                fontFamily='body'
+                fontWeight={'bold'}
+                color={coloresAIQ.negro}>
+                    Código:
+                </Text>
+                <TextInput
+                    style={{ 
+                        padding: 4,
+                        borderWidth: 1.5, 
+                        borderColor: coloresAIQ.grisOscuroAIQ,
+                        borderRadius: 8,
+                        backgroundColor: coloresAIQ.blanco
+                    }}
+                    placeholder="Ingresa el código enviado a Whatsapp"
+                    value={codigo}
+                    onChangeText={(val) => setCodigo(val)}
+                />
+                <FormControl.ErrorMessage>
+                    Codigo erroneo, intentalo nuevamente.
+                </FormControl.ErrorMessage>
+            </View>
+        </FormControl>
         {/* Btn confirma codigo */}
         <Center>
             <Button
@@ -177,7 +218,9 @@ const ConfirmarPedido = (props) => {
                 width={250}
                 height={55}
                 borderRadius={32}
-                onPress={() => props.navigation.navigate("Pedidos")}
+                onPress={() => {
+                    generaPedido();
+                }}
                 _pressed={{
                     bg: coloresAIQ.azulBtn}}>
                 <Text
