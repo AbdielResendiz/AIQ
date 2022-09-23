@@ -9,7 +9,6 @@ import estilosAIQ from '../../styles/estilosAIQ';
 import Procesando from '../components/Procesando';
 import LottieSinServ from '../components/Lotties/LottieSinServ';
 import ProcesandoAir from '../components/ProcesandoAir';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const wait = (timeout) => {
     return new Promise((resolve) => setTimeout(resolve, timeout));

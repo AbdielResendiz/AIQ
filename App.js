@@ -181,6 +181,7 @@ const App = () => {
             name='Pedidos'
             options={{
               title: 'DETALLE PEDIDO',
+              headerLeft: () => null,
             }}
             component={Pedidos}
           />

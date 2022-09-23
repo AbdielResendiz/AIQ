@@ -1,7 +1,7 @@
 import React, {useState, useEffect, useCallback} from 'react'
 import {Text, Box, Image, Flex, Center, View} from 'native-base';
 import {ScrollView, TouchableOpacity, RefreshControl, SafeAreaView} from 'react-native';
-import { getRestaurantes, getPublicidad, urlImg } from '../../../api/controlWS';
+import { getRestaurantes, getPublicidad, urlImg, deleteCart } from '../../../api/controlWS';
 import LottieSinServ from '../../components/Lotties/LottieSinServ';
 import coloresAIQ from '../../../styles/coloresAIQ';
 import ProcesandoAir from '../../components/ProcesandoAir';
@@ -37,7 +37,8 @@ const Restaurantes = (props) => {
   }
 
   useEffect(()=>{
-    datosResAd()
+    deleteCart();
+    datosResAd();
   },[])
  
   useEffect(() => {
