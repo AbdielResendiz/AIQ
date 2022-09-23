@@ -8,9 +8,11 @@ const urlAD = `${baseUrl}/MovilR/getPublicidad`;
 const urlAddCart = `${baseUrl}/Carrito/addCart/`;
 const urlGetCart = `${baseUrl}/Carrito/getCart/`;
 const urlDeleteItem = `${baseUrl}/Carrito/deteleItemCart/`;
+const urlDeleteCart = `${baseUrl}/Carrito/borraCarrito/`
 const urlGetTotalCart = `${baseUrl}/Carrito/getTotalCart/`;
 const urlGetCodigo = `${baseUrl}/Carrito/validaCodigo/`;
 const urlDeleteCodigo = `${baseUrl}/Carrito/borraCodigo/`;
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const getRestaurantes = async() => {
   try{
@@ -218,6 +220,17 @@ export const deteleItemCart = async(idMesa, idComida) => {
   }) 
 }
 
+export const deleteCart = async() => {
+  const m = await AsyncStorage.getItem('ID_MESA');
+  const mesa = JSON.parse(m);
+  let data = new FormData();
+  data.append('id_mesa', mesa);
+  await fetch(urlDeleteCart, {
+    method: 'POST',
+    body: data,
+  });
+}
+
 export const getTotalCart = async (idMesa) => {
   const mesa = idMesa;
   const urlTotal = `${urlGetTotalCart}${mesa}`;
@@ -241,12 +254,11 @@ export const getTotalCart = async (idMesa) => {
 export const getCodigo = async(cod) => {
   const codi = cod;
   const urlCodigo = `${urlGetCodigo}${codi}`;
-
   try{
     const response = await axios.get(urlCodigo, {cancelToken: source.token});
     if (response.status === 200) {
       console.log(response.data.res)
-      return response.data;
+      return response.data.res;
     } else {
       throw new Error("Fallo en fetch get codigo")
     }

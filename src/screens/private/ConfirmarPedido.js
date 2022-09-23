@@ -23,30 +23,8 @@ const ConfirmarPedido = (props) => {
   const cambioP = () => setValidoP(false);
   const cambioC = () => setValidoC(false);
 
-  const generaPedido = async() => {
-    //validando nombre
-    if (alias.length == 0) {
-        setValidoN(true);
-        setAlias('');
-        return;
-    } //validando celular
-    if (celular.length == 0) {
-        setValidoP(true);
-        setCelular('');
-        return;
-    } //validando codigo
-    if (codigo.length == 0) {
-        setValidoC(true);
-        setCodigo('');
-        return;
-    }
-    else {
-        console.log('nombre valido');
-        props.navigation.navigate("Pedidos")
-    }
-  }
-
   const enviaWhats = async() => {
+    //validando nombre
     if (alias.length == 0) {
         setValidoN(true);
         setAlias('');
@@ -59,7 +37,7 @@ const ConfirmarPedido = (props) => {
     } else {
         Alert.alert(
             'Mensaje enviado',
-            'Favor de revisar mensajes.',
+            'Favor de revisar mensajes. Código prueba 5678',
           )
     }
   }
@@ -67,7 +45,7 @@ const ConfirmarPedido = (props) => {
   const enviaMesero = async() => {
     Alert.alert(
         'Mesero en camino',
-        'Favor de esperar.',
+        'Favor de esperar. Código prueba 5678',
       )
   }
 
@@ -77,10 +55,8 @@ const ConfirmarPedido = (props) => {
         setCodigo('');
         return;
     } else {
-        const m = getCodigo(cod);
-        console.log('prueba', m);
-    
-        if (codigo == 5678) {
+        const m = await getCodigo(cod);
+        if (m == true) {
             setCodigo('');
             Alert.alert(
                 'Codigo valido',
@@ -219,7 +195,7 @@ const ConfirmarPedido = (props) => {
         {/* Indicaciones sin Whats */}
         <Box flex={1} paddingTop={3} paddingX={8}>
             <Center>
-                <Indicaciones indicacion='¿No cuentas con Whatsapp? Un mesero te compartira un código.'/>
+                <Indicaciones indicacion='¿No cuentas con Whatsapp? Un mesero te compartirá un código.'/>
             </Center>
         </Box>
 

@@ -1,8 +1,11 @@
 import React, {useState, useEffect} from 'react';
 import {extendTheme, Image, NativeBaseProvider, useToast } from 'native-base';
+import { Alert } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import { HeaderBackButton } from '@react-navigation/elements';
+import { deleteCart } from './src/api/controlWS';
 import {
 	useFonts,
 	Nunito_200ExtraLight,
@@ -94,15 +97,43 @@ const App = () => {
             name='InicioAds'
             options={{
               title: 'INICIO',
+              headerLeft: () => null,
             }}
             component={InicioAds}
           />
 
           <Stack.Screen
             name='Menu'
-            options={{
+            options={ ({navigation}) => ({
               title: 'MENÚ',
-            }}
+              headerLeft: () => (
+                <HeaderBackButton
+                  tintColor={coloresAIQ.blanco}
+                  onPress={() => {
+                    Alert.alert(
+                      '¡Espera!',
+                      '¿Deseas volver a restaurantes? El carrito actual se vaciara. ',
+                      [
+                        {
+                          text: 'Cancelar',
+                          onPress: () => null,
+                          style: 'cancel',
+                        },
+                        {
+                          text: 'Si',
+                          onPress: async () => {
+                            deleteCart();
+                            navigation.navigate("Restaurante");
+                          },
+                        },
+                      ],
+                      { cancelable: false }
+                    );
+                    return true;
+                  }}
+                />
+              ),
+            })}
             component={Menu}
           />
 

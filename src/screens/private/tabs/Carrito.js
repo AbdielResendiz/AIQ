@@ -25,7 +25,6 @@ const Carrito = (props) => {
 
   const deleteItem = async(idComida) => {
     const m = await AsyncStorage.getItem('ID_MESA');
-    console.log('mesa', JSON.parse(m), 'comida', idComida);
     await deteleItemCart(JSON.parse(m), idComida);
     getMesa();
   }

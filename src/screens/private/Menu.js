@@ -1,14 +1,15 @@
 import React, {useState, useEffect, useCallback} from 'react'
-import { SafeAreaView, ScrollView, TouchableOpacity, RefreshControl, Alert } from 'react-native';
+import { SafeAreaView, ScrollView, TouchableOpacity, RefreshControl, Alert, BackHandler } from 'react-native';
 import { Box, Center, Image, Text, Flex,View} from 'native-base';
 import { FAB } from 'react-native-elements';
 import { AntDesign } from '@expo/vector-icons';
-import { getMenu, getRestaurantes, urlImg, getCombos, getComidas, getBebidas} from '../../api/controlWS';
+import { getMenu, getRestaurantes, urlImg, getCombos, getComidas, getBebidas, deleteCart} from '../../api/controlWS';
 import coloresAIQ from '../../styles/coloresAIQ';
 import estilosAIQ from '../../styles/estilosAIQ';
 import Procesando from '../components/Procesando';
 import LottieSinServ from '../components/Lotties/LottieSinServ';
 import ProcesandoAir from '../components/ProcesandoAir';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const wait = (timeout) => {
     return new Promise((resolve) => setTimeout(resolve, timeout));
@@ -73,6 +74,29 @@ const Menu = (props) => {
     setCategoria(tipCat)
   })
 
+  //Alerta que confirma la acción de "vaciar carrito"
+	const backAction = () => {
+		Alert.alert(
+			'¡Espera!',
+			'¿Deseas volver a restaurantes? El carrito actual se vaciara. ',
+			[
+				{
+					text: 'Cancelar',
+					onPress: () => null,
+					style: 'cancel',
+				},
+				{
+					text: 'Si',
+					onPress: async () => {
+						deleteCart();
+            props.navigation.navigate("Restaurante");
+					},
+				},
+			],
+			{ cancelable: false }
+		);
+		return true;
+	}; //ALERTA SALIR
 
   useEffect(() => {
     const cambiaTamaño = setInterval(() => {
@@ -89,8 +113,13 @@ const Menu = (props) => {
 
 
   useEffect(() => {
-    datosMenu()
+    datosMenu();
     setCargando(false);
+    const backHandler = BackHandler.addEventListener(
+			'hardwareBackPress',
+			backAction
+		);
+    return () => backHandler.remove();
   }, [])
 
   return (

@@ -1,5 +1,5 @@
 import React,{useState, useEffect} from 'react';
-import { TouchableOpacity, ScrollView, SafeAreaView} from 'react-native';
+import { TouchableOpacity, ScrollView, SafeAreaView, BackHandler} from 'react-native';
 import estilosAIQ from '../../styles/estilosAIQ';
 import {Text, View} from 'native-base';
 import Carousel from '../components/Carousel';
@@ -8,10 +8,11 @@ import Carousel2 from '../components/Carousel2';
 const InicioAds = (props) => {
   const [anuncios, setAnuncios] = useState(['']);
 
-// const construye = async () =>{
-//     //se recargar la funcion anuncios
-//       getAnuncios()
-//      }
+  //Back action para no salir de app
+	const backAction = () => {
+		props.navigation.navigate('InicioAds');
+		return true;
+	};
 
   const getAnuncios = async() => {
     await fetch('https://v-csoft.com/AIQ/MovilR/getPublicidad', {
@@ -40,6 +41,21 @@ const InicioAds = (props) => {
       clearInterval(cambiaTamaño);
     };
   }, []);
+
+  //Efecto para sobreescribir el funcionamiento del boton back
+	//este código sólo se ejecutará la primera vez que cargue
+	//el componente
+	useEffect(() => {
+		//Vincular el evento back del SO a mi alerta Back
+		const backHandler = BackHandler.addEventListener(
+			'hardwareBackPress',
+			backAction
+		);
+
+		//Al salir de Home eliminamos el evento del backbutton del SO
+		return () => backHandler.remove();
+	}, []);
+
   
   return (
     <SafeAreaView flex={5} flexDirection={'column'}>
