@@ -4,7 +4,7 @@
     "slug": "FoodAIQ",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/image/iconAIQ.png",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/image/AIQ.png",
@@ -19,14 +19,14 @@
       "**/*"
     ],
     "notification": {
-			"icon": "./assets/icon.png"
+			"icon": "./assets/image/iconAIQ.png"
 		},
     "ios": {
       "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/image/iconAIQ.png",
         "backgroundColor": "#FFFFFF"
       }
     },
