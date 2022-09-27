@@ -63,7 +63,7 @@ const MetodoPago = (props) => {
       {/* Component Logo*/}
       <Logo/>
       {/* Titulo: Metodo */}
-      <Titulos titulo='Selecciona metodo de pago:'/>
+      <Titulos titulo='Selecciona método de pago:'/>
       {/* Box metodo */}
       <Box                       
         style={{ borderRadius: 12 }}

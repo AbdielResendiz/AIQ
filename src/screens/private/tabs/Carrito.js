@@ -81,7 +81,7 @@ const Carrito = (props) => {
               return(
                   <Box                       
                     style={{ borderRadius: 12 }}
-                    key={item.id_comida}
+                    key={item.id}
                     shadow={3}
                     m={2}
                     mt={2}

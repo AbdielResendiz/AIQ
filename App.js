@@ -164,7 +164,7 @@ const App = () => {
           <Stack.Screen
             name='MetodoPago'
             options={{
-              title: 'METODO DE PAGO',
+              title: 'MÉTODO DE PAGO',
             }}
             component={MetodoPago}
           />

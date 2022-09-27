@@ -10,7 +10,7 @@ const Pedidos = (props) => {
       id: 1,
       title: "chicken",
       description: "pollo ",
-        imagen: '../../../../assets/Alimentos/comida.jpeg',
+      imagen: '../../../../assets/Alimentos/comida.jpeg',
       price: "$ 10.99",
     },
   ];

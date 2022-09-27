@@ -164,7 +164,7 @@ const Menu = (props) => {
               {arrAlimentos.length > 0 ? (<>    
             {categoria == 'Alimentos' ? 
             (<>
-              {arrPlatillos.length > 0 ? 
+              {arrAlimentos.length > 0 ? 
                 (<TouchableOpacity
                     style={estilosAIQ.containerCategorias}
                     onPress={() => {navCategoria('Alimentos')}}>
