@@ -41,15 +41,15 @@ const MetodoPago = (props) => {
       } else {
         //en caso de llenar todo, pasar a la sig. screen
         props.navigation.navigate("ConfirmaPedido", {
-          datoMetodo: metodo,
+          datoMetodo: 'efectivo',
           datoMonto: monto
         });
       }
     } else {
       //en caso de usar tarjeta, solo mandar el metodo
       props.navigation.navigate("ConfirmaPedido", {
-        datoMetodo: metodo,
-        datoMonto: ''
+        datoMetodo: 'tarjeta',
+        datoMonto: '0',
       });
     } 
   }

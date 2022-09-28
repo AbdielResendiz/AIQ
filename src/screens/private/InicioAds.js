@@ -14,26 +14,25 @@ const InicioAds = (props) => {
 		return true;
 	};
 
+  //funcion para obtener anuncios
   const getAnuncios = async() => {
     await fetch('https://v-csoft.com/AIQ/MovilR/getPublicidad', {
       method: 'post',
     })
     .then((response) => response.json())
-    .then((result) => {
-    // console.log('Success:', result['Publicidad']);  
+    .then((result) => { 
       const dataa = result['Publicidad']
       setAnuncios(dataa);
-      // setList()
     })
     .catch((error) => {
       console.error('Error:', error);
     });
   };
 
+  //actualiza anuncios cada 10000
    useEffect(() => {
     const cambiaTamaño = setInterval(() => {
       getAnuncios();
-      // console.log("reinicio")
     }, 10000);
     return () => {
       // clean up
@@ -43,8 +42,7 @@ const InicioAds = (props) => {
   }, []);
 
   //Efecto para sobreescribir el funcionamiento del boton back
-	//este código sólo se ejecutará la primera vez que cargue
-	//el componente
+	//este código sólo se ejecutará la primera vez que cargue el componente
 	useEffect(() => {
 		//Vincular el evento back del SO a mi alerta Back
 		const backHandler = BackHandler.addEventListener(

@@ -1,12 +1,13 @@
 import React, {useState, useEffect} from 'react'
 import { ScrollView, Text, View, Box, Center, Button, FormControl } from 'native-base'
 import { TextInput, Alert } from 'react-native';
-import {AntDesign, FontAwesome, FontAwesome5} from '@expo/vector-icons';
+import {FontAwesome, FontAwesome5} from '@expo/vector-icons';
 import Procesando from '../components/Procesando';
 import coloresAIQ from '../../styles/coloresAIQ';
 import Logo from '../components/Logo';
 import { Indicaciones } from '../components/Textos';
-import { getCodigo } from '../../api/controlWS';
+import { getCodigo, creaPedido, getTotalCart, getIdCart } from '../../api/controlWS';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const ConfirmarPedido = (props) => {
   const metodo = props.route.params.datoMetodo;
@@ -58,6 +59,11 @@ const ConfirmarPedido = (props) => {
         const m = await getCodigo(cod);
         if (m == true) {
             setCodigo('');
+            const mesa = await AsyncStorage.getItem('ID_MESA');
+            const idRest = await AsyncStorage.getItem('ID_REST');
+            const t = await getTotalCart(JSON.parse(mesa));
+            const idCar = await getIdCart(JSON.parse(mesa));
+            await creaPedido(JSON.parse(mesa), alias, celular, t, JSON.parse(idRest), metodo, idCar, monto);
             Alert.alert(
                 'Codigo valido',
                 'El codigo es correcto.' ,
@@ -190,17 +196,17 @@ const ConfirmarPedido = (props) => {
         </Center>
 
         {/* margen */}
-        <View margin={2}/>
+        {/* <View margin={2}/> */}
 
         {/* Indicaciones sin Whats */}
-        <Box flex={1} paddingTop={3} paddingX={8}>
+        {/* <Box flex={1} paddingTop={3} paddingX={8}>
             <Center>
                 <Indicaciones indicacion='¿No cuentas con Whatsapp? Un mesero te compartirá un código.'/>
             </Center>
-        </Box>
+        </Box> */}
 
         {/* Btn envia mesero */}
-        <Center>
+        {/* <Center>
             <Button
                 leftIcon={<FontAwesome5
                     name={'running'}
@@ -221,7 +227,7 @@ const ConfirmarPedido = (props) => {
                     Solicitar mesero
                 </Text>
             </Button>
-        </Center>
+        </Center> */}
 
         {/* Input codigo */}
         <FormControl isInvalid={validoC}>

@@ -6,7 +6,7 @@ import LottieSinServ from '../../components/Lotties/LottieSinServ';
 import coloresAIQ from '../../../styles/coloresAIQ';
 import ProcesandoAir from '../../components/ProcesandoAir';
 import { Titulos } from '../../components/Textos';
-import AsyncStorage from '@react-native-async-storage/async-storage'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const wait = (timeout) => {
 	return new Promise((resolve) =>
@@ -31,7 +31,8 @@ const Restaurantes = (props) => {
   const datosResAd = async() => {
     const n = await getPublicidad();
     setArrAnuncios(n);
-    const m = await getRestaurantes();
+    const zona = await AsyncStorage.getItem('ID_ZONA');
+    const m = await getRestaurantes(JSON.parse(zona));
     setArrRestaurantes(m);
     setCargando(false)   
   }
@@ -56,10 +57,11 @@ const Restaurantes = (props) => {
 		props.navigation.navigate('Menu', {
 			idRes: id,
 		});
+    //almacena id_rest en local storage
     AsyncStorage.setItem(
       'ID_REST',
       JSON.stringify(id),
-  );
+    );
 	};
 
   return (

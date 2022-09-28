@@ -9,7 +9,7 @@ import Logo from '../components/Logo';
 import {Indicaciones} from '../components/Textos';
 
 const Login = (props) => {
-    //para mensaje mesa o pass erroneo
+    //aviso mesao contra erroneos
     const toast = useToast();
     //datos mesa
 	const [usuario, setUsuario] = useState('');
@@ -26,8 +26,8 @@ const Login = (props) => {
 	const cambioC = () => setValidoC(false);
 	const cambioP = () => setValidoP(false);
 
-	const demoServiciosAxios = async () => {
-		
+    //funcion login
+	const demoServiciosAxios = async () => {	
 		setCargando(true);
         var data = new FormData()
         data.append('nombre',usuario)
@@ -41,10 +41,8 @@ const Login = (props) => {
         })
         .then((response) => response.json())
         .then((result) => {
-            console.log('Success:', result);
             var acceso = result.res
-            //setLogin(acceso)
-  
+            //validando mesa y contraseña
             if (usuario.length == 0) {
                 setValidoC(true);
                 setUsuario('');
@@ -66,9 +64,14 @@ const Login = (props) => {
                     props.navigation.navigate('InicioAds');
                     //guarda sesion localStorage
                     const idMesa = result.user.id_mesa;
+                    const idZona = result.user.zona;
                     AsyncStorage.setItem(
                         'ID_MESA',
                         JSON.stringify(idMesa),
+                    );
+                    AsyncStorage.setItem(
+                        'ID_ZONA',
+                        JSON.stringify(idZona),
                     );
                 }
                 //datos login incorrectos

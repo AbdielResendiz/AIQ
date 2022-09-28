@@ -2,21 +2,24 @@ import axios from "axios";
 export const urlImg = 'https://v-csoft.com/AIQ/static/img/';
 const source = axios.CancelToken.source();
 const baseUrl = 'https://v-csoft.com/AIQ';
-const urlRes = `${baseUrl}/MovilR/getRestaurantes`;
+const urlRes = `${baseUrl}/MovilR/getRestaurantes/`;
 const urlAD = `${baseUrl}/MovilR/getPublicidad`;
 //const urlCreaCart = `${baseUrl}/Carrito/createCart/`;
 const urlAddCart = `${baseUrl}/Carrito/addCart/`;
 const urlGetCart = `${baseUrl}/Carrito/getCart/`;
+const urlIdGetCart = `${baseUrl}/Carrito/getIdCart/`;
 const urlDeleteItem = `${baseUrl}/Carrito/deteleItemCart/`;
 const urlDeleteCart = `${baseUrl}/Carrito/borraCarrito/`
 const urlGetTotalCart = `${baseUrl}/Carrito/getTotalCart/`;
 const urlGetCodigo = `${baseUrl}/Carrito/validaCodigo/`;
 const urlDeleteCodigo = `${baseUrl}/Carrito/borraCodigo/`;
+const urlCreaPedido = `${baseUrl}/Pedidos/creaPedido/`
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export const getRestaurantes = async() => {
+export const getRestaurantes = async(zona) => {
+  const urlRestaurente = `${urlRes}${zona}`
   try{
-    const response = await axios.get(urlRes, {cancelToken: source.token});
+    const response = await axios.get(urlRestaurente, {cancelToken: source.token});
     if (response.status === 200) {
       return (response.data);
     } else {
@@ -293,4 +296,40 @@ export const deletecodigo = async(codigo) => {
       console.log("esto no sirve", e);
     }
   }) 
+}
+
+export const creaPedido = async(idMesa, nombre, cel, total, rest, metodo, idCarrito, cambio) => {
+  let data = new FormData();
+  data.append('id_mesa', idMesa);
+  data.append('nombre_alias', nombre);
+  data.append('telefono', cel);
+  data.append('total', total);
+  data.append('id_user', rest);
+  data.append('metodo', metodo);
+  data.append('id_carrito', idCarrito);
+  data.append('cambio', cambio);
+  await fetch(urlCreaPedido, {
+    method: 'POST',
+    body: data,
+  })
+}
+
+export const getIdCart = async(idMesa) => {
+  const mesa = idMesa;
+  const urlTotal = `${urlIdGetCart}${mesa}`;
+
+  try{
+    const response = await axios.get(urlTotal, {cancelToken: source.token});
+    if (response.status === 200) {
+      return response.data;
+    } else {
+      throw new Error("Fallo en fetch idCart")
+    }
+  } catch (error) {
+    if(axios.isCancel(error)) {
+      console.log('Data fetching cancelado')
+    } else {
+      console.log('algo pago en funcion getIdCart', error)
+    }
+  }  
 }

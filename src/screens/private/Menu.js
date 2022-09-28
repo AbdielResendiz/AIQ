@@ -9,6 +9,7 @@ import estilosAIQ from '../../styles/estilosAIQ';
 import Procesando from '../components/Procesando';
 import LottieSinServ from '../components/Lotties/LottieSinServ';
 import ProcesandoAir from '../components/ProcesandoAir';
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 const wait = (timeout) => {
     return new Promise((resolve) => setTimeout(resolve, timeout));
@@ -38,10 +39,12 @@ const Menu = (props) => {
       setRefreshing(false)});
   }, []);
   
+  //obtener menu desde ws
   const datosMenu = async() => {
     const m = await getMenu(idRest);
     setArrAlimentos(m);
-    const n = await getRestaurantes();
+    const zona = await AsyncStorage.getItem('ID_ZONA');
+    const n = await getRestaurantes(JSON.parse(zona));
     setArrRestaurantes(n);
     const p = await getCombos(idRest);
     setArrCombos(p);
@@ -52,6 +55,7 @@ const Menu = (props) => {
     setCargandoR(false)
   }
 
+  //envia datos para generar detalle producto en la sig. screen
   const detalleProducto = (id_comida, nombre, desc, precio, imagen, tiempo, restaurante) => {
     props.navigation.navigate("Producto", {
       id_comida: id_comida,
@@ -63,12 +67,15 @@ const Menu = (props) => {
       idRest: restaurante
     });
   };
+
+  //envia id_rest a screen carrito
   const enviaDatos = async (idRes) => {
     props.navigation.navigate("Carrito", {
       idRes: idRes
     });
   }
 
+  //funcion cambia categoria platillos, bebidad y combos
   const navCategoria = ((tipCat) => {
     setCategoria(tipCat)
   })
@@ -95,21 +102,17 @@ const Menu = (props) => {
 			{ cancelable: false }
 		);
 		return true;
-	}; //ALERTA SALIR
+	}; //ALERTA FIN
 
   useEffect(() => {
     const cambiaTamaño = setInterval(() => {
       datosMenu()
-      // setCargandoR(false)
-      // console.log("reinicio")
     }, 1500);
     return () => {
       // clean up
-     
       clearInterval(cambiaTamaño);
     };
   }, []);
-
 
   useEffect(() => {
     datosMenu();
