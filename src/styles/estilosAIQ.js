@@ -54,6 +54,14 @@ const estilosAIQ = StyleSheet.create({
       fontWeight: 'normal',
       textAlign: 'center',
     },
+    containerLoader: {
+      flex: 1,
+      justifyContent: 'center',
+      textAlign: 'center',
+      paddingTop: 30,
+      backgroundColor: '#ecf0f1',
+      padding: 8,
+    },
 })
 
 export default estilosAIQ

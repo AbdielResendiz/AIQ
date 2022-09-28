@@ -19,8 +19,8 @@
       "**/*"
     ],
     "notification": {
-			"icon": "./assets/image/iconAIQ.png"
-		},
+      "icon": "./assets/image/iconAIQ.png"
+    },
     "ios": {
       "supportsTablet": true
     },
@@ -28,11 +28,17 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/image/iconAIQ.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "package": "com.isacel97.FoodAIQ"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "description": ""
+    "description": "",
+    "extra": {
+      "eas": {
+        "projectId": "2f9140f0-e24a-4e2e-8f30-78f271236e39"
+      }
+    }
   }
 }

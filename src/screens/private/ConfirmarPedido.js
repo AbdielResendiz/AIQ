@@ -1,9 +1,10 @@
 import React, {useState, useEffect} from 'react'
 import { ScrollView, Text, View, Box, Center, Button, FormControl } from 'native-base'
-import { TextInput, Alert } from 'react-native';
+import { TextInput, Alert, ActivityIndicator, } from 'react-native';
 import {FontAwesome, FontAwesome5} from '@expo/vector-icons';
 import Procesando from '../components/Procesando';
 import coloresAIQ from '../../styles/coloresAIQ';
+import estilosAIQ from '../../styles/estilosAIQ';
 import Logo from '../components/Logo';
 import { Indicaciones } from '../components/Textos';
 import { getCodigo, creaPedido, getTotalCart, getIdCart } from '../../api/controlWS';
@@ -13,6 +14,8 @@ const ConfirmarPedido = (props) => {
   const metodo = props.route.params.datoMetodo;
   const monto = props.route.params.datoMonto;
   const [cargando, setCargando] = useState(true);
+  const [loading, setLoading] = useState(false);
+  //datos de usuario
   const [alias, setAlias] = useState('');
   const [celular, setCelular] = useState('');
   const [codigo, setCodigo] = useState('');
@@ -49,21 +52,30 @@ const ConfirmarPedido = (props) => {
         'Favor de esperar. Código prueba 5678',
       )
   }
-
+  //funcion envia datos y genera pedido, cod=codigo
   const validarCodigo = async(cod) => {
+    //valida si el codigo esta vacio
     if (codigo.length == 0) {
         setValidoC(true);
         setCodigo('');
         return;
     } else {
+        //se envia codigo para validar si existe
         const m = await getCodigo(cod);
         if (m == true) {
+            //inicio loader
+            setLoading(true);
+            //vacia input
             setCodigo('');
+            //datos para generar pedido
             const mesa = await AsyncStorage.getItem('ID_MESA');
             const idRest = await AsyncStorage.getItem('ID_REST');
             const t = await getTotalCart(JSON.parse(mesa));
             const idCar = await getIdCart(JSON.parse(mesa));
             await creaPedido(JSON.parse(mesa), alias, celular, t, JSON.parse(idRest), metodo, idCar, monto);
+            //fin loader
+            setLoading(false);
+            //confirmacion de codigo existoso y navagacion a screen pedidos
             Alert.alert(
                 'Codigo valido',
                 'El codigo es correcto.' ,
@@ -73,6 +85,7 @@ const ConfirmarPedido = (props) => {
                   style: 'default',
                 }]);
         } else {
+            //si el codigo es invalido
             setCodigo('');
             Alert.alert(
                 'ERROR',
@@ -89,7 +102,9 @@ const ConfirmarPedido = (props) => {
   return (
     <>
       {cargando ? <Procesando /> : null}
-      <ScrollView>
+      <ScrollView flex={1}>
+        {loading ? (<View style={estilosAIQ.containerLoader}><ActivityIndicator size="large" color={coloresAIQ.azulAIQ}/></View>) :
+        (<>
         {/* Logo */}
         <Logo/>
         {/* Indicaciones */}
@@ -282,7 +297,9 @@ const ConfirmarPedido = (props) => {
                     Validar código
                 </Text>
             </Button>
-        </Center>
+        </Center>  
+        </>)}
+
       </ScrollView>
     </>
 
