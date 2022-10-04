@@ -1,14 +1,15 @@
 import React, {useState, useEffect} from 'react'
 import { ScrollView, Text, View, Box, Center, Button, FormControl } from 'native-base'
-import { TextInput, Alert, ActivityIndicator, } from 'react-native';
-import {FontAwesome, FontAwesome5} from '@expo/vector-icons';
-import Procesando from '../components/Procesando';
+import { TextInput, Alert, } from 'react-native';
+import {FontAwesome, FontAwesome5, Entypo} from '@expo/vector-icons';
 import coloresAIQ from '../../styles/coloresAIQ';
 import estilosAIQ from '../../styles/estilosAIQ';
 import Logo from '../components/Logo';
-import { Indicaciones } from '../components/Textos';
-import { getCodigo, creaPedido, getTotalCart, getIdCart } from '../../api/controlWS';
+import { Indicaciones, TituloInput } from '../components/Textos';
+import { getCodigo, creaPedido, getTotalCart, getIdCart,  insertCode, enviaMensaje} from '../../api/controlWS';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import ProcesandoAir from '../components/ProcesandoAir';
+import IntlPhoneInput from 'react-native-intl-phone-input';
 
 const ConfirmarPedido = (props) => {
   const metodo = props.route.params.datoMetodo;
@@ -24,21 +25,27 @@ const ConfirmarPedido = (props) => {
   const [validoP, setValidoP] = useState(false);
   const [validoC, setValidoC] = useState(false);
   const cambioN = () => setValidoN(false);
-  const cambioP = () => setValidoP(false);
   const cambioC = () => setValidoC(false);
+  //pruebas code random
+
+    //datos de input celular
+    onChangeText = ({dialCode, unmaskedPhoneNumber, phoneNumber, isVerified}) => {
+        setCelular(dialCode+unmaskedPhoneNumber);
+        setValidoP(isVerified);
+      };
 
   const enviaWhats = async() => {
-    //validando nombre
     if (alias.length == 0) {
         setValidoN(true);
         setAlias('');
         return;
     } //validando celular
-    if (celular.length == 0) {
-        setValidoP(true);
-        setCelular('');
+    if (validoP == false) {
         return;
     } else {
+        let randomCod = (Math.random() + 1).toString(36).substring(6);
+        insertCode(randomCod);
+        await enviaMensaje(parseInt(celular), randomCod, alias);
         Alert.alert(
             'Mensaje enviado',
             'Favor de revisar mensajes. Código prueba 5678',
@@ -54,17 +61,26 @@ const ConfirmarPedido = (props) => {
   }
   //funcion envia datos y genera pedido, cod=codigo
   const validarCodigo = async(cod) => {
+    //validando nombre
+    if (alias.length == 0) {
+        setValidoN(true);
+        setAlias('');
+        return;
+    } //validando celular
+    if (validoP == false) {
+        return;
+    }
     //valida si el codigo esta vacio
-    if (codigo.length == 0) {
+    if (codigo.length < 4) {
         setValidoC(true);
         setCodigo('');
         return;
     } else {
+        //inicio loader
+        setLoading(true);
         //se envia codigo para validar si existe
         const m = await getCodigo(cod);
         if (m == true) {
-            //inicio loader
-            setLoading(true);
             //vacia input
             setCodigo('');
             //datos para generar pedido
@@ -72,8 +88,8 @@ const ConfirmarPedido = (props) => {
             const idRest = await AsyncStorage.getItem('ID_REST');
             const t = await getTotalCart(JSON.parse(mesa));
             const idCar = await getIdCart(JSON.parse(mesa));
-            await creaPedido(JSON.parse(mesa), alias, celular, t, JSON.parse(idRest), metodo, idCar, monto);
-            //fin loader
+            await creaPedido(JSON.parse(mesa), alias, parseInt(celular), t, JSON.parse(idRest), metodo, idCar, monto);
+            //fin loader if
             setLoading(false);
             //confirmacion de codigo existoso y navagacion a screen pedidos
             Alert.alert(
@@ -85,6 +101,8 @@ const ConfirmarPedido = (props) => {
                   style: 'default',
                 }]);
         } else {
+            //fin loader else
+            setLoading(false);
             //si el codigo es invalido
             setCodigo('');
             Alert.alert(
@@ -101,44 +119,23 @@ const ConfirmarPedido = (props) => {
 
   return (
     <>
-      {cargando ? <Procesando /> : null}
+      {cargando || loading ? <ProcesandoAir /> : null}
       <ScrollView flex={1}>
-        {loading ? (<View style={estilosAIQ.containerLoader}><ActivityIndicator size="large" color={coloresAIQ.azulAIQ}/></View>) :
-        (<>
+        <>
         {/* Logo */}
         <Logo/>
         {/* Indicaciones */}
         <Box>
-            <Center>
-                <Text
-                fontSize={22}
-                fontFamily='body'
-                colorScheme={coloresAIQ.negro}>
-                ¿Quién recibirá el pedido?
-                </Text>
-            </Center>
+            <Indicaciones indicacion={'¿Quíen recibirá el pedido?'} />
         </Box>
 
         {/* Input nombre */}
         <FormControl isInvalid={validoN}>
-            <View paddingY={2} paddingX={8}>
-                <Text
-                marginY={2}                 
-                fontSize={18}
-                fontFamily='body'
-                fontWeight={'bold'}
-                color={coloresAIQ.negro}>
-                    Nombre/Alias:
-                </Text>
+            <View  paddingX={8}>
+                <TituloInput titulo={'Nombre/Alias:'} />
                 <TextInput
                     keyboardType='default'
-                    style={{ 
-                        padding: 4,
-                        borderWidth: 1.5, 
-                        borderColor: coloresAIQ.grisOscuroAIQ,
-                        borderRadius: 8,
-                        backgroundColor: coloresAIQ.blanco
-                    }}
+                    style={estilosAIQ.input}
                     placeholder="Ingresa un nombre/apellido o alias"
                     value={alias}
                     onChangeText={(val) => setAlias(val)}
@@ -149,61 +146,52 @@ const ConfirmarPedido = (props) => {
                 </FormControl.ErrorMessage>
             </View>
         </FormControl>
+
+        {/* Input celular */}
+        <FormControl isInvalid={!validoP}>
+            <View paddingY={2} paddingX={8}>
+                <TituloInput titulo={'Celular:'} />
+                <IntlPhoneInput 
+                    onChangeText={this.onChangeText}
+                    defaultCountry="MX" 
+                    renderAction={() => 
+                        <Entypo
+                            name='phone'
+                            size={28}
+                            color={coloresAIQ.azulClaroAIQ}
+                    />} 
+                />
+                <FormControl.ErrorMessage>
+                    Ingresa un número valido.
+                </FormControl.ErrorMessage>
+            </View>
+        </FormControl>
+
         {/* Indicaciones celular */}
         <Box flex={1} paddingTop={3} paddingX={8}>
             <Center>
                 <Indicaciones indicacion='Te enviaremos un código de verifiación vía Whatsapp.'/>
             </Center>
         </Box>
-
-        {/* Input celular */}
-        <FormControl isInvalid={validoP}>
-            <View paddingY={2} paddingX={8}>
-                <Text
-                marginY={2}                 
-                fontSize={18}
-                fontFamily='body'
-                fontWeight={'bold'}
-                color={coloresAIQ.negro}>
-                    Celular:
-                </Text>
-                <TextInput
-                    keyboardType='phone-pad'
-                    style={{ 
-                        padding: 4,
-                        borderWidth: 1.5, 
-                        borderColor: coloresAIQ.grisOscuroAIQ,
-                        borderRadius: 8,
-                        backgroundColor: coloresAIQ.blanco
-                    }}
-                    placeholder="Ingresa tu celular"
-                    value={celular}
-                    onChangeText={(val) => setCelular(val)}
-                    onChange={cambioP}
-                />
-                <FormControl.ErrorMessage>
-                    Ingresa un numero valido.
-                </FormControl.ErrorMessage>
-            </View>
-        </FormControl>
+        
         {/* Btn envia codigo */}
         <Center>
             <Button
                 leftIcon={<FontAwesome
                     name={'send'}
-                    size={16}
+                    size={20}
                     color={coloresAIQ.blanco}/>}
                 bg={coloresAIQ.azulAIQ}
-                mt='1'
-                width={150}
-                height={42}
-                borderRadius={18}
+                mt='4'
+                width={200}
+                height={52}
+                borderRadius={24}
                 onPress={() => {enviaWhats()}}
                 _pressed={{
                     bg: coloresAIQ.azulBtn}}>
                 <Text
                     color={coloresAIQ.blanco}
-                    fontSize='sm'
+                    fontSize='md'
                     fontFamily='body'>
                     Enviar código
                 </Text>
@@ -247,24 +235,11 @@ const ConfirmarPedido = (props) => {
         {/* Input codigo */}
         <FormControl isInvalid={validoC}>
             <View paddingY={2} paddingX={8}>
-                <Text
-                marginY={2}                 
-                fontSize={18}
-                fontFamily='body'
-                fontWeight={'bold'}
-                color={coloresAIQ.negro}>
-                    Código:
-                </Text>
+                <TituloInput titulo={'Codigó'} />
                 <TextInput
                     keyboardType='default'
                     autoCapitalize='none'
-                    style={{ 
-                        padding: 4,
-                        borderWidth: 1.5, 
-                        borderColor: coloresAIQ.grisOscuroAIQ,
-                        borderRadius: 8,
-                        backgroundColor: coloresAIQ.blanco
-                    }}
+                    style={estilosAIQ.input}
                     placeholder="Ingresa el código enviado a Whatsapp"
                     value={codigo}
                     onChangeText={(val) => setCodigo(val)}
@@ -280,26 +255,25 @@ const ConfirmarPedido = (props) => {
             <Button
                 leftIcon={<FontAwesome
                     name={'check'}
-                    size={16}
+                    size={20}
                     color={coloresAIQ.blanco}/>}
                 bg={coloresAIQ.azulAIQ}
-                mt='1'
-                width={150}
-                height={42}
-                borderRadius={18}
+                mt='4'
+                width={200}
+                height={52}
+                borderRadius={24}
                 onPress={() => {validarCodigo(codigo)}}
                 _pressed={{
                     bg: coloresAIQ.azulBtn}}>
                 <Text
                     color={coloresAIQ.blanco}
-                    fontSize='sm'
+                    fontSize='md'
                     fontFamily='body'>
                     Validar código
                 </Text>
             </Button>
         </Center>  
-        </>)}
-
+        </>
       </ScrollView>
     </>
 

@@ -11,7 +11,7 @@ const Logo = () => {
         resizeMode='center'
         alt='AIQ'
         width={'100%'}
-        height={180}/>
+        height={300}/>
     </Box>
   )
 }

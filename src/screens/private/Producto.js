@@ -6,6 +6,8 @@ import coloresAIQ from '../../styles/coloresAIQ'
 import { TextInput } from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { addCarrito } from '../../api/controlWS'
+import estilosAIQ from '../../styles/estilosAIQ'
+import { DetalleProducto, InfoProducto, NombreBox } from '../components/Textos'
 
 const Producto = (props) => {
   const [comentario, setComentario] = useState('');
@@ -61,105 +63,47 @@ const Producto = (props) => {
         {/* Imagen Producto */}
         <Center paddingTop={4}>
             <Image
-                style={{
-                resizeMode: "cover",
-                justifyContent: "center",
-                alignItems: "center",
-                borderRadius: 12,
-                }}
+                style={{...estilosAIQ.imagenMenu, borderBottomRightRadius: 12, borderTopRightRadius: 12,}}
                 source={{uri: urlImg+imagen}}
                 alt={"Imagen producto"}
                 size='180'/>
         </Center>
         {/* Nombre Producto y precio */}
         <Center p={4}>
-            <Text                   
-              fontSize={22}
-              fontFamily='heading'
-              color={coloresAIQ.negro}>
-                {nomProd}
-            </Text>
-            <Text                   
-              fontSize={20}
-              fontFamily='heading'
-              color={coloresAIQ.azulOscuroAIQ}>
-                ${precio}
-            </Text>
+            <NombreBox nombre={nomProd.toUpperCase()} color={coloresAIQ.negro}/>
+            <NombreBox nombre={`$${precio}`} color={coloresAIQ.azulOscuroAIQ}/>
         </Center>
         {/* Descripcion y tiempo de producto */}
         <View paddingY={2} paddingX={8}>
-            <Text                   
-              fontSize={18}
-              fontFamily='body'
-              fontWeight={'bold'}
-              color={coloresAIQ.negro}>
-                Información del producto:
-            </Text>
-            <Text                   
-              fontSize={18}
-              fontFamily='body'
-              color={coloresAIQ.grisOscuroAIQ}>
-                {desc}
-            </Text>
-            <Text
-              paddingTop={2}                   
-              fontSize={18}
-              fontFamily='body'
-              fontWeight={'bold'}
-              color={coloresAIQ.negro}>
-                Tiempo de entrega aproximado:
-            </Text>
-            <Text                   
-              fontSize={18}
-              fontFamily='body'
-              color={coloresAIQ.grisOscuroAIQ}>
-                {tiempo}min.
-            </Text>
+          <InfoProducto info={'Información del producto'}/>
+          <DetalleProducto detalle={desc}/>
+          <View margin={2}/>
+          <InfoProducto info={'Tiempo de entrega aproximado:'}/>
+          <DetalleProducto detalle={`${tiempo}min.`}/>
         </View>
         {/* Comentarios */}
         <View paddingY={2} paddingX={8}>
-            <Text                   
-              fontSize={18}
-              fontFamily='body'
-              fontWeight={'bold'}
-              color={coloresAIQ.negro}>
-                Comentarios:
-            </Text>
+          <InfoProducto info={'Comentarios:'}/>
             <TextInput
-                style={{ 
-                    padding: 10,
-                    textAlignVertical: 'top', 
-                    borderWidth: 1.5, 
-                    borderColor: coloresAIQ.grisOscuroAIQ,
-                    borderRadius: 8,
-                    backgroundColor: coloresAIQ.blanco
-                 }}
-                numberOfLines={4}
+                style={{...estilosAIQ.input, textAlignVertical: 'top', }}
+                numberOfLines={5}
                 placeholder="Escribe tus comentarios"
                 multiline
                 value={comentario}
+                maxLength={200}
                 onChangeText={(val) => setComentario(val)}
             />
         </View>
 
         {/* Input spinner cantidad */}
         <Box w='50%' alignContent='center' marginLeft={8} marginTop={3}>
-          <Text                 
-            fontSize={18}
-            fontFamily='body'
-            fontWeight={'bold'}
-            color={coloresAIQ.negro}>
-              Cantidad:
-          </Text>
+          <InfoProducto info={'Cantidad:'}/>
           <Flex direction={"row"} alignItems='flex-start'>
             <Button
               bg={coloresAIQ.azulOscuroAIQ}
-              h={12}
-              style={{
-                borderTopRightRadius: 0,
-                borderBottomRightRadius: 0,
-                width: 50,
-              }}
+              style={{...estilosAIQ.btnCantidadProd, 
+                borderTopLeftRadius: 8,
+                borderBottomLeftRadius: 8}}
               startIcon={
                 <FontAwesome
                   name='minus'
@@ -170,8 +114,8 @@ const Producto = (props) => {
               onPress={disminCarrito}
             />
             <Text
-              h={12}
-              w={10}
+              h={16}
+              w={12}
               bg={coloresAIQ.azulOscuroAIQ}
               fontSize={"md"}
               style={{ textAlignVertical: "center", textAlign: "center" }}
@@ -180,13 +124,10 @@ const Producto = (props) => {
               {cantP}
             </Text>
             <Button
-              h={12}
               bg={coloresAIQ.azulOscuroAIQ}
-              style={{
-                borderTopLeftRadius: 0,
-                borderBottomLeftRadius: 0,
-                width: 50,
-              }}
+              style={{...estilosAIQ.btnCantidadProd, 
+                borderTopRightRadius: 8,
+                borderBottomRightRadius: 8}}
               endIcon={
                 <FontAwesome
                   name='plus'
@@ -204,19 +145,19 @@ const Producto = (props) => {
             <Button
                 leftIcon={<MaterialCommunityIcons
                     name='cart-plus'
-                    size={24}
+                    size={28}
                     color={coloresAIQ.blanco}/>}
                 bg={coloresAIQ.azulAIQ}
                 mt='3'
-                width={250}
-                height={55}
+                width={270}
+                height={70}
                 borderRadius={32}
                 onPress={() => {enviaDatos(comentario, precio, idRes, cantP, idComida)}}
                 _pressed={{
                     bg: coloresAIQ.azulBtn}}>
                 <Text
                     color={coloresAIQ.blanco}
-                    fontSize='md'
+                    fontSize='lg'
                     fontFamily='body'>
                     Agregar producto
                 </Text>

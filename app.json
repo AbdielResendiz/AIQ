@@ -3,7 +3,7 @@
     "name": "FoodAIQ",
     "slug": "FoodAIQ",
     "version": "1.0.0",
-    "orientation": "portrait",
+    "orientation": "default",
     "icon": "./assets/image/iconAIQ.png",
     "userInterfaceStyle": "light",
     "splash": {

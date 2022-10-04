@@ -27,9 +27,9 @@ const estilosAIQ = StyleSheet.create({
     },
     botonTouch: {
       backgroundColor: coloresAIQ.azulAIQ,
-      margin: 24,
+      margin: 20,
       textAlign: 'center',
-      padding:16,
+      padding:24,
       borderRadius: 24,
       alignItems: 'center',
       flexDirection: 'row',
@@ -39,14 +39,6 @@ const estilosAIQ = StyleSheet.create({
       color: coloresAIQ.blanco, 
       fontWeight: '600', 
       fontSize: 18
-    },
-    containerCategorias: {
-      marginTop: 12,
-      marginHorizontal: 12,
-      textAlign: 'center',
-      alignItems: 'center',
-      flexDirection: 'row',
-      justifyContent: 'center'
     },
     textUps: {
       color: coloresAIQ.naranjaOscuroFood,
@@ -59,9 +51,63 @@ const estilosAIQ = StyleSheet.create({
       justifyContent: 'center',
       textAlign: 'center',
       paddingTop: 30,
-      backgroundColor: '#ecf0f1',
+      backgroundColor: coloresAIQ.azulAIQ,
       padding: 8,
     },
+    imagenMenu: {                             
+      resizeMode: "stretch",
+      justifyContent: "center",
+      borderTopLeftRadius: 12,
+      borderBottomLeftRadius: 12,
+      borderBottomRightRadius: 0,
+      borderTopRightRadius: 0,
+      width: 350,
+      height: 200
+    },
+    logo: {
+      resizeMode: "center", justifyContent: "center",
+      width: 300, height: 300,
+      alignItems: "center", borderRadius: 12,
+    },
+    boxAds: {
+      width: 400,
+      height: 204,
+      marginRight: 16,
+      borderColor: coloresAIQ.azulOscuroAIQ,
+      borderWidth: 2,
+      borderRadius: 5
+    },
+    imagenAnuncios: {
+      flex: 1,
+      resizeMode: 'contain',
+      borderRadius: 5,
+      width: null,
+      height: null,
+    },
+    boxRest: {
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      justifyContent: 'space-evenly',
+      alignItems: 'center',
+    },
+    titulosProducto: {
+      fontSize:24,
+      fontWeight: 'bold',
+      color: coloresAIQ.negro
+    },
+    btnCantidadProd: {
+      borderRadius:0,
+      width: 64,
+      height: 64
+    },
+    input: {
+      padding: 14,
+      borderWidth: 1.5, 
+      borderColor: coloresAIQ.grisOscuroAIQ,
+      borderRadius: 8,
+      backgroundColor: coloresAIQ.blanco,
+      fontSize: 16,
+    }
 })
 
 export default estilosAIQ

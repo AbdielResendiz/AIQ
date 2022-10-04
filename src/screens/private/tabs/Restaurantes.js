@@ -7,6 +7,7 @@ import coloresAIQ from '../../../styles/coloresAIQ';
 import ProcesandoAir from '../../components/ProcesandoAir';
 import { Titulos } from '../../components/Textos';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import estilosAIQ from '../../../styles/estilosAIQ';
 
 const wait = (timeout) => {
 	return new Promise((resolve) =>
@@ -70,7 +71,6 @@ const Restaurantes = (props) => {
       <SafeAreaView flex={1}>
         {/* Scroll anuncios */}
         <ScrollView
-          contentContainerStyle={{paddingBottom: 32}}
           horizontal={true}
           showsHorizontalScrollIndicator={false}
           refreshControl={
@@ -80,33 +80,17 @@ const Restaurantes = (props) => {
           }>
           <Box
             p={3}
-            style={{
-              flexDirection: 'row',
-              flexWrap: 'wrap',
-              justifyContent: 'space-evenly',
-              alignItems: 'center',
-            }}>
+            style={{...estilosAIQ.boxRest, height: 270}}>
             {arrAnuncios.map((item) => {
               return (
                 <Box key={item.id_ad} mb={4}>
                   <TouchableOpacity
-                    style={{
-                      width: 200,
-                      height: 104,
-                      marginRight: 8,
-                      borderColor: coloresAIQ.azulOscuroAIQ,
-                      borderWidth: 2,
-                      borderRadius: 5
-                    }}
+                    style={estilosAIQ.boxAds}
                     onPress={() => {console.log(item.id_ad)}}>
                     <Image
-                      borderRadius={5}
                       source={{uri: urlImg + item.imagen}}
                       alt='Anuncio'
-                      style={{
-                        width: '100%',
-                        height: 100,
-                      }}
+                      style={estilosAIQ.imagenAnuncios}
                     />
                   </TouchableOpacity>
                 </Box>
@@ -127,47 +111,37 @@ const Restaurantes = (props) => {
               onRefresh={onRefresh}
             />
           }>
+            
           {/* Inicio if restaurantes activos */}
           {arrRestaurantes.length > 0 ? (
               <Box
                 flex={1}
-                p={3}
-                paddingTop={1}
-                style={{
-                  flexDirection: 'row',
-                  flexWrap: 'wrap',
-                  justifyContent: 'space-evenly',
-                  alignItems: 'center',
-                }}>
+                style={estilosAIQ.boxRest}>
                 {arrRestaurantes.map((item) => {
                   if (item.status == 1) {
                     return (
                       <Box
                         key={item.id_user}
-                        mb={4}
+                        mb={10}
                         style={{ backgroundColor: coloresAIQ.blanco, borderRadius: 6 }}>
                         {/* Cambiar por idRes onPress cuando esten los WS */}
                         <TouchableOpacity
                           style={{
-                            width: 150,
-                            height: 150,
+                            width: 300,
+                            height: 300,
                             marginRight: 3,
                           }}
                           onPress={() => menu(item.id_user)}>
                           <Image
-                            borderRadius={6}
                             source={{uri: urlImg + item.avatar}}
-                            alt='Restaurante'
-                            style={{
-                              width: '100%',
-                              height: 150,
-                            }} />
+                            alt={item.nombre}
+                            style={estilosAIQ.imagenAnuncios} />
                           <Center
                             bg={coloresAIQ.azulOscuroAIQ}
                             _text={{
                               color: coloresAIQ.blanco,
                               fontWeight: '700',
-                              fontSize: 'sm',
+                              fontSize: 'xl',
                             }}
                             position='absolute'
                             bottom={0}

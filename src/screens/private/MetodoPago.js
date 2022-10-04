@@ -6,7 +6,7 @@ import {AntDesign, FontAwesome5, FontAwesome} from '@expo/vector-icons';
 import { getTotalCart } from '../../api/controlWS';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Logo from '../components/Logo';
-import { Indicaciones, Titulos } from '../components/Textos';
+import { Indicaciones, TituloInput, Titulos } from '../components/Textos';
 
 const MetodoPago = (props) => {
   const [total, setTotal] = useState('');
@@ -68,7 +68,7 @@ const MetodoPago = (props) => {
       <Box                       
         style={{ borderRadius: 12 }}
         shadow={3}
-        m={3}
+        m={4}
         _light={{
             backgroundColor: coloresAIQ.blanco,
         }}>
@@ -95,8 +95,8 @@ const MetodoPago = (props) => {
       <Center>
         {/* Monto total */}
         <Text
-          paddingTop={3}
-          fontSize={22}
+          paddingTop={4}
+          fontSize={24}
           fontFamily='heading'
           colorScheme={coloresAIQ.negro}>
           Total: ${total}
@@ -110,40 +110,36 @@ const MetodoPago = (props) => {
       (
         <FormControl isInvalid={validoC}> 
           <Stack>
-            <Text
-                mt={8}
-                fontSize='md'
-                fontFamily='body'
-                fontWeight={'bold'}
-                color={coloresAIQ.azulOscuroAIQ}>
-                ¿Requieres cambio?
-            </Text>
+            <TituloInput titulo={'¿Requieres cambio?'} />
             <Input
-                rounded={12}
-                variant='outline'
-                placeholder='Ingresa el monto de los billetes'
-                fontFamily='body'
-                keyboardType='numeric'
-                autoCorrect={false}
-                backgroundColor={coloresAIQ.blanco}
-                InputRightElement={(
-                  <Button
-                  ml={1}
-                  variant='link'
-                  roundedLeft={0}
-                  roundedRight='md'>
-                    <FontAwesome5
-                      name='money-bill-alt'
-                      size={20}
-                      color={coloresAIQ.azulClaroAIQ}
-                    />
-                  </Button>
-                )}
-                value={monto}
-                onChangeText={(val) =>
-                    setMonto(val)
-                }
-                onChange={cambioC}
+              m={4}
+              height={16}
+              rounded={12}
+              variant='outline'
+              placeholder='Ingresa el monto de los billetes'
+              fontFamily='body'
+              fontSize={16}
+              keyboardType='numeric'
+              autoCorrect={false}
+              backgroundColor={coloresAIQ.blanco}
+              InputRightElement={(
+                <Button
+                ml='3'
+                variant='link'
+                roundedLeft={0}
+                roundedRight='md'>
+                  <FontAwesome5
+                    name='money-bill-alt'
+                    size={28}
+                    color={coloresAIQ.azulClaroAIQ}
+                  />
+                </Button>
+              )}
+              value={monto}
+              onChangeText={(val) =>
+                  setMonto(val)
+              }
+              onChange={cambioC}
             />
             <FormControl.ErrorMessage>
                 Ingresa una cantidad.
@@ -156,13 +152,13 @@ const MetodoPago = (props) => {
       <Center marginTop={2} marginBottom={4}>
         <Button
             leftIcon={<AntDesign
-                name='check'
-                size={24}
-                color={coloresAIQ.blanco}/>}
+              name='check'
+              size={28}
+              color={coloresAIQ.blanco}/>}
             bg={coloresAIQ.azulAIQ}
-            mt='3'
-            width={250}
-            height={55}
+            mt='4'
+            width={300}
+            height={65}
             borderRadius={32}
             onPress={() => {
               enviaMetodo();
@@ -171,7 +167,7 @@ const MetodoPago = (props) => {
                 bg: coloresAIQ.azulBtn}}>
             <Text
                 color={coloresAIQ.blanco}
-                fontSize='md'
+                fontSize='lg'
                 fontFamily='body'>
                 Continuar
             </Text>

@@ -6,10 +6,11 @@ import { AntDesign } from '@expo/vector-icons';
 import { getMenu, getRestaurantes, urlImg, getCombos, getComidas, getBebidas, deleteCart} from '../../api/controlWS';
 import coloresAIQ from '../../styles/coloresAIQ';
 import estilosAIQ from '../../styles/estilosAIQ';
-import Procesando from '../components/Procesando';
 import LottieSinServ from '../components/Lotties/LottieSinServ';
+import LottieSelect from '../components/Lotties/LottieSelect';
 import ProcesandoAir from '../components/ProcesandoAir';
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { NombreBox, NombreBoxProd, TextBoxProd } from '../components/Textos';
 
 const wait = (timeout) => {
     return new Promise((resolve) => setTimeout(resolve, timeout));
@@ -17,7 +18,6 @@ const wait = (timeout) => {
 
 const Menu = (props) => {
   const [refreshing, setRefreshing] = useState(false);
-  const [cargando, setCargando] = useState(true);
   const [cargandoR, setCargandoR] = useState(true);
   const [categoria, setCategoria] = useState('Alimentos')
   
@@ -51,7 +51,7 @@ const Menu = (props) => {
     const k = await getComidas(idRest);
     setPlatillos(k)
     const l = await getBebidas(idRest)
-    setBebidas(l)
+    setBebidas(l);
     setCargandoR(false)
   }
 
@@ -79,7 +79,6 @@ const Menu = (props) => {
   const navCategoria = ((tipCat) => {
     setCategoria(tipCat)
   })
-
   //Alerta que confirma la acción de "vaciar carrito"
 	const backAction = () => {
 		Alert.alert(
@@ -106,7 +105,7 @@ const Menu = (props) => {
 
   useEffect(() => {
     const cambiaTamaño = setInterval(() => {
-      datosMenu()
+      datosMenu();
     }, 1500);
     return () => {
       // clean up
@@ -116,7 +115,6 @@ const Menu = (props) => {
 
   useEffect(() => {
     datosMenu();
-    setCargando(false);
     const backHandler = BackHandler.addEventListener(
 			'hardwareBackPress',
 			backAction
@@ -126,7 +124,7 @@ const Menu = (props) => {
 
   return (
     <>
-      {cargando ? <Procesando /> : null}
+      {cargandoR ? <ProcesandoAir /> : null}
       <SafeAreaView flex={1}>
         {/* Datos restaurante */}
         {arrRestaurantes.map((item) => {
@@ -136,25 +134,12 @@ const Menu = (props) => {
                 <Center paddingTop={3}>
                   {/* Logo */}
                   <Image
-                    style={{
-                    resizeMode: "cover", justifyContent: "center",
-                    alignItems: "center", borderTopLeftRadius: 5,
-                    borderBottomLeftRadius: 5, borderTopRightRadius: 0,
-                    borderBottomRightRadius: 0,
-                    }}
-                    imageStyle={{
-                    borderRadius: 55,
-                    }}
+                    style={estilosAIQ.logo}
                     source={{uri: urlImg + item.avatar}}
                     alt={"Logo restaurante"}
                     size={"xl"}/>
                   {/* Nombre */}
-                  <Text
-                      fontFamily='heading'
-                      fontSize='2xl'
-                      color={coloresAIQ.negro}>
-                      {item.nombre}
-                  </Text>
+                  <NombreBox nombre={item.nombre.toUpperCase()} color={coloresAIQ.negro}/>
                 </Center>
               </Box>
             )
@@ -167,7 +152,7 @@ const Menu = (props) => {
               {arrAlimentos.length > 0 ? (<>    
             {categoria == 'Alimentos' ? 
             (<>
-              {arrAlimentos.length > 0 ? 
+              {arrPlatillos.length > 0 ? 
                 (<TouchableOpacity
                     style={estilosAIQ.containerCategorias}
                     onPress={() => {navCategoria('Alimentos')}}>
@@ -244,9 +229,8 @@ const Menu = (props) => {
               onRefresh={onRefresh}
             />
           }>
-            {cargandoR ? <ProcesandoAir /> : null}
-          <Box flex={2} p={3}>
-          {categoria == 'Alimentos' && arrPlatillos.length > 0? 
+          {arrAlimentos.length > 0 ? (<Box flex={2} p={3}>
+          {categoria == 'Alimentos' && arrPlatillos.length > 0 ? 
             (arrAlimentos.map((item) => { 
               if (item.id_categoria == 2 ) {
                 return(
@@ -255,7 +239,6 @@ const Menu = (props) => {
                   key={item.id_comida}
                   shadow={3}
                   m={2}
-                  mt={2}
                   _light={{
                     backgroundColor: coloresAIQ.blanco,
                   }}>
@@ -264,51 +247,27 @@ const Menu = (props) => {
                           detalleProducto(item.id_comida, item.nombre, item.descripcion, item.precio, item.imagen, item.tiempo, idRest);
                       }}><Flex direction='row'>
                           <Image
-                          style={{
-                              flex: 1,
-                              resizeMode: "cover",
-                              justifyContent: "center",
-                              borderTopLeftRadius: 12,
-                              borderBottomLeftRadius: 12,
-                              borderTopRightRadius: 0,
-                              borderBottomRightRadius: 0,
-                          }}
-                          imageStyle={{
-                              borderRadius: 55,
-                          }}
+                          style={estilosAIQ.imagenMenu}
                           source={{uri: urlImg+item.imagen}}
                           alt={item.nombre}
                           size={"xl"}
                           />
                           <Box m={2} style={{width: 0, flexGrow: 1, flex: 1}}>
                           {/* Nombre platillo */}
-                          <Text
-                          fontFamily='heading'
-                          fontSize='xl'
-                          color={coloresAIQ.azulOscuroAIQ}>
-                          {item.nombre}
-                          </Text>
+                          <NombreBoxProd color={coloresAIQ.azulOscuroAIQ} nombre={item.nombre} />
                           {/* Costo de platillo */}
-                          <Text
-                          ml={1}
-                          color={coloresAIQ.grisAIQ}
-                          fontSize='md'
-                          fontFamily='body'>
-                          Costo: ${item.precio}
-                          </Text>
+                          <TextBoxProd dato={`Costo: $${item.precio}`} />
                           </Box>
                       </Flex></TouchableOpacity>
                   </Box>
               )
               }
-            })) : ( (<View>
-               {(categoria != 'Alimentos' && arrCombos.length >= 1) || (categoria != 'Alimentos' && arrBebidas.length >= 1 ) || (categoria != 'Alimentos' && arrPlatillos.length ==0) ? 
-            (<View></View>) : (<Center>
-                                    <LottieSinServ></LottieSinServ>
-                                    <Text>Ups....Intentalo mas tarde</Text>
-                              </Center>)}
-
-            </View>))}
+            })) : (null)}
+          {categoria == 'Alimentos' && arrPlatillos.length == 0 ? 
+            (<View><Center>
+              <LottieSelect></LottieSelect>
+              <Text>Bienvenido, selecciona una categoría</Text>
+            </Center></View>) : (null)}
           {categoria == 'Bebidas' && arrBebidas.length > 0 ? 
             (arrAlimentos.map((item) => {
                 if (item.id_categoria == 3) {
@@ -327,51 +286,22 @@ const Menu = (props) => {
                           detalleProducto(item.id_comida, item.nombre, item.descripcion, item.precio, item.imagen, item.tiempo, idRest);
                         }}><Flex direction='row'>
                             <Image
-                            style={{
-                                flex: 1,
-                                resizeMode: "cover",
-                                justifyContent: "center",
-                                borderTopLeftRadius: 12,
-                                borderBottomLeftRadius: 12,
-                                borderTopRightRadius: 0,
-                                borderBottomRightRadius: 0,
-                            }}
-                            imageStyle={{
-                                borderRadius: 55,
-                            }}
+                            style={estilosAIQ.imagenMenu}
                             source={{uri: urlImg+item.imagen}}
                             alt={item.nombre}
                             size={"xl"}
                             />
                             <Box m={2} style={{width: 0, flexGrow: 1, flex: 1}}>
                             {/* Nombre platillo */}
-                            <Text
-                            fontFamily='heading'
-                            fontSize='xl'
-                            color={coloresAIQ.azulOscuroAIQ}>
-                            {item.nombre}
-                            </Text>
+                            <NombreBoxProd color={coloresAIQ.azulOscuroAIQ} nombre={item.nombre} />
                             {/* Costo de platillo */}
-                            <Text
-                            ml={1}
-                            color={coloresAIQ.grisAIQ}
-                            fontSize='md'
-                            fontFamily='body'>
-                            Costo: ${item.precio}
-                            </Text>
+                            <TextBoxProd dato={`Costo: $${item.precio}`} />
                             </Box>
                         </Flex></TouchableOpacity>
                     </Box>
                 )
                 }
-            })) : ((<View>
-             {(categoria != 'Bebidas' && arrCombos.length >= 1) || (categoria != 'Bebidas' && arrBebidas.length == 0 ) || (categoria != 'Bebidas' && arrPlatillos.length >=1 ) ? 
-          (<View></View>) : (<Center>
-            <LottieSinServ></LottieSinServ>
-            <Text>Ups....Intentalo mas tarde</Text>
-      </Center>)}
-
-          </View>))}
+            })) : (null)}
           {categoria == 'Combos' && arrCombos.length > 0 ? 
             (arrAlimentos.map((item) => {
                if (item.id_categoria == 1 ) {
@@ -390,59 +320,33 @@ const Menu = (props) => {
                           detalleProducto(item.id_comida, item.nombre, item.descripcion, item.precio, item.imagen, item.tiempo, idRest);
                         }}><Flex direction='row'>
                             <Image
-                            style={{
-                                flex: 1,
-                                resizeMode: "cover",
-                                justifyContent: "center",
-                                borderTopLeftRadius: 12,
-                                borderBottomLeftRadius: 12,
-                                borderTopRightRadius: 0,
-                                borderBottomRightRadius: 0,
-                            }}
-                            imageStyle={{
-                                borderRadius: 55,
-                            }}
+                            style={estilosAIQ.imagenMenu}
                             source={{uri: urlImg+item.imagen}}
                             alt={item.nombre}
                             size={"xl"}
                             />
                             <Box m={2} style={{width: 0, flexGrow: 1, flex: 1}}>
                             {/* Nombre platillo */}
-                            <Text
-                            fontFamily='heading'
-                            fontSize='xl'
-                            color={coloresAIQ.azulOscuroAIQ}>
-                            {item.nombre}
-                            </Text>
+                            <NombreBoxProd color={coloresAIQ.azulOscuroAIQ} nombre={item.nombre} />
                             {/* Costo de platillo */}
-                            <Text
-                            ml={1}
-                            color={coloresAIQ.grisAIQ}
-                            fontSize='md'
-                            fontFamily='body'>
-                            Costo: ${item.precio}
-                            </Text>
+                            <TextBoxProd dato={`Costo: $${item.precio}`} />
                             </Box>
                         </Flex></TouchableOpacity>
                     </Box>
                 )
                 }
-            })) : (<View>
-                {(categoria != 'Combos' && arrCombos.length == 0 ) || (categoria != 'Combos' && arrBebidas.length >= 1 ) || (categoria != 'Combos' && arrPlatillos.length >=1 ) ? 
-            (<View></View>) : (<Center>
-              <LottieSinServ></LottieSinServ>
-              <Text>Ups....Intentalo mas tarde</Text>
-        </Center>)}
-
-            </View>)}
-          </Box>
+            })) : (null)}
+          </Box>) : (<View><Center>
+                      <LottieSinServ></LottieSinServ>
+                      <Text>Ups....Intentalo mas tarde</Text>
+                    </Center></View>)}
         </ScrollView>
-        <FAB
-            placement='right'
-            color={coloresAIQ.azulAIQ}
-            onPress={() => {enviaDatos(idRest)}}
-            icon={<AntDesign name="shoppingcart" size={24} color={coloresAIQ.blanco}/>}
-          />
+        {arrAlimentos.length > 0 ? (<FAB
+          placement='right'
+          color={coloresAIQ.azulAIQ}
+          onPress={() => {enviaDatos(idRest)}}
+          icon={<AntDesign name="shoppingcart" size={24} color={coloresAIQ.blanco}/>}
+          />) : (null)}
       </SafeAreaView>
     </>
   )

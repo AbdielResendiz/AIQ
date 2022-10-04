@@ -6,7 +6,7 @@ import { Alert } from 'react-native';
 import ProcesandoAir from '../components/ProcesandoAir';
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import Logo from '../components/Logo';
-import {Indicaciones} from '../components/Textos';
+import {Indicaciones, TituloInput} from '../components/Textos';
 
 const Login = (props) => {
     //aviso mesao contra erroneos
@@ -108,7 +108,7 @@ const Login = (props) => {
   return (
     <>
     {cargando ? <ProcesandoAir /> : null}
-        <ScrollView margin={5} marginTop={1} showsVerticalScrollIndicator={false}>
+        <ScrollView marginX={12} showsVerticalScrollIndicator={false}>
             {/* Logo */}
             <Logo/>
             {/* Text: Indicaciones */}
@@ -116,15 +116,10 @@ const Login = (props) => {
             {/* Input Mesa */}
             <FormControl isInvalid={validoC}>
                 <Stack>
-                    <Text
-                        mt={8}
-                        fontSize='md'
-                        fontFamily='body'
-                        fontWeight={'bold'}
-                        color={coloresAIQ.azulOscuroAIQ}>
-                        MESA
-                    </Text>
+                    <TituloInput titulo={'MESA'} />
                     <Input
+                        fontSize={16}
+                        height={16}
                         rounded={12}
                         variant='outline'
                         placeholder='Escribe el número de mesa'
@@ -144,7 +139,7 @@ const Login = (props) => {
                             }}>
                                 <MaterialIcons
                                     name='cancel'
-                                    size={20}
+                                    size={28}
                                     color={coloresAIQ.grisOscuroAIQ}
                                 />
                             </Button>
@@ -164,15 +159,9 @@ const Login = (props) => {
             {/* Input Password */}
             <FormControl isInvalid={validoP}>
                 <Stack>
-                    <Text
-                        mt={8}
-                        fontSize='md'
-                        fontFamily='body'
-                        fontWeight={'bold'}
-                        color={coloresAIQ.azulOscuroAIQ}>
-                        CONTRASEÑA
-                    </Text>
-                    <Input
+                    <TituloInput titulo={'CONTRASEÑA'} />
+                    <Input fontSize={16}
+                        height={16}
                         rounded={12}
                         fontFamily='body'
                         type={
@@ -191,13 +180,13 @@ const Login = (props) => {
                                 {show ? (
                                     <FontAwesome
                                         name='eye-slash'
-                                        size={20}
+                                        size={28}
                                         color={coloresAIQ.grisOscuroAIQ}
                                     />
                                 ) : (
                                     <FontAwesome
                                         name='eye'
-                                        size={20}
+                                        size={28}
                                         color={coloresAIQ.grisOscuroAIQ}
                                     />
                                 )}
@@ -220,7 +209,8 @@ const Login = (props) => {
             <Button
                 bg={coloresAIQ.azulAIQ}
                 mt='10'
-                size='lg'
+                mb={5}
+                height={16}
                 borderRadius={32}
                 onPress={()=>{
                     demoServiciosAxios();

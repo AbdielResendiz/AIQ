@@ -3,9 +3,10 @@ import { View, Text, Box, Flex, Image, Center, Button} from 'native-base';
 import { ScrollView, TouchableOpacity, Alert } from 'react-native';
 import {AntDesign, MaterialCommunityIcons} from '@expo/vector-icons';
 import coloresAIQ from '../../../styles/coloresAIQ';
-import { Titulos } from '../../components/Textos';
+import { NombreBoxProd, TextBoxProd, Titulos } from '../../components/Textos';
 import { getCart, urlImg, deteleItemCart, getTotalCart } from '../../../api/controlWS';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import estilosAIQ from '../../../styles/estilosAIQ';
 
 const Carrito = (props) => {
   //datos recibidos de Producto.js
@@ -75,82 +76,52 @@ const Carrito = (props) => {
         {/* Titulo: Carrito */}
         <Titulos titulo='Mi carrito'/>
         {/* Scroll: carrito */}
-        <ScrollView>
+        <ScrollView flex={1}>
         {arrCarrito.length > 0 ? 
           (arrCarrito.map((item) => {
-              return(
-                  <Box                       
-                    style={{ borderRadius: 12 }}
-                    key={item.id}
-                    shadow={3}
-                    m={2}
-                    mt={2}
-                    _light={{
-                      backgroundColor: coloresAIQ.blanco,
-                    }}>
-                    <Flex direction='row'>
-                      {/* Img producto */}
-                      <Image
-                      style={{
-                          resizeMode: "cover",
-                          justifyContent: "center",
-                          borderTopLeftRadius: 12,
-                          borderBottomLeftRadius: 12,
-                          borderTopRightRadius: 0,
-                          borderBottomRightRadius: 0,
-                      }}
-                      source={{uri: urlImg+item.imagen}}
-                      alt={item.nombre}
-                      size={"lg"}/>
-                      <Box m={2} style={{width: 0, flexGrow: 1, flex: 1}}>
-                        {/* Nombre platillo */}
-                        <Text
-                          fontFamily='heading'
-                          fontSize='xl'
-                          color={coloresAIQ.azulOscuroAIQ}>
-                          {item.nombre}
-                        </Text>
-                        {/* Costo de platillo */}
-                        <Text
-                          ml={1}
-                          color={coloresAIQ.grisAIQ}
-                          fontSize='md'
-                          fontFamily='body'>
-                          Costo: ${item.precio}
-                        </Text>
-                        {/* Cantidad */}
-                        <Text
-                          ml={1}
-                          color={coloresAIQ.grisAIQ}
-                          fontSize='md'
-                          fontFamily='body'>
-                          Cantidad: {item.cantidad}
-                        </Text>
-                        {/* Subtotal */}
-                        <Text
-                          ml={1}
-                          color={coloresAIQ.grisAIQ}
-                          fontSize='md'
-                          fontFamily='body'>
-                          Subtotal: ${item.subtotal}
-                        </Text>
-                      </Box>
-                      <TouchableOpacity 
-                        style={{justifyContent:'center', alignItems: 'center', margin: 8}}
-                        onPress={() => {
-                          deleteItem(item.id_comida)
-                          }}>
-                        <MaterialCommunityIcons name="delete-empty-outline" size={36} color={coloresAIQ.azulOscuroAIQ}/>
-                      </TouchableOpacity>
-                    </Flex>
-                  </Box>)
+            return(
+              <Box                       
+                style={{ borderRadius: 12 }}
+                key={item.id}
+                shadow={3}
+                m={6}
+                mt={2}
+                _light={{
+                  backgroundColor: coloresAIQ.blanco,
+                }}>
+                <Flex direction='row'>
+                  {/* Img producto */}
+                  <Image
+                  style={estilosAIQ.imagenMenu}
+                  source={{uri: urlImg+item.imagen}}
+                  alt={item.nombre}
+                  />
+                  <Box m={2} style={{width: 0, flexGrow: 1, flex: 1}}>
+                    {/* Nombre platillo */}
+                    <NombreBoxProd color={coloresAIQ.azulOscuroAIQ} nombre={item.nombre} />
+                    {/* Costo de platillo */}
+                    <TextBoxProd dato={`Costo: $${item.precio}`}/>
+                    {/* Cantidad */}
+                    <TextBoxProd dato={`Cantidad: ${item.cantidad}`}/>
+                    {/* Subtotal */}
+                    <TextBoxProd dato={`Subtotal: $${item.subtotal}`}/>
+                  </Box>
+                  <TouchableOpacity 
+                    style={{justifyContent:'center', alignItems: 'center', margin: 12}}
+                    onPress={() => {
+                      deleteItem(item.id_comida)
+                      }}>
+                    <MaterialCommunityIcons name="delete-empty-outline" size={60} color={coloresAIQ.azulOscuroAIQ}/>
+                  </TouchableOpacity>
+                </Flex>
+              </Box>)
           })) : (null)}
           {/* Total */}
           <Center>
             <Text
               paddingX={4}
               paddingTop={3}
-              fontSize={22}
+              fontSize={26}
               fontFamily='heading'
               colorScheme={coloresAIQ.negro}>
               Total: ${total}
@@ -164,19 +135,18 @@ const Carrito = (props) => {
           <Button
               leftIcon={<AntDesign
                   name='check'
-                  size={24}
+                  size={28}
                   color={coloresAIQ.blanco}/>}
               bg={coloresAIQ.azulAIQ}
-              mt='3'
-              width={250}
-              height={55}
+              width={300}
+              height={65}
               borderRadius={32}
               onPress={() => {irPago();}}
               _pressed={{
                   bg: coloresAIQ.azulBtn}}>
               <Text
                   color={coloresAIQ.blanco}
-                  fontSize='md'
+                  fontSize='lg'
                   fontFamily='body'>
                   Confirmar compra
               </Text>
@@ -184,23 +154,23 @@ const Carrito = (props) => {
         </Center>
 
         {/* btn Volver menu */}
-        <Center marginTop={2} marginBottom={4}>
+        <Center marginTop={2} marginBottom={8}>
           <Button
               leftIcon={<AntDesign
-                  name='arrowleft'
-                  size={24}
-                  color={coloresAIQ.blanco}/>}
+                name='arrowleft'
+                size={28}
+                color={coloresAIQ.blanco}/>}
               bg={coloresAIQ.azulAIQ}
-              mt='3'
-              width={250}
-              height={55}
+              mt='4'
+              width={300}
+              height={65}
               borderRadius={32}
               onPress={() => {enviaDatos(idRes)}}
               _pressed={{
                   bg: coloresAIQ.azulBtn}}>
               <Text
                   color={coloresAIQ.blanco}
-                  fontSize='md'
+                  fontSize='lg'
                   fontFamily='body'>
                   Volver al menú
               </Text>
