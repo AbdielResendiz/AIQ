@@ -106,7 +106,7 @@ const Menu = (props) => {
   useEffect(() => {
     const cambiaTamaño = setInterval(() => {
       datosMenu();
-    }, 1500);
+    }, 15000);
     return () => {
       // clean up
       clearInterval(cambiaTamaño);

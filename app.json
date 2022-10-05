@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "FoodAIQ",
-    "slug": "FoodAIQ",
+    "name": "AIQ app",
+    "slug": "AIQ-app",
     "version": "1.0.0",
     "orientation": "default",
     "icon": "./assets/image/iconAIQ.png",
@@ -29,7 +29,7 @@
         "foregroundImage": "./assets/image/iconAIQ.png",
         "backgroundColor": "#FFFFFF"
       },
-      "package": "com.isacel97.FoodAIQ"
+      "package": "com.AIQ"
     },
     "web": {
       "favicon": "./assets/favicon.png"

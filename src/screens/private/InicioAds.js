@@ -32,7 +32,7 @@ const InicioAds = (props) => {
     const cambiaTamaño = setInterval(() => {
       getAnuncios();
       // console.log("reinicio")
-    }, 10000);
+    }, 20000);
     return () => {
       // clean up
      
@@ -44,6 +44,7 @@ const InicioAds = (props) => {
 	//este código sólo se ejecutará la primera vez que cargue
 	//el componente
 	useEffect(() => {
+    getAnuncios();
 		//Vincular el evento back del SO a mi alerta Back
 		const backHandler = BackHandler.addEventListener(
 			'hardwareBackPress',
@@ -61,25 +62,14 @@ const InicioAds = (props) => {
         <Carousel data= {anuncios}></Carousel>
       </ScrollView>
 
-      <ScrollView>
-<View style={{
-  flex: 1,
-  flexDirection: 'column',
-  justifyContent: 'center',
-  flexWrap: 'nowrap',
-  alignContent: 'center',
-  alignItems: 'center'
+      <View style={estilosAIQ.containerBtn}>
+        <TouchableOpacity 
+            style={estilosAIQ.botonTouch}
+            onPress={() => {props.navigation.navigate('Restaurante')}}>
+            <Text style={estilosAIQ.textBtn}>Ver restaurantes</Text>
+        </TouchableOpacity>
+      </View>
 
-}}>
-  
-  <TouchableOpacity 
-      style={estilosAIQ.botonTouch}
-      onPress={() => {props.navigation.navigate('Restaurante')}}>
-      <Text style={estilosAIQ.textBtn}>Ver restaurantes</Text>
-  </TouchableOpacity>
-
-</View>
-</ScrollView>
       <ScrollView>
         <Carousel2 data= {anuncios}></Carousel2>
       </ScrollView>

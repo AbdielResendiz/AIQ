@@ -12,10 +12,11 @@ const urlDeleteItem = `${baseUrl}/Carrito/deteleItemCart/`;
 const urlDeleteCart = `${baseUrl}/Carrito/borraCarrito/`
 const urlGetTotalCart = `${baseUrl}/Carrito/getTotalCart/`;
 const urlGetCodigo = `${baseUrl}/Carrito/validaCodigo/`;
-const urlDeleteCodigo = `${baseUrl}/Carrito/borraCodigo/`;
 const urlCreaPedido = `${baseUrl}/Pedidos/creaPedido/`;
-const urlInsertCode = `${baseUrl}/Pedidos/setCod`;
+const urlInsertCode = `${baseUrl}/Pedidos/insertCod`;
+const urlDeleteCode = `${baseUrl}/Pedidos/deleteCod`;
 const urlEnviaMensaje = `${baseUrl}/MensajesW/sendTextMessage`;
+const urlGetPedido = `${baseUrl}/Pedidos/getPedido/`
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const getRestaurantes = async(zona) => {
@@ -276,30 +277,6 @@ export const getCodigo = async(cod) => {
   }
 }
 
-export const deletecodigo = async(codigo) => {
-  let data = new FormData();
-  data.append('codigo', codigo);
-  await fetch(urlDeleteCodigo, {
-    method: 'POST',
-    body: data,
-  })
-  .then((response) => {response.json()})
-  .then((result) => {
-    let acceso = result.res
-    try{
-      if (acceso === true) {
-        console.log('Success:', result);
-        return acceso;
-      } else {
-        console.log('Error:', result);
-        return acceso;
-      }
-    } catch (e) {
-      console.log("esto no sirve", e);
-    }
-  }) 
-}
-
 export const creaPedido = async(idMesa, nombre, cel, total, rest, metodo, idCarrito, cambio) => {
   let data = new FormData();
   data.append('id_mesa', idMesa);
@@ -337,28 +314,51 @@ export const insertCode = async(codigo) => {
   })
 }
 
+export const deleteCode = async(codigo) => {
+  let data = new FormData();
+  data.append('codigo', codigo);
+  await fetch(urlDeleteCode, {
+    method: 'POST',
+    body: data,
+  }).then((response) => response.json())
+  .then((result) => {
+    let acceso = result.res
+    try{
+      if (acceso === true) {
+        console.log('Success:', result);
+      } else {
+        console.log('Error:', result);
+      }
+    } catch (e) {
+      console.log("esto no sirve", e);
+    }
+  })
+}
+
 export const enviaMensaje = async(celular, codigo, alias) => {
   let data = new FormData();
   data.append('numero', celular);
   data.append('tipo', 'cliente');
-  data.append('mensaje', `Hola ${alias} tu codigó es ${codigo} Disfruta tu pedido`)
+  data.append('mensaje', `Hola ${alias}. 
+Tu código es *${codigo}* 
+Disfruta tu pedido :)`)
   data.append('codigo', codigo);
   await fetch(urlEnviaMensaje, {
     method: 'POST',
     body: data,
   })
-  // .then((response) => response)
-  // .then((result) => {
-  //   try{
-  //     if (result === true) {
-  //       console.log('Success:', result);
-  //     } else {
-  //       console.log('Error:', result);
-  //     }
-  //   } catch (e) {
-  //     console.log("esto no sirve", e);
-  //   }
-  // })
+  .then((response) => response.json())
+  .then((result) => {
+    try{
+      if (result === true) {
+        console.log('Success:', result);
+      } else {
+        console.log('Error:', result);
+      }
+    } catch (e) {
+      console.log("esto no sirve", e);
+    }
+  })
 }
 
 export const getIdCart = async(idMesa) => {
@@ -377,6 +377,25 @@ export const getIdCart = async(idMesa) => {
       console.log('Data fetching cancelado')
     } else {
       console.log('algo pago en funcion getIdCart', error)
+    }
+  }  
+}
+
+export const getIdPedido = async(idCart) => {
+  const urlPedido = `${urlGetPedido}${idCart}`;
+
+  try{
+    const response = await axios.get(urlPedido, {cancelToken: source.token});
+    if (response.status === 200) {
+      return response.data;
+    } else {
+      throw new Error("Fallo en fetch getIdpedido")
+    }
+  } catch (error) {
+    if(axios.isCancel(error)) {
+      console.log('Data fetching cancelado')
+    } else {
+      console.log('algo pago en funcion getIdpedido', error)
     }
   }  
 }

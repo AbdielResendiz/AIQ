@@ -96,3 +96,15 @@ export const TituloInput = (props) => {
     </Text>
   )
 }
+
+export const DetallePedido = (props) => {
+  return(
+    <Text
+    ml={1}
+    color={coloresAIQ.grisAIQ}
+    fontSize='md'
+    fontFamily='body'>
+    {props.detalle}
+    </Text>
+  )
+}

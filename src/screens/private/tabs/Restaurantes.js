@@ -46,7 +46,7 @@ const Restaurantes = (props) => {
   useEffect(() => {
     const intervalCall = setInterval(() => {  
       datosResAd();
-    }, 5000);
+    }, 10000);
     return () => {
       // clean up
       clearInterval(intervalCall);

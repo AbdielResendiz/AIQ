@@ -6,7 +6,7 @@ import coloresAIQ from '../../styles/coloresAIQ';
 import estilosAIQ from '../../styles/estilosAIQ';
 import Logo from '../components/Logo';
 import { Indicaciones, TituloInput } from '../components/Textos';
-import { getCodigo, creaPedido, getTotalCart, getIdCart,  insertCode, enviaMensaje} from '../../api/controlWS';
+import { getCodigo, creaPedido, getTotalCart, getIdCart,  insertCode, enviaMensaje, deleteCode} from '../../api/controlWS';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import ProcesandoAir from '../components/ProcesandoAir';
 import IntlPhoneInput from 'react-native-intl-phone-input';
@@ -26,7 +26,6 @@ const ConfirmarPedido = (props) => {
   const [validoC, setValidoC] = useState(false);
   const cambioN = () => setValidoN(false);
   const cambioC = () => setValidoC(false);
-  //pruebas code random
 
     //datos de input celular
     onChangeText = ({dialCode, unmaskedPhoneNumber, phoneNumber, isVerified}) => {
@@ -44,32 +43,23 @@ const ConfirmarPedido = (props) => {
         return;
     } else {
         let randomCod = (Math.random() + 1).toString(36).substring(6);
-        insertCode(randomCod);
+        await insertCode(randomCod);
         await enviaMensaje(parseInt(celular), randomCod, alias);
         Alert.alert(
             'Mensaje enviado',
-            'Favor de revisar mensajes. Código prueba 5678',
+            'Favor de revisar tu Whatsapp.',
           )
     }
   }
 
-  const enviaMesero = async() => {
-    Alert.alert(
-        'Mesero en camino',
-        'Favor de esperar. Código prueba 5678',
-      )
-  }
+//   const enviaMesero = async() => {
+//     Alert.alert(
+//         'Mesero en camino',
+//         'Favor de esperar.',
+//       )
+//   }
   //funcion envia datos y genera pedido, cod=codigo
   const validarCodigo = async(cod) => {
-    //validando nombre
-    if (alias.length == 0) {
-        setValidoN(true);
-        setAlias('');
-        return;
-    } //validando celular
-    if (validoP == false) {
-        return;
-    }
     //valida si el codigo esta vacio
     if (codigo.length < 4) {
         setValidoC(true);
@@ -89,6 +79,7 @@ const ConfirmarPedido = (props) => {
             const t = await getTotalCart(JSON.parse(mesa));
             const idCar = await getIdCart(JSON.parse(mesa));
             await creaPedido(JSON.parse(mesa), alias, parseInt(celular), t, JSON.parse(idRest), metodo, idCar, monto);
+            await deleteCode(cod);
             //fin loader if
             setLoading(false);
             //confirmacion de codigo existoso y navagacion a screen pedidos

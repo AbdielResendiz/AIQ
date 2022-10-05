@@ -25,6 +25,13 @@ const estilosAIQ = StyleSheet.create({
       flexDirection: 'row',
       justifyContent: 'center'
     },
+    containerBtn: {
+      
+      flexDirection: 'column',
+      justifyContent: 'center',
+      alignContent: 'center',
+      alignItems: 'center'
+    },
     botonTouch: {
       backgroundColor: coloresAIQ.azulAIQ,
       margin: 20,
@@ -62,6 +69,16 @@ const estilosAIQ = StyleSheet.create({
       borderBottomRightRadius: 0,
       borderTopRightRadius: 0,
       width: 350,
+      height: 200
+    },
+    imagenPedido: {                             
+      resizeMode: "stretch",
+      justifyContent: "center",
+      borderTopLeftRadius: 12,
+      borderBottomLeftRadius: 12,
+      borderBottomRightRadius: 0,
+      borderTopRightRadius: 0,
+      width: 200,
       height: 200
     },
     logo: {

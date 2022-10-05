@@ -48,7 +48,7 @@ const Carrito = (props) => {
         'No has seleccionado ningun articulo, ¿Donde deseas ir?',
         [
           {
-            text: 'Menu',
+            text: 'Menú',
             onPress: () => {    
               props.navigation.navigate("Menu", {
                 idRes: idRes
