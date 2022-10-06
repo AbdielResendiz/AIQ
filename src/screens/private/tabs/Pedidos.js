@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react'
 import { ScrollView, View, StyleSheet, Text, Alert } from 'react-native';
 import { Image, Box, Center, Flex } from 'native-base';
 import coloresAIQ from '../../../styles/coloresAIQ';
-import { getIdCart, getIdPedido, urlImg } from '../../../api/controlWS';
+import { getIdCart, getIdPedido, urlImg, enviaConfirmacion } from '../../../api/controlWS';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { DetallePedido } from '../../components/Textos';
 import estilosAIQ from '../../../styles/estilosAIQ';
@@ -10,9 +10,7 @@ import LottieConfirm from '../../components/Lotties/LottieConfirm';
 
 const Pedidos = (props) => {
   //Carga datos
-  const [cargando, setCargando] = useState(true);
   const [arrPedido, setArrPedido] = useState([]);
-  const [status, setStatus] = useState('');
 
   const getPedido = async() => {
     const idMesa = await AsyncStorage.getItem('ID_MESA');
@@ -21,24 +19,28 @@ const Pedidos = (props) => {
     setArrPedido([pedidoData]);    
 
     if (pedidoData.id_status == 2) {
+      enviaConfirmacion(pedidoData.telefono, pedidoData.nombre_alias, pedidoData.id_pedido, pedidoData.estado)
+      props.navigation.navigate("InicioAds")
       Alert.alert(
         'Pedido aceptado',
         `Tu pedido ha sido aceptado.
 Gracias por usar nuestra app :D` ,
         [{
           text: 'Ok',
-          onPress: () => {props.navigation.navigate("InicioAds")},
+          onPress: () => {},
           style: 'default',
         }]);
     }
-    if (pedidoData.id_status == 6) {
+    else if (pedidoData.id_status == 6) {
+      enviaConfirmacion(pedidoData.telefono, pedidoData.nombre_alias, pedidoData.id_pedido, pedidoData.estado)
+      props.navigation.navigate("InicioAds")
       Alert.alert(
         'Pedido rechazado',
         `Tu pedido ha sido rechazado :(
 Intenta realizar otro pedido.` ,
         [{
           text: 'Ok',
-          onPress: () => {props.navigation.navigate("InicioAds")},
+          onPress: () => {},
           style: 'default',
         }]);
     }
@@ -46,16 +48,17 @@ Intenta realizar otro pedido.` ,
 
   useEffect(() => {
     const cambiaTamaño = setInterval(() => {
+      console.log('sigo escuchando');
       getPedido();
     }, 10000);
     return () => {
       // clean up
       clearInterval(cambiaTamaño);
     };
-  }, []);
+  })
 
   useEffect(() => {
-    getPedido()
+    getPedido();
   }, [])
 
   return (

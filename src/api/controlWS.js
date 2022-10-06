@@ -339,10 +339,33 @@ export const enviaMensaje = async(celular, codigo, alias) => {
   let data = new FormData();
   data.append('numero', celular);
   data.append('tipo', 'cliente');
-  data.append('mensaje', `Hola ${alias}. 
-Tu código es *${codigo}* 
-Disfruta tu pedido :)`)
+  data.append('nombre', alias);
   data.append('codigo', codigo);
+  await fetch(urlEnviaMensaje, {
+    method: 'POST',
+    body: data,
+  })
+  .then((response) => response.json())
+  .then((result) => {
+    try{
+      if (result === true) {
+        console.log('Success:', result);
+      } else {
+        console.log('Error:', result);
+      }
+    } catch (e) {
+      console.log("esto no sirve", e);
+    }
+  })
+}
+
+export const enviaConfirmacion = async(celular, alias, idPedido, status) => {
+  let data = new FormData();
+  data.append('numero', celular);
+  data.append('tipo', 'status');
+  data.append('nombre', alias);
+  data.append('idPedido', idPedido);
+  data.append('status', status);
   await fetch(urlEnviaMensaje, {
     method: 'POST',
     body: data,
@@ -383,7 +406,6 @@ export const getIdCart = async(idMesa) => {
 
 export const getIdPedido = async(idCart) => {
   const urlPedido = `${urlGetPedido}${idCart}`;
-
   try{
     const response = await axios.get(urlPedido, {cancelToken: source.token});
     if (response.status === 200) {
