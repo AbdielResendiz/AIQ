@@ -48,7 +48,6 @@ Intenta realizar otro pedido.` ,
 
   useEffect(() => {
     const cambiaTamaño = setInterval(() => {
-      console.log('sigo escuchando');
       getPedido();
     }, 10000);
     return () => {
