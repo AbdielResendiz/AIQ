@@ -359,13 +359,22 @@ export const enviaMensaje = async(celular, codigo, alias) => {
   })
 }
 
-export const enviaConfirmacion = async(celular, alias, idPedido, status) => {
+export const enviaConfirmacion = async(celular, alias, idPedido, restaurante, total) => {
   let data = new FormData();
-  data.append('numero', celular);
-  data.append('tipo', 'status');
-  data.append('nombre', alias);
-  data.append('idPedido', idPedido);
-  data.append('status', status);
+  if(total == 0) {
+    data.append('numero', celular);
+    data.append('tipo', 'pRechazado');
+    data.append('nombre', alias);
+    data.append('idPedido', idPedido);
+    data.append('')
+  } else {
+    data.append('numero', celular);
+    data.append('tipo', 'pAceptado');
+    data.append('nombre', alias);
+    data.append('idPedido', idPedido);
+    data.append('restaurante', restaurante);
+    data.append('total', total);
+  }
   await fetch(urlEnviaMensaje, {
     method: 'POST',
     body: data,

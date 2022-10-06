@@ -19,7 +19,7 @@ const Pedidos = (props) => {
     setArrPedido([pedidoData]);    
 
     if (pedidoData.id_status == 2) {
-      enviaConfirmacion(pedidoData.telefono, pedidoData.nombre_alias, pedidoData.id_pedido, pedidoData.estado)
+      enviaConfirmacion(pedidoData.telefono, pedidoData.nombre_alias, pedidoData.id_pedido, pedidoData.nombre, pedidoData.total)
       props.navigation.navigate("InicioAds")
       Alert.alert(
         'Pedido aceptado',
@@ -32,7 +32,7 @@ Gracias por usar nuestra app :D` ,
         }]);
     }
     else if (pedidoData.id_status == 6) {
-      enviaConfirmacion(pedidoData.telefono, pedidoData.nombre_alias, pedidoData.id_pedido, pedidoData.estado)
+      enviaConfirmacion(pedidoData.telefono, pedidoData.nombre_alias, pedidoData.id_pedido, 0, 0)
       props.navigation.navigate("InicioAds")
       Alert.alert(
         'Pedido rechazado',

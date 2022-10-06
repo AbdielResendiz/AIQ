@@ -84,8 +84,8 @@ const ConfirmarPedido = (props) => {
             setLoading(false);
             //confirmacion de codigo existoso y navagacion a screen pedidos
             Alert.alert(
-                'Codigo valido',
-                'El codigo es correcto.' ,
+                'Código valido',
+                'El código es correcto.' ,
                 [{
                   text: 'Continuar',
                   onPress: () => {props.navigation.navigate("Pedidos")},
@@ -98,7 +98,7 @@ const ConfirmarPedido = (props) => {
             setCodigo('');
             Alert.alert(
                 'ERROR',
-                'El codigo es invalido, vuelve a intentarlo.' ,
+                'El código es invalido, vuelve a intentarlo.' ,
             );
         }
     }
@@ -226,7 +226,7 @@ const ConfirmarPedido = (props) => {
         {/* Input codigo */}
         <FormControl isInvalid={validoC}>
             <View paddingY={2} paddingX={8}>
-                <TituloInput titulo={'Codigó'} />
+                <TituloInput titulo={'Código'} />
                 <TextInput
                     keyboardType='default'
                     autoCapitalize='none'
@@ -237,7 +237,7 @@ const ConfirmarPedido = (props) => {
                     onChange={cambioC}
                 />
                 <FormControl.ErrorMessage>
-                    Codigo erroneo, intentalo nuevamente.
+                    Código erroneo, intentalo nuevamente.
                 </FormControl.ErrorMessage>
             </View>
         </FormControl>
