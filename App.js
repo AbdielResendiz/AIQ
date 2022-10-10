@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {extendTheme, Image, NativeBaseProvider, useToast } from 'native-base';
+import {extendTheme, NativeBaseProvider } from 'native-base';
 import { Alert } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { NavigationContainer } from '@react-navigation/native';
@@ -33,12 +33,23 @@ import Pedidos from './src/screens/private/tabs/Pedidos';
 import MetodoPago from './src/screens/private/MetodoPago';
 import ConfirmarPedido from './src/screens/private/ConfirmarPedido';
 import coloresAIQ from './src/styles/coloresAIQ';
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 const Stack = createStackNavigator();
 
 const App = () => {
-  const [activo, setActivo] = useState(false);
-  const [initScreen, setInitScreen] = useState('Login');
+  const [initScreen, setInitScreen] = useState('Principal');
+  useEffect(() => {
+    getLogin();
+  }, []);
+
+  const getLogin = async() => {
+    const idMesa = await AsyncStorage.getItem('ID_MESA')
+    console.log(idMesa);
+    if (idMesa !== null) {
+      setInitScreen('InicioAds');
+    }
+  }
   let [fontsLoaded] = useFonts({
 		Nunito_200ExtraLight,
 		Nunito_200ExtraLight_Italic,
@@ -83,7 +94,8 @@ const App = () => {
             headerTintColor: '#FFF',
             headerBackTitleVisible: false,
             headerTitleAlign: 'center',
-          }}>
+          }}
+          initialRouteName={initScreen}>
 
           <Stack.Screen
             name='Principal'

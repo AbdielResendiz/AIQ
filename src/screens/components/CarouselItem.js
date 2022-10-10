@@ -9,10 +9,6 @@ const CarouselItem = ({ item }) => {
     return (
         <View style={styles.cardView}>
             <Image style={styles.image} source={{ uri: urlImg + item.imagen}} />
-            <View style={styles.textView}>
-                <Text style={styles.itemTitle}> {item.id_ad}</Text>
-                <Text style={styles.itemDescription}>{item.fecha_fin}</Text>
-            </View>
         </View>
     )
 }
@@ -43,26 +39,6 @@ const styles = StyleSheet.create({
         height: height / 3,
         borderRadius: 10
     },
-    itemTitle: {
-        color: 'white',
-        fontSize: 22,
-        shadowColor: '#000',
-        shadowOffset: { width: 0.8, height: 0.8 },
-        shadowOpacity: 1,
-        shadowRadius: 3,
-        marginBottom: 5,
-        fontWeight: "bold",
-        elevation: 5
-    },
-    itemDescription: {
-        color: 'white',
-        fontSize: 12,
-        shadowColor: '#000',
-        shadowOffset: { width: 0.8, height: 0.8 },
-        shadowOpacity: 1,
-        shadowRadius: 3,
-        elevation: 5
-    }
 })
 
 export default CarouselItem
