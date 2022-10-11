@@ -1,10 +1,10 @@
 {
   "expo": {
-    "name": "FoodAIQ",
-    "slug": "FoodAIQ",
+    "name": "AIQ app",
+    "slug": "AIQ-app",
     "version": "1.0.0",
-    "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "orientation": "default",
+    "icon": "./assets/image/iconAIQ.png",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/image/AIQ.png",
@@ -19,20 +19,26 @@
       "**/*"
     ],
     "notification": {
-			"icon": "./assets/icon.png"
-		},
+      "icon": "./assets/image/iconAIQ.png"
+    },
     "ios": {
       "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/image/iconAIQ.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "package": "com.AIQ"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "description": ""
+    "description": "",
+    "extra": {
+      "eas": {
+        "projectId": "2f9140f0-e24a-4e2e-8f30-78f271236e39"
+      }
+    }
   }
 }

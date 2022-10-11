@@ -1,21 +1,24 @@
 import React, {useState, useEffect, useCallback} from 'react'
-import { SafeAreaView, ScrollView, TouchableOpacity, RefreshControl, Alert } from 'react-native';
+import { SafeAreaView, ScrollView, TouchableOpacity, RefreshControl, Alert, BackHandler } from 'react-native';
 import { Box, Center, Image, Text, Flex,View} from 'native-base';
 import { FAB } from 'react-native-elements';
 import { AntDesign } from '@expo/vector-icons';
-import { getMenu, getRestaurantes, urlImg, getCombos, getComidas, getBebidas} from '../../api/controlWS';
+import { getMenu, getRestaurantes, urlImg, getCombos, getComidas, getBebidas, deleteCart, getProductos} from '../../api/controlWS';
 import coloresAIQ from '../../styles/coloresAIQ';
 import estilosAIQ from '../../styles/estilosAIQ';
-import Procesando from '../components/Procesando';
 import LottieSinServ from '../components/Lotties/LottieSinServ';
+import LottieSelect from '../components/Lotties/LottieSelect';
 import ProcesandoAir from '../components/ProcesandoAir';
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import { NombreBox, NombreBoxProd, TextBoxProd } from '../components/Textos';
+
+//define tiempos
 const wait = (timeout) => {
     return new Promise((resolve) => setTimeout(resolve, timeout));
   };
 
 const Menu = (props) => {
   const [refreshing, setRefreshing] = useState(false);
-  const [cargando, setCargando] = useState(true);
   const [cargandoR, setCargandoR] = useState(true);
   const [categoria, setCategoria] = useState('Alimentos')
   
@@ -26,10 +29,12 @@ const Menu = (props) => {
   const [arrCombos, setArrCombos] = useState([]);
   const [arrPlatillos, setPlatillos] = useState([]);
   const [arrBebidas, setBebidas] = useState([]);
+  const [arrProductos, setProductos] = useState([]);
 
   //Datos menu
   const [arrAlimentos, setArrAlimentos] = useState([]);
 
+  //refresh menu
   const onRefresh = useCallback(() => {
     setRefreshing(true);
     wait(1000).then(() => {
@@ -37,23 +42,25 @@ const Menu = (props) => {
       setRefreshing(false)});
   }, []);
   
+  //obtener menu desde ws
   const datosMenu = async() => {
     const m = await getMenu(idRest);
     setArrAlimentos(m);
-    const n = await getRestaurantes();
+    const zona = await AsyncStorage.getItem('ID_ZONA');
+    const n = await getRestaurantes(JSON.parse(zona));
     setArrRestaurantes(n);
-    const p = await getCombos(idRest);
-    setArrCombos(p);
-    const k = await getComidas(idRest);
-    setPlatillos(k)
+    const c = await getCombos(idRest);
+    setArrCombos(c);
+    const p = await getComidas(idRest);
+    setPlatillos(p)
+    const b = await getBebidas(idRest);
+    setBebidas(b);
+    const a = await getProductos(idRest);
+    setProductos(a);
     setCargandoR(false)
-    const l = await getBebidas(idRest)
-    setBebidas(l)
-
-
-
   }
 
+  //envia datos para generar detalle producto en la sig. screen
   const detalleProducto = (id_comida, nombre, desc, precio, imagen, tiempo, restaurante) => {
     props.navigation.navigate("Producto", {
       id_comida: id_comida,
@@ -65,42 +72,66 @@ const Menu = (props) => {
       idRest: restaurante
     });
   };
-  const enviaDatos = async (nombreRes) => {
+
+  //envia id_rest a screen carrito
+  const enviaDatos = async (idRes) => {
     props.navigation.navigate("Carrito", {
-      nombreRes: nombreRes
+      idRes: idRes
     });
   }
 
+  //funcion cambia categoria platillos, bebidad y combos
   const navCategoria = ((tipCat) => {
     setCategoria(tipCat)
   })
+  //Alerta que confirma la acción de "vaciar carrito"
+	const backAction = () => {
+		Alert.alert(
+			'¡Espera!',
+			'¿Deseas volver a restaurantes? El carrito actual se vaciara. ',
+			[
+				{
+					text: 'Cancelar',
+					onPress: () => null,
+					style: 'cancel',
+				},
+				{
+					text: 'Si',
+					onPress: async () => {
+						deleteCart();
+            props.navigation.navigate("Restaurante");
+					},
+				},
+			],
+			{ cancelable: false }
+		);
+		return true;
+	}; //ALERTA FIN
 
-
+  //escucha menu
   useEffect(() => {
     const cambiaTamaño = setInterval(() => {
-      
-      datosMenu()
-      // setCargandoR(false)
-      // console.log("reinicio")
-    }, 1500);
+      datosMenu();
+    }, 15000);
     return () => {
       // clean up
-     
       clearInterval(cambiaTamaño);
     };
   }, []);
 
-
+  //carga funciones al entrar screen
   useEffect(() => {
- 
     datosMenu();
-    setCargando(false);
-   
+    const backHandler = BackHandler.addEventListener(
+			'hardwareBackPress',
+			backAction
+		);
+    return () => backHandler.remove();
   }, [])
 
   return (
     <>
-      {cargando ? <Procesando /> : null}
+      {cargandoR ? <ProcesandoAir /> : null}
       <SafeAreaView flex={1}>
         {/* Datos restaurante */}
         {arrRestaurantes.map((item) => {
@@ -110,76 +141,67 @@ const Menu = (props) => {
                 <Center paddingTop={3}>
                   {/* Logo */}
                   <Image
-                    style={{
-                    resizeMode: "cover", justifyContent: "center",
-                    alignItems: "center", borderTopLeftRadius: 5,
-                    borderBottomLeftRadius: 5, borderTopRightRadius: 0,
-                    borderBottomRightRadius: 0,
-                    }}
-                    imageStyle={{
-                    borderRadius: 55,
-                    }}
-                    source={{uri: item.avatar}}
+                    style={estilosAIQ.logo}
+                    source={{uri: urlImg + item.avatar}}
                     alt={"Logo restaurante"}
                     size={"xl"}/>
                   {/* Nombre */}
-                  <Text
-                      fontFamily='heading'
-                      fontSize='2xl'
-                      color={coloresAIQ.negro}>
-                      {item.nombre}
-                  </Text>
+                  <NombreBox nombre={item.nombre.toUpperCase()} color={coloresAIQ.negro}/>
                 </Center>
               </Box>
             )
           }
         })}
 
-        {/* Categorias */}
-        
+        {/* Categorias */}  
         <Box p={2}>
             <Center flexDir={'row'}>
-              {arrAlimentos.length > 0 ? (<> 
-              
+              {arrAlimentos.length > 0 ? (<>    
             {categoria == 'Alimentos' ? 
             (<>
-            
-              {arrAlimentos.length > 0 ? 
+              {arrProductos.length > 0 ? 
+                (<TouchableOpacity
+                    style={estilosAIQ.containerCategorias}
+                    onPress={() => {navCategoria('Alimentos')}}>
+                    <Text style={estilosAIQ.textCategoriasSelect}>Productos</Text>
+                </TouchableOpacity>) : 
+                (null)}
+              {arrPlatillos.length > 0 ? 
                 (<TouchableOpacity
                     style={estilosAIQ.containerCategorias}
                     onPress={() => {navCategoria('Alimentos')}}>
                     <Text style={estilosAIQ.textCategoriasSelect}>Platillos</Text>
                 </TouchableOpacity>) : 
                 (null)}
-              {arrAlimentos.length > 0 ? (
+              {arrBebidas.length > 0 ? (
                 <TouchableOpacity
                     style={estilosAIQ.containerCategorias}
                     onPress={() => {navCategoria('Bebidas')}}>
                     <Text style={estilosAIQ.textCategorias}>Bebidas</Text>
                 </TouchableOpacity>) : (null)}
-              {arrAlimentos.length > 0 ? (                 
+              {arrCombos.length > 0 ? (                 
                 <TouchableOpacity
-                    style={estilosAIQ.containerCategorias}
-                    onPress={() => {navCategoria('Combos')}}>
-                    <Text style={estilosAIQ.textCategorias}>Combos</Text>
+                  style={estilosAIQ.containerCategorias}
+                  onPress={() => {navCategoria('Combos')}}>
+                  <Text style={estilosAIQ.textCategorias}>Combos</Text>
                 </TouchableOpacity>) : (null)}
             </>) : (null)}
 
             {categoria == 'Bebidas' ? 
             (<>
-                {arrAlimentos.length > 0 ? 
+                {arrPlatillos.length > 0 ? 
                     (<TouchableOpacity
                         style={estilosAIQ.containerCategorias}
                         onPress={() => {navCategoria('Alimentos')}}>
                         <Text style={estilosAIQ.textCategorias}>Platillos</Text>
                     </TouchableOpacity>) : (null)}
-                {arrAlimentos.length > 0 ? (
+                {arrBebidas.length > 0 ? (
                     <TouchableOpacity
                         style={estilosAIQ.containerCategorias}
                         onPress={() => {navCategoria('Bebidas')}}>
                         <Text style={estilosAIQ.textCategoriasSelect}>Bebidas</Text>
                     </TouchableOpacity>) : (null)}
-                {arrAlimentos.length > 0 ? (                 
+                {arrCombos.length > 0 ? (                 
                     <TouchableOpacity
                         style={estilosAIQ.containerCategorias}
                         onPress={() => {navCategoria('Combos')}}>
@@ -189,19 +211,19 @@ const Menu = (props) => {
        
             {categoria == 'Combos' ? 
             (<>
-                {arrAlimentos.length > 0 ? 
+                {arrPlatillos.length > 0 ? 
                     (<TouchableOpacity
                         style={estilosAIQ.containerCategorias}
                         onPress={() => {navCategoria('Alimentos')}}>
                         <Text style={estilosAIQ.textCategorias}>Platillos</Text>
                     </TouchableOpacity>) : (null)}
-                {arrAlimentos.length > 0 ? (
+                {arrBebidas.length > 0 ? (
                     <TouchableOpacity
                         style={estilosAIQ.containerCategorias}
                         onPress={() => {navCategoria('Bebidas')}}>
                         <Text style={estilosAIQ.textCategorias}>Bebidas</Text>
                     </TouchableOpacity>) : (null)}
-                {arrAlimentos.length > 0 ? (                 
+                {arrCombos.length > 0 ? (                 
                     <TouchableOpacity
                         style={estilosAIQ.containerCategorias}
                         onPress={() => {navCategoria('Combos')}}>
@@ -213,8 +235,6 @@ const Menu = (props) => {
             </Center>
         </Box>
 
-
-
         {/* Menu */}
         <ScrollView flex={1}
           refreshControl={
@@ -223,9 +243,8 @@ const Menu = (props) => {
               onRefresh={onRefresh}
             />
           }>
-            {cargandoR ? <ProcesandoAir /> : null}
-          <Box flex={2} p={3}>
-          {categoria == 'Alimentos' && arrPlatillos.length > 0? 
+          {arrAlimentos.length > 0 ? (<Box flex={2} p={3}>
+          {categoria == 'Alimentos' && arrPlatillos.length > 0 ? 
             (arrAlimentos.map((item) => { 
               if (item.id_categoria == 2 ) {
                 return(
@@ -234,7 +253,6 @@ const Menu = (props) => {
                   key={item.id_comida}
                   shadow={3}
                   m={2}
-                  mt={2}
                   _light={{
                     backgroundColor: coloresAIQ.blanco,
                   }}>
@@ -243,51 +261,60 @@ const Menu = (props) => {
                           detalleProducto(item.id_comida, item.nombre, item.descripcion, item.precio, item.imagen, item.tiempo, idRest);
                       }}><Flex direction='row'>
                           <Image
-                          style={{
-                              flex: 1,
-                              resizeMode: "cover",
-                              justifyContent: "center",
-                              borderTopLeftRadius: 12,
-                              borderBottomLeftRadius: 12,
-                              borderTopRightRadius: 0,
-                              borderBottomRightRadius: 0,
-                          }}
-                          imageStyle={{
-                              borderRadius: 55,
-                          }}
+                          style={estilosAIQ.imagenMenu}
                           source={{uri: urlImg+item.imagen}}
                           alt={item.nombre}
                           size={"xl"}
                           />
                           <Box m={2} style={{width: 0, flexGrow: 1, flex: 1}}>
                           {/* Nombre platillo */}
-                          <Text
-                          fontFamily='heading'
-                          fontSize='xl'
-                          color={coloresAIQ.azulOscuroAIQ}>
-                          {item.nombre}
-                          </Text>
+                          <NombreBoxProd color={coloresAIQ.azulOscuroAIQ} nombre={item.nombre} />
                           {/* Costo de platillo */}
-                          <Text
-                          ml={1}
-                          color={coloresAIQ.grisAIQ}
-                          fontSize='md'
-                          fontFamily='body'>
-                          Costo: ${item.precio}
-                          </Text>
+                          <TextBoxProd dato={`Costo: $${item.precio}`} />
                           </Box>
                       </Flex></TouchableOpacity>
                   </Box>
               )
               }
-            })) : ( (<View>
-               {(categoria != 'Alimentos' && arrCombos.length >= 1) || (categoria != 'Alimentos' && arrBebidas.length >= 1 ) || (categoria != 'Alimentos' && arrPlatillos.length ==0) ? 
-            (<View></View>) : (<Center>
-                                    <LottieSinServ></LottieSinServ>
-                                    <Text>Ups....Intentalo mas tarde</Text>
-                              </Center>)}
-
-            </View>))}
+            })) : (null)}
+          {categoria == 'Alimentos' && arrProductos.length > 0 ? 
+            (arrProductos.map((item) => { 
+              if (item.id_categoria == 4 ) {
+                return(
+                  <Box                       
+                  style={{ borderRadius: 12 }}
+                  key={item.id_comida}
+                  shadow={3}
+                  m={2}
+                  _light={{
+                    backgroundColor: coloresAIQ.blanco,
+                  }}>
+                      <TouchableOpacity
+                      onPress={() => {
+                          detalleProducto(item.id_comida, item.nombre, item.descripcion, item.precio, item.imagen, item.tiempo, idRest);
+                      }}><Flex direction='row'>
+                          <Image
+                          style={estilosAIQ.imagenMenu}
+                          source={{uri: urlImg+item.imagen}}
+                          alt={item.nombre}
+                          size={"xl"}
+                          />
+                          <Box m={2} style={{width: 0, flexGrow: 1, flex: 1}}>
+                          {/* Nombre platillo */}
+                          <NombreBoxProd color={coloresAIQ.azulOscuroAIQ} nombre={item.nombre} />
+                          {/* Costo de platillo */}
+                          <TextBoxProd dato={`Costo: $${item.precio}`} />
+                          </Box>
+                      </Flex></TouchableOpacity>
+                  </Box>
+              )
+              }
+            })) : (null)}
+          {categoria == 'Alimentos' && arrPlatillos.length == 0 && arrProductos.length == 0 ? 
+            (<View><Center>
+              <LottieSelect></LottieSelect>
+              <Text>Bienvenido, selecciona una categoría</Text>
+            </Center></View>) : (null)}
           {categoria == 'Bebidas' && arrBebidas.length > 0 ? 
             (arrAlimentos.map((item) => {
                 if (item.id_categoria == 3) {
@@ -306,51 +333,22 @@ const Menu = (props) => {
                           detalleProducto(item.id_comida, item.nombre, item.descripcion, item.precio, item.imagen, item.tiempo, idRest);
                         }}><Flex direction='row'>
                             <Image
-                            style={{
-                                flex: 1,
-                                resizeMode: "cover",
-                                justifyContent: "center",
-                                borderTopLeftRadius: 12,
-                                borderBottomLeftRadius: 12,
-                                borderTopRightRadius: 0,
-                                borderBottomRightRadius: 0,
-                            }}
-                            imageStyle={{
-                                borderRadius: 55,
-                            }}
+                            style={estilosAIQ.imagenMenu}
                             source={{uri: urlImg+item.imagen}}
                             alt={item.nombre}
                             size={"xl"}
                             />
                             <Box m={2} style={{width: 0, flexGrow: 1, flex: 1}}>
                             {/* Nombre platillo */}
-                            <Text
-                            fontFamily='heading'
-                            fontSize='xl'
-                            color={coloresAIQ.azulOscuroAIQ}>
-                            {item.nombre}
-                            </Text>
+                            <NombreBoxProd color={coloresAIQ.azulOscuroAIQ} nombre={item.nombre} />
                             {/* Costo de platillo */}
-                            <Text
-                            ml={1}
-                            color={coloresAIQ.grisAIQ}
-                            fontSize='md'
-                            fontFamily='body'>
-                            Costo: ${item.precio}
-                            </Text>
+                            <TextBoxProd dato={`Costo: $${item.precio}`} />
                             </Box>
                         </Flex></TouchableOpacity>
                     </Box>
                 )
                 }
-            })) : ((<View>
-             {(categoria != 'Bebidas' && arrCombos.length >= 1) || (categoria != 'Bebidas' && arrBebidas.length == 0 ) || (categoria != 'Bebidas' && arrPlatillos.length >=1 ) ? 
-          (<View></View>) : (<Center>
-            <LottieSinServ></LottieSinServ>
-            <Text>Ups....Intentalo mas tarde</Text>
-      </Center>)}
-
-          </View>))}
+            })) : (null)}
           {categoria == 'Combos' && arrCombos.length > 0 ? 
             (arrAlimentos.map((item) => {
                if (item.id_categoria == 1 ) {
@@ -369,59 +367,33 @@ const Menu = (props) => {
                           detalleProducto(item.id_comida, item.nombre, item.descripcion, item.precio, item.imagen, item.tiempo, idRest);
                         }}><Flex direction='row'>
                             <Image
-                            style={{
-                                flex: 1,
-                                resizeMode: "cover",
-                                justifyContent: "center",
-                                borderTopLeftRadius: 12,
-                                borderBottomLeftRadius: 12,
-                                borderTopRightRadius: 0,
-                                borderBottomRightRadius: 0,
-                            }}
-                            imageStyle={{
-                                borderRadius: 55,
-                            }}
+                            style={estilosAIQ.imagenMenu}
                             source={{uri: urlImg+item.imagen}}
                             alt={item.nombre}
                             size={"xl"}
                             />
                             <Box m={2} style={{width: 0, flexGrow: 1, flex: 1}}>
                             {/* Nombre platillo */}
-                            <Text
-                            fontFamily='heading'
-                            fontSize='xl'
-                            color={coloresAIQ.azulOscuroAIQ}>
-                            {item.nombre}
-                            </Text>
+                            <NombreBoxProd color={coloresAIQ.azulOscuroAIQ} nombre={item.nombre} />
                             {/* Costo de platillo */}
-                            <Text
-                            ml={1}
-                            color={coloresAIQ.grisAIQ}
-                            fontSize='md'
-                            fontFamily='body'>
-                            Costo: ${item.precio}
-                            </Text>
+                            <TextBoxProd dato={`Costo: $${item.precio}`} />
                             </Box>
                         </Flex></TouchableOpacity>
                     </Box>
                 )
                 }
-            })) : (<View>
-                {(categoria != 'Combos' && arrCombos.length == 0 ) || (categoria != 'Combos' && arrBebidas.length >= 1 ) || (categoria != 'Combos' && arrPlatillos.length >=1 ) ? 
-            (<View></View>) : (<Center>
-              <LottieSinServ></LottieSinServ>
-              <Text>Ups....Intentalo mas tarde</Text>
-        </Center>)}
-
-            </View>)}
-          </Box>
+            })) : (null)}
+          </Box>) : (<View><Center>
+                      <LottieSinServ></LottieSinServ>
+                      <Text>Ups....Intentalo mas tarde</Text>
+                    </Center></View>)}
         </ScrollView>
-        <FAB
-            placement='right'
-            color={coloresAIQ.azulAIQ}
-            onPress={() => {enviaDatos(idRest)}}
-            icon={<AntDesign name="shoppingcart" size={24} color={coloresAIQ.blanco}/>}
-          />
+        {arrAlimentos.length > 0 ? (<FAB
+          placement='right'
+          color={coloresAIQ.azulAIQ}
+          onPress={() => {enviaDatos(idRest)}}
+          icon={<AntDesign name="shoppingcart" size={24} color={coloresAIQ.blanco}/>}
+          />) : (null)}
       </SafeAreaView>
     </>
   )

@@ -1,8 +1,11 @@
 import React, {useState, useEffect} from 'react';
-import {extendTheme, Image, NativeBaseProvider, useToast } from 'native-base';
+import {extendTheme, NativeBaseProvider } from 'native-base';
+import { Alert } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import { HeaderBackButton } from '@react-navigation/elements';
+import { deleteCart } from './src/api/controlWS';
 import {
 	useFonts,
 	Nunito_200ExtraLight,
@@ -29,14 +32,28 @@ import Carrito from './src/screens/private/tabs/Carrito';
 import Pedidos from './src/screens/private/tabs/Pedidos';
 import MetodoPago from './src/screens/private/MetodoPago';
 import ConfirmarPedido from './src/screens/private/ConfirmarPedido';
-import ListMenu from './src/screens/components/ListMenu';
 import coloresAIQ from './src/styles/coloresAIQ';
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 const Stack = createStackNavigator();
 
 const App = () => {
-  const [activo, setActivo] = useState(false);
-  const [initScreen, setInitScreen] = useState('Login');
+  //screen por default, login
+  const [initScreen, setInitScreen] = useState('Principal');
+  //ejectar funcion leer local storage
+  useEffect(() => {
+    getLogin();
+  }, []);
+  //funcion obtener idMesa del login
+  const getLogin = async() => {
+    const idMesa = await AsyncStorage.getItem('ID_MESA')
+    //console.log(idMesa);
+    
+    //si existe datos de sesion, ir directo a Inicio publicidad
+    if (idMesa !== null) {
+      setInitScreen('InicioAds');
+    }
+  }
   let [fontsLoaded] = useFonts({
 		Nunito_200ExtraLight,
 		Nunito_200ExtraLight_Italic,
@@ -81,8 +98,9 @@ const App = () => {
             headerTintColor: '#FFF',
             headerBackTitleVisible: false,
             headerTitleAlign: 'center',
-          }}>
-
+          }}
+          initialRouteName={initScreen}>
+            {/*initScreen, indicara la screen de inicio login o inicioAds */}
           <Stack.Screen
             name='Principal'
             options={{
@@ -95,15 +113,43 @@ const App = () => {
             name='InicioAds'
             options={{
               title: 'INICIO',
+              headerLeft: () => null,
             }}
             component={InicioAds}
           />
 
           <Stack.Screen
             name='Menu'
-            options={{
+            options={ ({navigation}) => ({
               title: 'MENÚ',
-            }}
+              headerLeft: () => (
+                <HeaderBackButton
+                  tintColor={coloresAIQ.blanco}
+                  onPress={() => {
+                    Alert.alert(
+                      '¡Espera!',
+                      '¿Deseas volver a restaurantes? El carrito actual se vaciara. ',
+                      [
+                        {
+                          text: 'Cancelar',
+                          onPress: () => null,
+                          style: 'cancel',
+                        },
+                        {
+                          text: 'Si',
+                          onPress: async () => {
+                            deleteCart();
+                            navigation.navigate("Restaurante");
+                          },
+                        },
+                      ],
+                      { cancelable: false }
+                    );
+                    return true;
+                  }}
+                />
+              ),
+            })}
             component={Menu}
           />
 
@@ -134,7 +180,7 @@ const App = () => {
           <Stack.Screen
             name='MetodoPago'
             options={{
-              title: 'METODO DE PAGO',
+              title: 'MÉTODO DE PAGO',
             }}
             component={MetodoPago}
           />
@@ -151,6 +197,7 @@ const App = () => {
             name='Pedidos'
             options={{
               title: 'DETALLE PEDIDO',
+              headerLeft: () => null,
             }}
             component={Pedidos}
           />

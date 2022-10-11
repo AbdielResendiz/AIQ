@@ -4,6 +4,8 @@ import { StyleSheet, TextInput, View, Keyboard, Button } from "react-native";
 import { Feather, Entypo } from "@expo/vector-icons";
 import coloresAIQ from "../../styles/coloresAIQ";
 
+//componente fuera de uso por el momento
+//componente para barra de busqueda
 const SearchBar = ({clicked, searchPhrase, setSearchPhrase, setClicked}) => {
   return (
     <View style={styles.container}>
