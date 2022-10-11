@@ -9,8 +9,10 @@ import { Titulos } from '../../components/Textos';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import estilosAIQ from '../../../styles/estilosAIQ';
 
+//ajusta componentes x pantalla
 const { width, height } = Dimensions.get('window');
 
+//funcion para contart tiempo
 const wait = (timeout) => {
 	return new Promise((resolve) =>
 		setTimeout(resolve, timeout)
@@ -45,6 +47,7 @@ const Restaurantes = (props) => {
     datosResAd();
   },[])
  
+  //escucha publicidad y negocios
   useEffect(() => {
     const intervalCall = setInterval(() => {  
       datosResAd();
@@ -88,7 +91,9 @@ const Restaurantes = (props) => {
                 <Box key={item.id_ad} mb={4}>
                   <TouchableOpacity
                     style={estilosAIQ.boxAds}
-                    onPress={() => {console.log(item.id_ad)}}>
+                    onPress={() => {
+                      //console.log(item.id_ad)
+                      }}>
                     <Image
                       source={{uri: urlImg + item.imagen}}
                       alt='Anuncio'

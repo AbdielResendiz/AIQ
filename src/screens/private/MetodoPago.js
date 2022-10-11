@@ -9,6 +9,7 @@ import Logo from '../components/Logo';
 import { Indicaciones, TituloInput, Titulos } from '../components/Textos';
 
 const MetodoPago = (props) => {
+  // total= cantidar a pagar por pedido, monto = cantidad con la que va a pagar el cliente, en caso de ser efectivo
   const [total, setTotal] = useState('');
   const [metodo, setMetodo] = useState('');
   const [monto, setMonto] = useState('');

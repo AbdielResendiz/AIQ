@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react'
-import { ScrollView, View, StyleSheet, Text, Alert } from 'react-native';
+import { ScrollView, View, Text, Alert } from 'react-native';
 import { Image, Box, Center, Flex } from 'native-base';
 import coloresAIQ from '../../../styles/coloresAIQ';
 import { getIdCart, getIdPedido, urlImg, enviaConfirmacion } from '../../../api/controlWS';
@@ -46,6 +46,7 @@ Intenta realizar otro pedido.` ,
     }
   }
 
+  //escucha estatus pedido
   useEffect(() => {
     const cambiaTamaño = setInterval(() => {
       getPedido();

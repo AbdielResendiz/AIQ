@@ -47,7 +47,8 @@ const App = () => {
   //funcion obtener idMesa del login
   const getLogin = async() => {
     const idMesa = await AsyncStorage.getItem('ID_MESA')
-    console.log(idMesa);
+    //console.log(idMesa);
+    
     //si existe datos de sesion, ir directo a Inicio publicidad
     if (idMesa !== null) {
       setInitScreen('InicioAds');

@@ -9,7 +9,7 @@ import Logo from '../components/Logo';
 import {Indicaciones, TituloInput} from '../components/Textos';
 
 const Login = (props) => {
-    //aviso mesao contra erroneos
+    //aviso mesa o contra erroneos
     const toast = useToast();
     //datos mesa
 	const [usuario, setUsuario] = useState('');

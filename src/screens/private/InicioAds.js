@@ -7,12 +7,15 @@ import Carousel2 from '../components/Carousel2';
 
 const InicioAds = (props) => {
 
+  //variables que almacenara datos anuncio
   const [anuncios, setAnuncios] = useState(['']);
 
+  //funcion que impide regreso a login
   const backAction = () => {
     props.navigation.navigate('Restaurante')
   }
 
+  //consume ws getAnuncios
   const getAnuncios = async() => {
     await fetch('https://v-csoft.com/AIQ/MovilR/getPublicidad', {
       method: 'post',
@@ -22,7 +25,6 @@ const InicioAds = (props) => {
     //  console.log('Success:', result['Publicidad']);
       const dataa = result['Publicidad']
       setAnuncios(dataa);
-      // setList()
     })
     .catch((error) => {
       console.error('Error:', error);
@@ -53,8 +55,6 @@ const InicioAds = (props) => {
 		//Al salir de Home eliminamos el evento del backbutton del SO
 		return () => backHandler.remove();
 	}, []);
-
-  
 
   return (
     <SafeAreaView flex={5} flexDirection={'column'}>

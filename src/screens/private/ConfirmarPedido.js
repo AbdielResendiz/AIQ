@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react'
 import { ScrollView, Text, View, Box, Center, Button, FormControl } from 'native-base'
 import { TextInput, Alert, } from 'react-native';
-import {FontAwesome, FontAwesome5, Entypo} from '@expo/vector-icons';
+import {FontAwesome, Entypo} from '@expo/vector-icons';
 import coloresAIQ from '../../styles/coloresAIQ';
 import estilosAIQ from '../../styles/estilosAIQ';
 import Logo from '../components/Logo';
@@ -52,12 +52,6 @@ const ConfirmarPedido = (props) => {
     }
   }
 
-//   const enviaMesero = async() => {
-//     Alert.alert(
-//         'Mesero en camino',
-//         'Favor de esperar.',
-//       )
-//   }
   //funcion envia datos y genera pedido, cod=codigo
   const validarCodigo = async(cod) => {
     //valida si el codigo esta vacio

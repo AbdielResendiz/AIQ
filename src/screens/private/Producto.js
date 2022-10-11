@@ -57,7 +57,6 @@ const Producto = (props) => {
     });
   }
 
-  
   return (
     <ScrollView flex={1}>
         {/* Imagen Producto */}

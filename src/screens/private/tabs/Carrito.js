@@ -7,6 +7,7 @@ import { NombreBoxProd, TextBoxProd, Titulos } from '../../components/Textos';
 import { getCart, urlImg, deteleItemCart, getTotalCart } from '../../../api/controlWS';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import estilosAIQ from '../../../styles/estilosAIQ';
+
 //ajustar imagenes sin importar pantalla
 const { width, height } = Dimensions.get('window');
 
@@ -26,6 +27,7 @@ const Carrito = (props) => {
     setTotal(p);
   }
 
+  //elimina articulo seleccionado
   const deleteItem = async(idComida) => {
     const m = await AsyncStorage.getItem('ID_MESA');
     await deteleItemCart(JSON.parse(m), idComida);

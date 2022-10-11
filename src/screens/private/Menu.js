@@ -12,6 +12,7 @@ import ProcesandoAir from '../components/ProcesandoAir';
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { NombreBox, NombreBoxProd, TextBoxProd } from '../components/Textos';
 
+//define tiempos
 const wait = (timeout) => {
     return new Promise((resolve) => setTimeout(resolve, timeout));
   };
@@ -33,6 +34,7 @@ const Menu = (props) => {
   //Datos menu
   const [arrAlimentos, setArrAlimentos] = useState([]);
 
+  //refresh menu
   const onRefresh = useCallback(() => {
     setRefreshing(true);
     wait(1000).then(() => {
@@ -106,6 +108,7 @@ const Menu = (props) => {
 		return true;
 	}; //ALERTA FIN
 
+  //escucha menu
   useEffect(() => {
     const cambiaTamaño = setInterval(() => {
       datosMenu();
@@ -116,6 +119,7 @@ const Menu = (props) => {
     };
   }, []);
 
+  //carga funciones al entrar screen
   useEffect(() => {
     datosMenu();
     const backHandler = BackHandler.addEventListener(
