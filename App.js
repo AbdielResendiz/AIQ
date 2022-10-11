@@ -38,14 +38,17 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 const Stack = createStackNavigator();
 
 const App = () => {
+  //screen por default, login
   const [initScreen, setInitScreen] = useState('Principal');
+  //ejectar funcion leer local storage
   useEffect(() => {
     getLogin();
   }, []);
-
+  //funcion obtener idMesa del login
   const getLogin = async() => {
     const idMesa = await AsyncStorage.getItem('ID_MESA')
     console.log(idMesa);
+    //si existe datos de sesion, ir directo a Inicio publicidad
     if (idMesa !== null) {
       setInitScreen('InicioAds');
     }
@@ -96,7 +99,7 @@ const App = () => {
             headerTitleAlign: 'center',
           }}
           initialRouteName={initScreen}>
-
+            {/*initScreen, indicara la screen de inicio login o inicioAds */}
           <Stack.Screen
             name='Principal'
             options={{

@@ -1,5 +1,9 @@
-import { Box, Image } from 'native-base'
-import React from 'react'
+import React from 'react';
+import { Box, Image } from 'native-base';
+import { Dimensions } from "react-native";
+
+//ajusta imagen a la pantalla
+const { width, height } = Dimensions.get('window');
 
 const Logo = () => {
   return (
@@ -8,10 +12,10 @@ const Logo = () => {
         source={require('../../../assets/image/AIQ.png')}
         alignContent={'center'}
         alignSelf={'center'}
-        resizeMode='center'
+        resizeMode='contain'
         alt='AIQ'
         width={'100%'}
-        height={300}/>
+        height={height/4.5}/>
     </Box>
   )
 }

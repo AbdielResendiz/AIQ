@@ -22,7 +22,7 @@ function infiniteScroll(dataList, mySlide) {
                 offset: scrollValue,
             });
         }
-    }, 20000)
+    }, 10000)
 }
 
 const Carousel2 = ({ data }) => {

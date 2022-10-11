@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, Box, Flex, Image, Center, Button} from 'native-base';
-import { ScrollView, TouchableOpacity, Alert } from 'react-native';
+import { ScrollView, TouchableOpacity, Alert, Dimensions } from 'react-native';
 import {AntDesign, MaterialCommunityIcons} from '@expo/vector-icons';
 import coloresAIQ from '../../../styles/coloresAIQ';
 import { NombreBoxProd, TextBoxProd, Titulos } from '../../components/Textos';
 import { getCart, urlImg, deteleItemCart, getTotalCart } from '../../../api/controlWS';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import estilosAIQ from '../../../styles/estilosAIQ';
+//ajustar imagenes sin importar pantalla
+const { width, height } = Dimensions.get('window');
 
 const Carrito = (props) => {
   //datos recibidos de Producto.js
@@ -92,7 +94,8 @@ const Carrito = (props) => {
                 <Flex direction='row'>
                   {/* Img producto */}
                   <Image
-                  style={estilosAIQ.imagenMenu}
+                  style={{...estilosAIQ.imagenMenu, width: (height / 8.5)*1.75,
+                  height: height / 8.5}}
                   source={{uri: urlImg+item.imagen}}
                   alt={item.nombre}
                   />
@@ -107,11 +110,11 @@ const Carrito = (props) => {
                     <TextBoxProd dato={`Subtotal: $${item.subtotal}`}/>
                   </Box>
                   <TouchableOpacity 
-                    style={{justifyContent:'center', alignItems: 'center', margin: 12}}
+                    style={{justifyContent:'center', alignItems: 'center', margin: 8}}
                     onPress={() => {
                       deleteItem(item.id_comida)
                       }}>
-                    <MaterialCommunityIcons name="delete-empty-outline" size={60} color={coloresAIQ.azulOscuroAIQ}/>
+                    <MaterialCommunityIcons name="delete-empty-outline" size={50} color={coloresAIQ.azulOscuroAIQ}/>
                   </TouchableOpacity>
                 </Flex>
               </Box>)

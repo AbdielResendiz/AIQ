@@ -83,13 +83,13 @@ export const getCombos = async (idRes) => {
     if (response.status === 200) {
       return response.data;
     } else {
-      throw new Error("Fallo en fetch array restaurantes")
+      throw new Error("Fallo en fetch array combos")
     }
   } catch (error) {
     if(axios.isCancel(error)) {
       console.log('Data fetching cancelado')
     } else {
-      console.log('algo pago en funcion getMenu', error)
+      console.log('algo pago en funcion getCombos', error)
     }
   }
 }
@@ -104,13 +104,13 @@ export const getComidas = async (idRes) => {
     if (response.status === 200) {
       return response.data;
     } else {
-      throw new Error("Fallo en fetch array restaurantes")
+      throw new Error("Fallo en fetch array comidas")
     }
   } catch (error) {
     if(axios.isCancel(error)) {
       console.log('Data fetching cancelado')
     } else {
-      console.log('algo pago en funcion getMenu', error)
+      console.log('algo pago en funcion comidas', error)
     }
   }
 }
@@ -125,13 +125,34 @@ export const getBebidas = async (idRes) => {
     if (response.status === 200) {
       return response.data;
     } else {
-      throw new Error("Fallo en fetch array restaurantes")
+      throw new Error("Fallo en fetch array bebidas")
     }
   } catch (error) {
     if(axios.isCancel(error)) {
       console.log('Data fetching cancelado')
     } else {
-      console.log('algo pago en funcion getMenu', error)
+      console.log('algo pago en funcion getBebidas', error)
+    }
+  }
+}
+
+export const getProductos = async (idRes) => {
+
+  const idRest = idRes;
+  const urlProductos = `${baseUrl}/MovilR/getProductos/${idRest}`;
+
+  try{
+    const response = await axios.get(urlProductos, {cancelToken: source.token});
+    if (response.status === 200) {
+      return response.data;
+    } else {
+      throw new Error("Fallo en fetch array getproductos")
+    }
+  } catch (error) {
+    if(axios.isCancel(error)) {
+      console.log('Data fetching cancelado')
+    } else {
+      console.log('algo pago en funcion getproductos', error)
     }
   }
 }

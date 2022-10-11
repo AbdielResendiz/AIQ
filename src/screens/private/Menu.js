@@ -3,7 +3,7 @@ import { SafeAreaView, ScrollView, TouchableOpacity, RefreshControl, Alert, Back
 import { Box, Center, Image, Text, Flex,View} from 'native-base';
 import { FAB } from 'react-native-elements';
 import { AntDesign } from '@expo/vector-icons';
-import { getMenu, getRestaurantes, urlImg, getCombos, getComidas, getBebidas, deleteCart} from '../../api/controlWS';
+import { getMenu, getRestaurantes, urlImg, getCombos, getComidas, getBebidas, deleteCart, getProductos} from '../../api/controlWS';
 import coloresAIQ from '../../styles/coloresAIQ';
 import estilosAIQ from '../../styles/estilosAIQ';
 import LottieSinServ from '../components/Lotties/LottieSinServ';
@@ -28,6 +28,7 @@ const Menu = (props) => {
   const [arrCombos, setArrCombos] = useState([]);
   const [arrPlatillos, setPlatillos] = useState([]);
   const [arrBebidas, setBebidas] = useState([]);
+  const [arrProductos, setProductos] = useState([]);
 
   //Datos menu
   const [arrAlimentos, setArrAlimentos] = useState([]);
@@ -46,12 +47,14 @@ const Menu = (props) => {
     const zona = await AsyncStorage.getItem('ID_ZONA');
     const n = await getRestaurantes(JSON.parse(zona));
     setArrRestaurantes(n);
-    const p = await getCombos(idRest);
-    setArrCombos(p);
-    const k = await getComidas(idRest);
-    setPlatillos(k)
-    const l = await getBebidas(idRest)
-    setBebidas(l);
+    const c = await getCombos(idRest);
+    setArrCombos(c);
+    const p = await getComidas(idRest);
+    setPlatillos(p)
+    const b = await getBebidas(idRest);
+    setBebidas(b);
+    const a = await getProductos(idRest);
+    setProductos(a);
     setCargandoR(false)
   }
 
@@ -152,6 +155,13 @@ const Menu = (props) => {
               {arrAlimentos.length > 0 ? (<>    
             {categoria == 'Alimentos' ? 
             (<>
+              {arrProductos.length > 0 ? 
+                (<TouchableOpacity
+                    style={estilosAIQ.containerCategorias}
+                    onPress={() => {navCategoria('Alimentos')}}>
+                    <Text style={estilosAIQ.textCategoriasSelect}>Productos</Text>
+                </TouchableOpacity>) : 
+                (null)}
               {arrPlatillos.length > 0 ? 
                 (<TouchableOpacity
                     style={estilosAIQ.containerCategorias}
@@ -263,7 +273,40 @@ const Menu = (props) => {
               )
               }
             })) : (null)}
-          {categoria == 'Alimentos' && arrPlatillos.length == 0 ? 
+          {categoria == 'Alimentos' && arrProductos.length > 0 ? 
+            (arrProductos.map((item) => { 
+              if (item.id_categoria == 4 ) {
+                return(
+                  <Box                       
+                  style={{ borderRadius: 12 }}
+                  key={item.id_comida}
+                  shadow={3}
+                  m={2}
+                  _light={{
+                    backgroundColor: coloresAIQ.blanco,
+                  }}>
+                      <TouchableOpacity
+                      onPress={() => {
+                          detalleProducto(item.id_comida, item.nombre, item.descripcion, item.precio, item.imagen, item.tiempo, idRest);
+                      }}><Flex direction='row'>
+                          <Image
+                          style={estilosAIQ.imagenMenu}
+                          source={{uri: urlImg+item.imagen}}
+                          alt={item.nombre}
+                          size={"xl"}
+                          />
+                          <Box m={2} style={{width: 0, flexGrow: 1, flex: 1}}>
+                          {/* Nombre platillo */}
+                          <NombreBoxProd color={coloresAIQ.azulOscuroAIQ} nombre={item.nombre} />
+                          {/* Costo de platillo */}
+                          <TextBoxProd dato={`Costo: $${item.precio}`} />
+                          </Box>
+                      </Flex></TouchableOpacity>
+                  </Box>
+              )
+              }
+            })) : (null)}
+          {categoria == 'Alimentos' && arrPlatillos.length == 0 && arrProductos.length == 0 ? 
             (<View><Center>
               <LottieSelect></LottieSelect>
               <Text>Bienvenido, selecciona una categoría</Text>

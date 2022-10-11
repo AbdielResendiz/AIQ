@@ -1,5 +1,7 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet, Dimensions } from "react-native";
 import coloresAIQ from "./coloresAIQ";
+
+const { width, height } = Dimensions.get('window');
 
 const estilosAIQ = StyleSheet.create({
     textCategoriasSelect: {
@@ -68,8 +70,8 @@ const estilosAIQ = StyleSheet.create({
       borderBottomLeftRadius: 12,
       borderBottomRightRadius: 0,
       borderTopRightRadius: 0,
-      width: 350,
-      height: 200
+      width: (height / 6.8)*1.75,
+      height: height / 6.8
     },
     imagenPedido: {                             
       resizeMode: "stretch",
@@ -83,12 +85,12 @@ const estilosAIQ = StyleSheet.create({
     },
     logo: {
       resizeMode: "center", justifyContent: "center",
-      width: 300, height: 300,
+      width: width / 2.5, height: width / 2.5,
       alignItems: "center", borderRadius: 12,
     },
-    boxAds: {
-      width: 400,
-      height: 204,
+    boxAds: {    
+      width: width - 180,
+      height: (width - 180)*0.5825,
       marginRight: 16,
       borderColor: coloresAIQ.azulOscuroAIQ,
       borderWidth: 2,

@@ -23,7 +23,7 @@ function infiniteScroll(dataList, mySlide) {
             });
         }
 
-    }, 10000)
+    }, 5000);
 }
 
 const Carousel = ({ data }) => {

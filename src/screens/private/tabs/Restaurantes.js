@@ -1,6 +1,6 @@
 import React, {useState, useEffect, useCallback} from 'react'
 import {Text, Box, Image, Flex, Center, View} from 'native-base';
-import {ScrollView, TouchableOpacity, RefreshControl, SafeAreaView} from 'react-native';
+import {ScrollView, TouchableOpacity, RefreshControl, SafeAreaView, Dimensions} from 'react-native';
 import { getRestaurantes, getPublicidad, urlImg, deleteCart } from '../../../api/controlWS';
 import LottieSinServ from '../../components/Lotties/LottieSinServ';
 import coloresAIQ from '../../../styles/coloresAIQ';
@@ -8,6 +8,8 @@ import ProcesandoAir from '../../components/ProcesandoAir';
 import { Titulos } from '../../components/Textos';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import estilosAIQ from '../../../styles/estilosAIQ';
+
+const { width, height } = Dimensions.get('window');
 
 const wait = (timeout) => {
 	return new Promise((resolve) =>
@@ -80,7 +82,7 @@ const Restaurantes = (props) => {
           }>
           <Box
             p={3}
-            style={{...estilosAIQ.boxRest, height: 270}}>
+            style={{...estilosAIQ.boxRest, height: height / 3}}>
             {arrAnuncios.map((item) => {
               return (
                 <Box key={item.id_ad} mb={4}>
@@ -100,7 +102,7 @@ const Restaurantes = (props) => {
         </ScrollView>
 
         {/* Titulo: restaurantes */}
-        <Titulos titulo='Restaurantes:'/>
+        <Titulos titulo='Negocios:'/>
 
         {/* Scroll restaurantes */}
         <ScrollView
@@ -127,8 +129,8 @@ const Restaurantes = (props) => {
                         {/* Cambiar por idRes onPress cuando esten los WS */}
                         <TouchableOpacity
                           style={{
-                            width: 300,
-                            height: 300,
+                            width: width / 2.5,
+                            height: width / 2.5,
                             marginRight: 3,
                           }}
                           onPress={() => menu(item.id_user)}>
