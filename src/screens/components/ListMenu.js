@@ -3,7 +3,8 @@ import {TouchableOpacity } from 'react-native';
 import { Box, Image, Text, Flex } from 'native-base';
 import coloresAIQ from '../../styles/coloresAIQ';
 
-
+//actualmente no se utiliza la screen
+//componente para renderizar los 4 tipos de menu
 const ListMenu = (item) => {
     return(
         <Box                       

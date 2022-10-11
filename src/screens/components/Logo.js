@@ -5,6 +5,7 @@ import { Dimensions } from "react-native";
 //ajusta imagen a la pantalla
 const { width, height } = Dimensions.get('window');
 
+//componente logo AIQ
 const Logo = () => {
   return (
     <Box paddingTop={2}>

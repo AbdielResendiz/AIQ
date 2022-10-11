@@ -4,7 +4,6 @@ const source = axios.CancelToken.source();
 const baseUrl = 'https://v-csoft.com/AIQ';
 const urlRes = `${baseUrl}/MovilR/getRestaurantes/`;
 const urlAD = `${baseUrl}/MovilR/getPublicidad`;
-//const urlCreaCart = `${baseUrl}/Carrito/createCart/`;
 const urlAddCart = `${baseUrl}/Carrito/addCart/`;
 const urlGetCart = `${baseUrl}/Carrito/getCart/`;
 const urlIdGetCart = `${baseUrl}/Carrito/getIdCart/`;
@@ -19,6 +18,7 @@ const urlEnviaMensaje = `${baseUrl}/MensajesW/sendTextMessage`;
 const urlGetPedido = `${baseUrl}/Pedidos/getPedido/`
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+//obtiene todos los negocios
 export const getRestaurantes = async(zona) => {
   const urlRestaurente = `${urlRes}${zona}`
   try{
@@ -54,6 +54,7 @@ export const getPublicidad = async () => {
   }
 }
 
+//obtiene todo el catalogo de cualquier negocio
 export const getMenu = async (idRes) => {
   const idRest = idRes;
   const urlMenu = `${baseUrl}/MovilR/getMenu/${idRest}`
@@ -73,7 +74,7 @@ export const getMenu = async (idRes) => {
   }
 }
 
-// traemos todo el arreglo de comidas de cada restaurante
+// traemos todo el arreglo de combos de cada restaurante
 export const getCombos = async (idRes) => {
   const idRest = idRes;
   const urlCombos = `${baseUrl}/MovilR/getCombos/${idRest}`
@@ -94,6 +95,7 @@ export const getCombos = async (idRes) => {
   }
 }
 
+// traemos todo el arreglo de comidas de cada restaurante
 export const getComidas = async (idRes) => {
 
   const idRest = idRes;
@@ -115,6 +117,7 @@ export const getComidas = async (idRes) => {
   }
 }
 
+// traemos todo el arreglo de bebidas de cada restaurante
 export const getBebidas = async (idRes) => {
 
   const idRest = idRes;
@@ -136,6 +139,7 @@ export const getBebidas = async (idRes) => {
   }
 }
 
+// traemos todo el arreglo de productos de cada local
 export const getProductos = async (idRes) => {
 
   const idRest = idRes;
@@ -156,27 +160,6 @@ export const getProductos = async (idRes) => {
     }
   }
 }
-
-// funcion crea carrito, solo referencia, remplazado por addCart
-// export const creaCarrito = async (idMesa) => {
-//   const datoMesa = idMesa;
-//   const urlIdmesa = `${urlCreaCart}/${datoMesa}`;
-//   try{
-//     const response = await axios.get(urlIdmesa, {cancelToken: source.token});
-//     if (response.status === 200) {
-//       console.log(response.data)
-//       return response.data;
-//     } else {
-//       throw new Error("Fallo en fetch data")
-//     }
-//   } catch (error) {
-//     if(axios.isCancel(error)) {
-//       console.log('Data fetching cancelado')
-//     } else {
-//       console.log('algo pago en funcion creaCarrito', error)
-//     }
-//   }
-// }
 
 //agrega productos en carrito y en caso necesario crea nuevo carrito
 export const addCarrito = async (idMesa, idComida, cantP, subtotal, comentario) => {
@@ -205,6 +188,7 @@ export const addCarrito = async (idMesa, idComida, cantP, subtotal, comentario) 
   }) 
 }
 
+//devuelve los articulos del carrito actual x cuenta
 export const getCart = async (idMesa) => {
   const mesa = idMesa;
   const urlGetCarrito = `${urlGetCart}${mesa}`;
@@ -224,6 +208,7 @@ export const getCart = async (idMesa) => {
   }
 }
 
+//elimina articulo especifico de carrito
 export const deteleItemCart = async(idMesa, idComida) => {
   let data = new FormData();
   data.append('id_mesa', idMesa);
@@ -247,6 +232,7 @@ export const deteleItemCart = async(idMesa, idComida) => {
   }) 
 }
 
+//elimina todos los articulos del carrito
 export const deleteCart = async() => {
   const m = await AsyncStorage.getItem('ID_MESA');
   const mesa = JSON.parse(m);
@@ -258,6 +244,7 @@ export const deleteCart = async() => {
   });
 }
 
+// devuelve el total del carrito actual
 export const getTotalCart = async (idMesa) => {
   const mesa = idMesa;
   const urlTotal = `${urlGetTotalCart}${mesa}`;
@@ -278,6 +265,7 @@ export const getTotalCart = async (idMesa) => {
   }
 }
 
+//valida si el codigo ingresado existe
 export const getCodigo = async(cod) => {
   const codi = cod;
   const urlCodigo = `${urlGetCodigo}${codi}`;
@@ -298,6 +286,7 @@ export const getCodigo = async(cod) => {
   }
 }
 
+//envia datos para crear pedido
 export const creaPedido = async(idMesa, nombre, cel, total, rest, metodo, idCarrito, cambio) => {
   let data = new FormData();
   data.append('id_mesa', idMesa);
@@ -314,6 +303,7 @@ export const creaPedido = async(idMesa, nombre, cel, total, rest, metodo, idCarr
   })
 }
 
+//recibe un codigo y lo inserta en la DB
 export const insertCode = async(codigo) => {
   let data = new FormData();
   data.append('codigo', codigo);
@@ -335,6 +325,7 @@ export const insertCode = async(codigo) => {
   })
 }
 
+//Elimina codigo de la DB despues de utilizar en la DB
 export const deleteCode = async(codigo) => {
   let data = new FormData();
   data.append('codigo', codigo);
@@ -356,6 +347,7 @@ export const deleteCode = async(codigo) => {
   })
 }
 
+//envia whats con el codigo generado
 export const enviaMensaje = async(celular, codigo, alias) => {
   let data = new FormData();
   data.append('numero', celular);
@@ -380,8 +372,10 @@ export const enviaMensaje = async(celular, codigo, alias) => {
   })
 }
 
+//envias confirmacions si el pedido fue rechazado o aceptado
 export const enviaConfirmacion = async(celular, alias, idPedido, restaurante, total) => {
   let data = new FormData();
+  //total sera 0 en caso de ser rechazado el pedido
   if(total == 0) {
     data.append('numero', celular);
     data.append('tipo', 'pRechazado');
@@ -414,6 +408,7 @@ export const enviaConfirmacion = async(celular, alias, idPedido, restaurante, to
   })
 }
 
+//se obtiene el id del carrito actual x cuenta
 export const getIdCart = async(idMesa) => {
   const mesa = idMesa;
   const urlTotal = `${urlIdGetCart}${mesa}`;
@@ -434,6 +429,7 @@ export const getIdCart = async(idMesa) => {
   }  
 }
 
+//obtiene el id del pedido generado en la ultima compra
 export const getIdPedido = async(idCart) => {
   const urlPedido = `${urlGetPedido}${idCart}`;
   try{

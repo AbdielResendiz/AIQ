@@ -1,10 +1,10 @@
 import React from 'react'
-import { View, StyleSheet, Text, Image, Dimensions } from 'react-native'
+import { View, StyleSheet, Image, Dimensions } from 'react-native'
 import { urlImg } from '../../api/controlWS'
 
 const { width, height } = Dimensions.get('window')
 
-
+//renderiza cada imagen obtenida de item
 const CarouselItem = ({ item }) => {
     return (
         <View style={styles.cardView}>
@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
         height: height / 3,
         backgroundColor: 'white',
         margin: 10,
-        borderRadius: 10,
+        borderRadius: 12,
         shadowColor: '#000',
         shadowOffset: { width: 0.5, height: 0.5 },
         shadowOpacity: 0.5,
@@ -37,7 +37,8 @@ const styles = StyleSheet.create({
     image: {
         width: width - 20,
         height: height / 3,
-        borderRadius: 10
+        resizeMode: 'contain',
+        borderRadius: 12
     },
 })
 

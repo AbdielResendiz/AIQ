@@ -2,6 +2,7 @@ import React from 'react'
 import { Box, Text } from 'native-base'
 import coloresAIQ from '../../styles/coloresAIQ'
 
+//componentes de textos, tipo hoja de estilos
 export const Indicaciones = (props) => {
   return (
     <Box flex={1}>

@@ -1,15 +1,13 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { View, StyleSheet, Dimensions, FlatList, Animated } from 'react-native';
+import React from 'react';
 import CarouselItem from './CarouselItem';
 import SwiperFlatList from 'react-native-swiper-flatlist';
 
-const { width, heigth } = Dimensions.get('window');
-
+//recibe de inicioAds el arreglo de publicidad y genera el carrusel
 const Carousel = ({ data }) => {
     return (
         <SwiperFlatList
         autoplay
-        autoplayDelay={5}
+        autoplayDelay={10}
         autoplayLoop
         autoplayInvertDirection
         data={data}
