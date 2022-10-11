@@ -4,6 +4,7 @@ import estilosAIQ from '../../styles/estilosAIQ';
 import {Text, View} from 'native-base';
 import Carousel from '../components/Carousel';
 import Carousel2 from '../components/Carousel2';
+
 const InicioAds = (props) => {
 
   const [anuncios, setAnuncios] = useState(['']);
@@ -35,7 +36,6 @@ const InicioAds = (props) => {
     }, 20000);
     return () => {
       // clean up
-     
       clearInterval(cambiaTamaño);
     };
   }, []);
