@@ -4,6 +4,7 @@ import coloresAIQ from '../../styles/coloresAIQ'
 import RadioButtonRN from 'radio-buttons-react-native'; 
 import {AntDesign, FontAwesome5, FontAwesome} from '@expo/vector-icons';
 import { getTotalCart } from '../../api/controlWS';
+import { backTime, cortaTimer } from '../../api/backHome';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Logo from '../components/Logo';
 import { Indicaciones, TituloInput, Titulos } from '../components/Textos';
@@ -41,6 +42,7 @@ const MetodoPago = (props) => {
         return;
       } else {
         //en caso de llenar todo, pasar a la sig. screen
+        cortaTimer();
         props.navigation.navigate("ConfirmaPedido", {
           datoMetodo: 'efectivo',
           datoMonto: monto
@@ -48,6 +50,7 @@ const MetodoPago = (props) => {
       }
     } else {
       //en caso de usar tarjeta, solo mandar el metodo
+      cortaTimer();
       props.navigation.navigate("ConfirmaPedido", {
         datoMetodo: 'tarjeta',
         datoMonto: '0',
@@ -57,6 +60,7 @@ const MetodoPago = (props) => {
 
   useEffect(() => {
     getMesa();
+    backTime(props);
   }, [])
 
   return (

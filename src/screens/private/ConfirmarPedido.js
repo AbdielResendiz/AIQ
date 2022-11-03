@@ -7,6 +7,7 @@ import estilosAIQ from '../../styles/estilosAIQ';
 import Logo from '../components/Logo';
 import { Indicaciones, TituloInput } from '../components/Textos';
 import { getCodigo, creaPedido, getTotalCart, getIdCart,  insertCode, enviaMensaje, deleteCode} from '../../api/controlWS';
+import { backTime, cortaTimer } from '../../api/backHome';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import ProcesandoAir from '../components/ProcesandoAir';
 import IntlPhoneInput from 'react-native-intl-phone-input';
@@ -82,7 +83,10 @@ const ConfirmarPedido = (props) => {
                 'El código es correcto.' ,
                 [{
                   text: 'Continuar',
-                  onPress: () => {props.navigation.navigate("Pedidos")},
+                  onPress: () => {
+                    cortaTimer();
+                    props.navigation.navigate("Pedidos")
+                },
                   style: 'default',
                 }]);
         } else {
@@ -100,6 +104,7 @@ const ConfirmarPedido = (props) => {
 
   useEffect(() => {
     setCargando(false);
+    backTime(props);
   }, [])
 
   return (

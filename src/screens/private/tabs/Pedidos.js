@@ -3,6 +3,7 @@ import { ScrollView, View, Text, Alert } from 'react-native';
 import { Image, Box, Center, Flex } from 'native-base';
 import coloresAIQ from '../../../styles/coloresAIQ';
 import { getIdCart, getIdPedido, urlImg, enviaConfirmacion } from '../../../api/controlWS';
+import { backTime, cortaTimer } from '../../../api/backHome';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { DetallePedido } from '../../components/Textos';
 import estilosAIQ from '../../../styles/estilosAIQ';
@@ -20,6 +21,7 @@ const Pedidos = (props) => {
 
     if (pedidoData.id_status == 2) {
       enviaConfirmacion(pedidoData.telefono, pedidoData.nombre_alias, pedidoData.id_pedido, pedidoData.nombre, pedidoData.total)
+      cortaTimer();
       props.navigation.navigate("InicioAds")
       Alert.alert(
         'Pedido aceptado',
@@ -33,6 +35,7 @@ Gracias por usar nuestra app :D` ,
     }
     else if (pedidoData.id_status == 6) {
       enviaConfirmacion(pedidoData.telefono, pedidoData.nombre_alias, pedidoData.id_pedido, 0, 0)
+      cortaTimer();
       props.navigation.navigate("InicioAds")
       Alert.alert(
         'Pedido rechazado',

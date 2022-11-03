@@ -5,6 +5,7 @@ import {AntDesign, MaterialCommunityIcons} from '@expo/vector-icons';
 import coloresAIQ from '../../../styles/coloresAIQ';
 import { NombreBoxProd, TextBoxProd, Titulos } from '../../components/Textos';
 import { getCart, urlImg, deteleItemCart, getTotalCart } from '../../../api/controlWS';
+import { backTime, cortaTimer } from '../../../api/backHome';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import estilosAIQ from '../../../styles/estilosAIQ';
 
@@ -29,13 +30,31 @@ const Carrito = (props) => {
 
   //elimina articulo seleccionado
   const deleteItem = async(idComida) => {
-    const m = await AsyncStorage.getItem('ID_MESA');
-    await deteleItemCart(JSON.parse(m), idComida);
-    getMesa();
+    Alert.alert(
+			'¡Espera!',
+			'¿Seguro deseas eliminar este articulo del carrito? ',
+			[
+				{
+					text: 'Cancelar',
+					onPress: () => null,
+					style: 'cancel',
+				},
+				{
+					text: 'Si',
+					onPress: async () => {
+            const m = await AsyncStorage.getItem('ID_MESA');
+            await deteleItemCart(JSON.parse(m), idComida);
+            getMesa();
+					},
+				},
+			],
+			{ cancelable: false }
+		);
   }
   
   //regrese a menu
   const enviaDatos = async (idRes) => {
+    cortaTimer();
     props.navigation.navigate("Menu", {
       idRes: idRes
     });
@@ -45,6 +64,7 @@ const Carrito = (props) => {
   const irPago = async() => {
     //validando carrito con articulos
     if (arrCarrito.length > 0) {
+      cortaTimer();
       props.navigation.navigate("MetodoPago")
     } else { //en caso de cart vacio, regresar a menu o restaurantes
       Alert.alert(
@@ -53,7 +73,8 @@ const Carrito = (props) => {
         [
           {
             text: 'Menú',
-            onPress: () => {    
+            onPress: () => {  
+              cortaTimer();  
               props.navigation.navigate("Menu", {
                 idRes: idRes
               });
@@ -62,7 +83,10 @@ const Carrito = (props) => {
           },
           {
             text: 'Restaurantes',
-            onPress: () => {props.navigation.navigate("Restaurante")},
+            onPress: () => {
+              cortaTimer();
+              props.navigation.navigate("Restaurante")
+            },
             style: 'default',
           }
         ]
@@ -72,6 +96,7 @@ const Carrito = (props) => {
 
   useEffect(() => {
     getMesa();
+    backTime(props)
   }, []);
 
   return (
@@ -111,6 +136,7 @@ const Carrito = (props) => {
                     {/* Subtotal */}
                     <TextBoxProd dato={`Subtotal: $${item.subtotal}`}/>
                   </Box>
+                  {/* Delete item */}
                   <TouchableOpacity 
                     style={{justifyContent:'center', alignItems: 'center', margin: 8}}
                     onPress={() => {

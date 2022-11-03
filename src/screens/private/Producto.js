@@ -6,6 +6,7 @@ import coloresAIQ from '../../styles/coloresAIQ'
 import { TextInput } from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { addCarrito } from '../../api/controlWS'
+import { backTime, cortaTimer } from '../../api/backHome'
 import estilosAIQ from '../../styles/estilosAIQ'
 import { DetalleProducto, InfoProducto, NombreBox } from '../components/Textos'
 
@@ -48,9 +49,11 @@ const Producto = (props) => {
   
   useEffect(()=>{
     getMesa()
+    backTime(props)
   },[])
 
   const enviaDatos = async (comentario, precio, idRes, cantP, idComida) => {
+    cortaTimer();
     await addCarrito(JSON.parse(mesa), idComida, cantP, cantP*precio, comentario);
     await props.navigation.navigate("Carrito", {
       idRes: idRes,

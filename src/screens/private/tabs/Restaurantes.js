@@ -43,7 +43,6 @@ const Restaurantes = (props) => {
   }
 
   useEffect(()=>{
-    deleteCart();
     datosResAd();
   },[])
  
