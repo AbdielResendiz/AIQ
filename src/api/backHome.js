@@ -37,7 +37,6 @@ export function backTime (props) {
       }, 15000)
     }, 80000);
   }
-
   //corta tiempo de la funcion backTime
   export function cortaTimer() {
     clearTimeout(timerId)
