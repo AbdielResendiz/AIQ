@@ -1238,7 +1238,7 @@
     xcode "^3.0.1"
     xml2js "0.4.23"
 
-"@expo/config-plugins@~5.0.0", "@expo/config-plugins@~5.0.1":
+"@expo/config-plugins@^5.0.0", "@expo/config-plugins@~5.0.0", "@expo/config-plugins@~5.0.1":
   version "5.0.1"
   resolved "https://registry.npmjs.org/@expo/config-plugins/-/config-plugins-5.0.1.tgz"
   integrity sha512-1OfnsOrfeSkB0VZfT01UjQ5Uq6p+yYbq8yNkj0e99K/6NLHpyvIxj+5tZIV0nQXgkOcqBIABL2uA7lwB8CkaBQ==
@@ -1512,7 +1512,7 @@
     semver "7.3.2"
     xml2js "0.4.23"
 
-"@expo/prebuild-config@~5.0.3":
+"@expo/prebuild-config@^5.0.1", "@expo/prebuild-config@~5.0.3":
   version "5.0.3"
   resolved "https://registry.npmjs.org/@expo/prebuild-config/-/prebuild-config-5.0.3.tgz"
   integrity sha512-G4j1H3WFjRaiQ+FgFNULrnIm7RsQyjc4xp6lLTP2ydBv79wO3x8wAdeZvaZh7eOkfu9BESpQzACT1uuJTag5jg==
@@ -6029,7 +6029,7 @@ expo-manifests@~0.3.0:
   dependencies:
     expo-json-utils "~0.3.0"
 
-expo-modules-autolinking@0.10.3:
+expo-modules-autolinking@0.10.3, expo-modules-autolinking@~0.10.1:
   version "0.10.3"
   resolved "https://registry.npmjs.org/expo-modules-autolinking/-/expo-modules-autolinking-0.10.3.tgz"
   integrity sha512-av9ln2zwUt303g98raX7sDmESgL3SXs1sbbtIjh1rL7R0676XIUacIKgbydR0/4tMbOShWx14Z9fozpk9xIAJA==
