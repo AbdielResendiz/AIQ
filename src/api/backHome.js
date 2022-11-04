@@ -34,8 +34,8 @@ export function backTime (props) {
         )
         clearTimeout(timerId)
         props.navigation.navigate("InicioAds");
-      }, 10000)
-    }, 60000);
+      }, 15000)
+    }, 80000);
   }
 
   //corta tiempo de la funcion backTime
