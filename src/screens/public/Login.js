@@ -34,7 +34,7 @@ const Login = (props) => {
         data.append('password',contrasena)
           
         //conexion con wb login
-        await fetch('https://v-csoft.com/AIQ/Mesas/existsMesa/', {
+        await fetch('https://appaiq.com/Mesas/existsMesa/', {
                 method: 'post',
                   body: data,
                   

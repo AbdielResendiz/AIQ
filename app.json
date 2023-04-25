@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "AIQ app",
-    "slug": "AIQ-app",
+    "slug": "FoodAIQ",
     "version": "1.0.0",
     "orientation": "default",
     "icon": "./assets/image/iconAIQ.png",
@@ -22,7 +22,9 @@
       "icon": "./assets/image/iconAIQ.png"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.AIQ",
+      "buildNumber": "1.0.0"
     },
     "android": {
       "adaptiveIcon": {

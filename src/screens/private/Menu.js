@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useCallback} from 'react'
-import { SafeAreaView, ScrollView, TouchableOpacity, RefreshControl, Alert, BackHandler } from 'react-native';
+import { SafeAreaView, ScrollView, TouchableOpacity, RefreshControl, BackHandler } from 'react-native';
 import { Box, Center, Image, Text, Flex,View} from 'native-base';
 import { FAB } from 'react-native-elements';
 import { AntDesign } from '@expo/vector-icons';
