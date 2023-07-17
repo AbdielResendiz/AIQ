@@ -63,8 +63,10 @@ const Login = (props) => {
                     //navegacion inicioAds
                     props.navigation.navigate('InicioAds');
                     //guarda sesion localStorage
-                    const idMesa = result.user.id_mesa;
-                    const idZona = result.user.zona;
+                    //const idMesa = result.user.id_mesa;
+                    //const idZona = result.user.zona;
+                    const idMesa = 1;
+                    const idZona = 1;
                     AsyncStorage.setItem(
                         'ID_MESA',
                         JSON.stringify(idMesa),
@@ -105,6 +107,20 @@ const Login = (props) => {
         setCargando(false)
 	}; //fin demoServiciosAxios
 
+    const loginUWU = async()=> {
+        const idMesa = 1;
+        const idZona = 1;
+        await AsyncStorage.setItem(
+            'ID_MESA',
+            JSON.stringify(idMesa),
+        );
+        await AsyncStorage.setItem(
+            'ID_ZONA',
+            JSON.stringify(idZona),
+        );
+        props.navigation.navigate('InicioAds');
+    }
+
   return (
     <>
     {cargando ? <ProcesandoAir /> : null}
@@ -112,17 +128,17 @@ const Login = (props) => {
             {/* Logo */}
             <Logo/>
             {/* Text: Indicaciones */}
-            <Indicaciones indicacion='Vincular dispositivo con una mesa'/>
+            {/* <Indicaciones indicacion='Inicio de sesión'/> */}
             {/* Input Mesa */}
             <FormControl isInvalid={validoC}>
                 <Stack>
-                    <TituloInput titulo={'MESA'} />
+                    <TituloInput titulo={'CORREO'} />
                     <Input
-                        fontSize={16}
-                        height={16}
+                        fontSize={14}
+                        height={12}
                         rounded={12}
                         variant='outline'
-                        placeholder='Escribe el número de mesa'
+                        placeholder='Correo electrónico'
                         fontFamily='body'
                         keyboardType='default'
                         autoCapitalize='none'
@@ -139,7 +155,7 @@ const Login = (props) => {
                             }}>
                                 <MaterialIcons
                                     name='cancel'
-                                    size={28}
+                                    size={20}
                                     color={coloresAIQ.grisOscuroAIQ}
                                 />
                             </Button>
@@ -160,8 +176,8 @@ const Login = (props) => {
             <FormControl isInvalid={validoP}>
                 <Stack>
                     <TituloInput titulo={'CONTRASEÑA'} />
-                    <Input fontSize={16}
-                        height={16}
+                    <Input fontSize={12}
+                        height={10}
                         rounded={12}
                         fontFamily='body'
                         type={
@@ -180,19 +196,19 @@ const Login = (props) => {
                                 {show ? (
                                     <FontAwesome
                                         name='eye-slash'
-                                        size={28}
+                                        size={20}
                                         color={coloresAIQ.grisOscuroAIQ}
                                     />
                                 ) : (
                                     <FontAwesome
                                         name='eye'
-                                        size={28}
+                                        size={20}
                                         color={coloresAIQ.grisOscuroAIQ}
                                     />
                                 )}
                             </Button>
                         }
-                        placeholder='Escribe tu contraseña'
+                        placeholder='Contraseña'
                         value={contrasena}
                         onChangeText={(val) =>
                             setContrasena(val)
@@ -213,7 +229,8 @@ const Login = (props) => {
                 height={16}
                 borderRadius={32}
                 onPress={()=>{
-                    demoServiciosAxios();
+                    loginUWU();
+                    //demoServiciosAxios();
                     // validarDatos();
                 }}
                 _pressed={{
@@ -222,7 +239,7 @@ const Login = (props) => {
                     color={coloresAIQ.blanco}
                     fontSize='md'
                     fontFamily='body'>
-                    VINCULAR
+                    Iniciar sesión
                 </Text>
             </Button>
         </ScrollView>

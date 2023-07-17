@@ -1,15 +1,15 @@
 {
   "expo": {
-    "name": "AIQ app",
-    "slug": "FoodAIQ",
+    "name": "Speedy EATS",
+    "slug": "SpeedyEATS",
     "version": "1.0.0",
     "orientation": "default",
-    "icon": "./assets/image/iconAIQ.png",
+    "icon": "./assets/adaptive-icon.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/image/AIQ.png",
+      "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#000000"
     },
     "privacy": "unlisted",
     "updates": {
@@ -19,16 +19,16 @@
       "**/*"
     ],
     "notification": {
-      "icon": "./assets/image/iconAIQ.png"
+      "icon": "./assets/icon.png"
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.AIQ",
+      "bundleIdentifier": "com.SpeedyEATS",
       "buildNumber": "1.0.0"
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/image/iconAIQ.png",
+        "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       },
       "package": "com.AIQ"
@@ -39,7 +39,7 @@
     "description": "",
     "extra": {
       "eas": {
-        "projectId": "2f9140f0-e24a-4e2e-8f30-78f271236e39"
+        "projectId": "04e30969-cff4-42c4-bedc-fd05cb3dbe84"
       }
     }
   }

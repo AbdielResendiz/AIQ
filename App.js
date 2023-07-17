@@ -104,7 +104,7 @@ const App = () => {
           <Stack.Screen
             name='Principal'
             options={{
-              title: 'VINCULAR',
+              title: 'Inicio de sesión',
             }}
             component={Login}
           />

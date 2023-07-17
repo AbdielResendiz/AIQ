@@ -22,7 +22,7 @@ export const Titulos = (props) => {
     <Text
     paddingX={4}
     paddingY={2}
-    fontSize={30}
+    fontSize="lg"
     fontFamily='heading'
     colorScheme={coloresAIQ.negro}>
     {props.titulo}
@@ -88,8 +88,8 @@ export const NombreBox = (props) => {
 export const TituloInput = (props) => {
   return(
     <Text
-      mt={8}
-      fontSize='2xl'
+      mt={4}
+      fontSize='xl'
       fontFamily='body'
       fontWeight={'bold'}
       color={coloresAIQ.azulOscuroAIQ}>

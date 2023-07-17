@@ -10,7 +10,7 @@ const Logo = () => {
   return (
     <Box paddingTop={2}>
         <Image
-        source={require('../../../assets/image/AIQ.png')}
+        source={require('../../../assets/image/LogoFOOD.png')}
         alignContent={'center'}
         alignSelf={'center'}
         resizeMode='contain'
