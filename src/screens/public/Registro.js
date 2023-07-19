@@ -8,23 +8,28 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import Logo from '../components/Logo';
 import {Indicaciones, TituloInput} from '../components/Textos';
 
-const Login = (props) => {
+const Registro = (props) => {
     //aviso mesa o contra erroneos
     const toast = useToast();
     //datos mesa
 	const [usuario, setUsuario] = useState('');
     const borraUser = () => setUsuario('');
 	const [contrasena, setContrasena] = useState('');
+    const [contrasena2, setContrasena2] = useState('');
     //show/hide pass
 	const [show, setShow] = useState(false);
+    const [show2, setShow2] = useState(false);
 	const handleClick = () => setShow(!show);
+    const handleClick2 = () => setShow2(!show2);
     //carga
 	const [cargando, setCargando] = useState(false);
     //validaciones C=Mesa, P=Password
 	const [validoC, setValidoC] = useState(false);
 	const [validoP, setValidoP] = useState(false);
+    const [validoP2, setValidoP2] = useState(false);
 	const cambioC = () => setValidoC(false);
 	const cambioP = () => setValidoP(false);
+    const cambioP2 = () => setValidoP2(false);
 
     //funcion login
 	const demoServiciosAxios = async () => {	
@@ -61,12 +66,12 @@ const Login = (props) => {
                 //datos login correctos
                 if (acceso === true) {
                     //navegacion inicioAds
-                    props.navigation.navigate('InicioAds')
+                    props.navigation.navigate('InicioAds');
                     //guarda sesion localStorage
                     //const idMesa = result.user.id_mesa;
                     //const idZona = result.user.zona;
-                    const idMesa = 1
-                    const idZona = 1
+                    const idMesa = 1;
+                    const idZona = 1;
                     AsyncStorage.setItem(
                         'ID_MESA',
                         JSON.stringify(idMesa),
@@ -97,7 +102,7 @@ const Login = (props) => {
                     placement: 'top',
                 });
                 setUsuario('');
-                setContrasena('')
+                setContrasena('');
                 setCargando(false);
             }
         })
@@ -134,7 +139,8 @@ const Login = (props) => {
                 <Stack>
                     <TituloInput titulo={'CORREO'} />
                     <Input
-                        fontSize={14}  height={12}
+                        fontSize={14}
+                        height={12}
                         rounded={12}
                         variant='outline'
                         placeholder='Correo electrónico'
@@ -220,7 +226,54 @@ const Login = (props) => {
                 </Stack>
             </FormControl>
 
-            
+             {/* Input Password */}
+             <FormControl isInvalid={validoP2}>
+                <Stack>
+                    <TituloInput titulo={'CONFIRMA CONTRASEÑA'} />
+                    <Input fontSize={12}
+                        height={10}
+                        rounded={12}
+                        fontFamily='body'
+                        type={
+                            show2 ? 'text' : 'password'
+                        }
+                        InputRightElement={
+                            <Button
+                                ml={1}
+                                variant='link'
+                                roundedLeft={0}
+                                roundedRight='md'
+                                onPress={handleClick2}
+                                _pressed={{
+                                    bg: coloresAIQ.grisClaroAiq,
+                                }}>
+                                {show2 ? (
+                                    <FontAwesome
+                                        name='eye-slash'
+                                        size={20}
+                                        color={coloresAIQ.grisOscuroAIQ}
+                                    />
+                                ) : (
+                                    <FontAwesome
+                                        name='eye'
+                                        size={20}
+                                        color={coloresAIQ.grisOscuroAIQ}
+                                    />
+                                )}
+                            </Button>
+                        }
+                        placeholder='Confirma Contraseña'
+                        value={contrasena2}
+                        onChangeText={(val) =>
+                            setContrasena2(val)
+                        }
+                        onChange={cambioP2}
+                    />
+                    <FormControl.ErrorMessage>
+                        Ingresa una contraseña valida.
+                    </FormControl.ErrorMessage>
+                </Stack>
+            </FormControl>
 
             {/* Boton Vincular */}
             <Button
@@ -293,4 +346,4 @@ const Login = (props) => {
   )
 }
 
-export default Login
+export default Registro

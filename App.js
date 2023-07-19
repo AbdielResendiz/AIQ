@@ -24,6 +24,7 @@ import {
 	Nunito_900Black_Italic,
 } from '@expo-google-fonts/nunito';
 import Login from './src/screens/public/Login';
+import Registro from './src/screens/public/Registro';
 import InicioAds from './src/screens/private/InicioAds';
 import Menu from './src/screens/private/Menu';
 import Producto from './src/screens/private/Producto';
@@ -107,6 +108,13 @@ const App = () => {
               title: 'Inicio de sesión',
             }}
             component={Login}
+          />
+          <Stack.Screen
+            name='Registro'
+            options={{
+              title: 'Registro',
+            }}
+            component={Registro}
           />
 
           <Stack.Screen
