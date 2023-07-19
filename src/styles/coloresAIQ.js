@@ -4,6 +4,7 @@ const coloresAIQ = StyleSheet.create({
     //azulClaroAIQ: "#00ACC8", 
     azulClaroAIQ: "#ACB115", 
     azulAIQ: '#ACB115', 
+    azul: '#ACB115', 
    // azulAIQ: '#0071CE', 
     azulOscuroAIQ: '#003764',
     azulBtn: '#0282EC',
@@ -18,7 +19,8 @@ const coloresAIQ = StyleSheet.create({
     naranjaBtnFood: '#EF4B04',
     cremaFood: '#FFEFCF',
     cafeFood: '#864000',
-    cafeClaroFood: '#A04C00'
+    cafeClaroFood: '#A04C00',
+    footerIcon: '#FFFFFF'
 
 })
 
