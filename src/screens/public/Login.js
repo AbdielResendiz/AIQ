@@ -251,7 +251,7 @@ const Login = (props) => {
                 height={16}
                 borderRadius={32}
                 onPress={()=>{
-                    props.navigation.navigate('Registro')
+                    props.navigation.navigate('Registro');
                     //demoServiciosAxios();
                     // validarDatos();
                 }}
@@ -274,7 +274,7 @@ const Login = (props) => {
                 height={16}
                 borderRadius={32}
                 onPress={()=>{
-                    props.navigation.navigate('Registro')
+                    props.navigation.navigate('Restaurante')
                     //demoServiciosAxios();
                     // validarDatos();
                 }}

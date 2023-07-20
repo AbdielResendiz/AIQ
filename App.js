@@ -1,10 +1,13 @@
 import React, {useState, useEffect} from 'react';
-import {extendTheme, NativeBaseProvider } from 'native-base';
-import { Alert } from 'react-native';
+import {extendTheme, NativeBaseProvider, Image, Box, HStack, Center, Pressable, Icon, Text } from 'native-base';
 import { StatusBar } from 'expo-status-bar';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, useNavigationContainerRef } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { HeaderBackButton } from '@react-navigation/elements';
+import { FontAwesome,  AntDesign , MaterialCommunityIcons, Ionicons, Entypo} from '@expo/vector-icons'; 
+import { View, TouchableOpacity, Alert} from 'react-native';
+import Cuenta from './src/screens/private/Cuenta';
+import Pedidos2 from './src/screens/private/Pedidos2';
 import { deleteCart } from './src/api/controlWS';
 import {
 	useFonts,
@@ -35,12 +38,14 @@ import MetodoPago from './src/screens/private/MetodoPago';
 import ConfirmarPedido from './src/screens/private/ConfirmarPedido';
 import coloresAIQ from './src/styles/coloresAIQ';
 import AsyncStorage from '@react-native-async-storage/async-storage'
-
 const Stack = createStackNavigator();
 
 const App = () => {
   //screen por default, login
   const [initScreen, setInitScreen] = useState('Principal');
+  const [showFooter, setShowFooter] = useState(false);
+  const navigationRef = useNavigationContainerRef();
+  const [selected, setSelected] = useState(0);
   //ejectar funcion leer local storage
   useEffect(() => {
     getLogin();
@@ -52,7 +57,7 @@ const App = () => {
     
     //si existe datos de sesion, ir directo a Inicio publicidad
     if (idMesa !== null) {
-      setInitScreen('InicioAds');
+      setInitScreen('Restaurantes');
     }
   }
   let [fontsLoaded] = useFonts({
@@ -81,6 +86,35 @@ const App = () => {
       mono: 'Nunito_300Light',
     },
   });
+
+  const shouldShowFooter=(route)=>{
+    switch (true) {
+      case (route.name === "Principal"):
+        return false;
+      case (route.name === "Registro"):
+          return false;
+    
+      default:
+        return true
+    }
+  }
+
+
+  const IrInicio = () => {
+    setSelected(0)
+    navigationRef.navigate('Restaurante');
+  };
+
+  const IrPedidos = () => {
+    setSelected(1)
+    navigationRef.navigate('Pedidos2');
+  };
+
+  
+  const IrCuenta = () => {
+    setSelected(4)
+    navigationRef.navigate('Cuenta');
+  };
   
   return (
     <NativeBaseProvider theme={theme}>
@@ -88,7 +122,7 @@ const App = () => {
         barStyle='light-content'
         backgroundColor={coloresAIQ.azulClaroAIQ}
       />
-      <NavigationContainer>
+      <NavigationContainer  ref={navigationRef}  onStateChange={(state) => setShowFooter(shouldShowFooter(state.routes[state.index]))}>
         <Stack.Navigator
           screenOptions={{
             headerMode:'float',
@@ -102,13 +136,14 @@ const App = () => {
           }}
           initialRouteName={initScreen}>
             {/*initScreen, indicara la screen de inicio login o inicioAds */}
-          <Stack.Screen
-            name='Principal'
-            options={{
-              title: 'Inicio de sesión',
-            }}
-            component={Login}
-          />
+          <Stack.Screen name="Principal" component={Login}   
+            options={{title: 'Bienvenido',
+            headerTintColor:coloresAIQ.blanco,
+            headerStyle: {
+              backgroundColor: coloresAIQ.azul,
+            },
+            headerShadowVisible: true
+          }} />
           <Stack.Screen
             name='Registro'
             options={{
@@ -118,10 +153,26 @@ const App = () => {
           />
 
           <Stack.Screen
+            name='Pedidos2'
+            options={{
+              title: 'Pedidos',
+            }}
+            component={Pedidos2}
+          />
+
+          <Stack.Screen
+            name='Cuenta'
+            options={{
+              title: 'Cuenta',
+            }}
+            component={Cuenta}
+          />    
+
+          <Stack.Screen
             name='InicioAds'
             options={{
               title: 'INICIO',
-              headerLeft: () => null,
+            
             }}
             component={InicioAds}
           />
@@ -172,7 +223,7 @@ const App = () => {
           <Stack.Screen
             name='Restaurante'
             options={{
-              title: 'SELECCIONAR',
+              title: 'Restaurantes',
             }}
             component={Restaurantes}
           />
@@ -211,6 +262,48 @@ const App = () => {
           />
 
         </Stack.Navigator>
+
+
+        {/* Footer navegation */}
+        {showFooter ? (
+        <View style={{height:55, marginBottom:12}} >
+           <NativeBaseProvider>
+            <Box flex={1} safeAreaY={2}  safeAreaX={5} width="80%"  alignSelf="center"  bg={coloresAIQ.blanco}  >
+              
+              <HStack bg={coloresAIQ.azulAIQ}  alignItems="center" shadow={6} borderRadius={25} >
+                <Pressable cursor="pointer"  py="3" flex={1} 
+                  onPress={() => {IrInicio()}}>
+                  <Center >
+                      <Icon  as={<Ionicons name={selected === 0 ? 'home' : 'home-outline'} />} color={ selected === 0 ? coloresAIQ.blanco : coloresAIQ.footerIcon} size="md" />
+                      <Text    color={ selected === 0 ? coloresAIQ.azulL : coloresAIQ.footerIcon} fontSize={12}>Inicio</Text>
+                  </Center>
+                </Pressable>
+                <Pressable cursor="pointer"  py="2" flex={1} onPress={() => {IrPedidos()}}>
+                  <Center>
+                      <Icon  as={<Entypo name="back-in-time" />} color={ selected === 1 ? coloresAIQ.azul : coloresAIQ.footerIcon} size="md" />
+                      <Text   color={ selected === 1 ? coloresAIQ.azul : coloresAIQ.footerIcon} fontSize={12}>Pedidos</Text>
+                  </Center>
+                </Pressable>
+                
+                {/* <Pressable cursor="pointer"  py="2" flex={1} onPress={() => {IrCarrito()} }>
+                  <Center>
+                      <Icon  as={<AntDesign name="shoppingcart"  />} color={ selected === 2 ? coloresAIQ.azul : coloresAIQ.footerIcon} size="md" />
+                      <Text color={ selected === 2 ? coloresAIQ.azul : coloresAIQ.footerIcon} fontSize={12}>Carrito</Text>
+                  </Center>
+                </Pressable> */}
+                <Pressable cursor="pointer"  py="2" flex={1} onPress={() => {IrCuenta()} }>
+                  <Center>
+                      <Icon  as={<MaterialCommunityIcons name={selected === 3 ? 'account' : 'account-outline'} />} 
+                      color={ selected === 3 ? coloresAIQ.azul : coloresAIQ.footerIcon} size="md" />
+                      <Text   color={ selected === 3 ? coloresAIQ.azul : coloresAIQ.footerIcon} fontSize={12}>Cuenta</Text>
+                  </Center>
+                </Pressable>
+              </HStack>
+            </Box>
+        </NativeBaseProvider>
+        </View>
+      ) : null}
+
       </NavigationContainer>
     </NativeBaseProvider>
   );}
