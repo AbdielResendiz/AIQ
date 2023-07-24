@@ -5,7 +5,7 @@ const { width, height } = Dimensions.get('window');
 
 const estilosAIQ = StyleSheet.create({
     textCategoriasSelect: {
-      color: coloresAIQ.azulOscuroAIQ,
+      color: coloresAIQ.azulAIQ,//coloresAIQ.azulOscuroAIQ,
       fontSize: 16,
       fontWeight: 'bold',
       textAlign: 'center',

@@ -73,7 +73,7 @@ const Producto = (props) => {
         {/* Nombre Producto y precio */}
         <Center p={4}>
             <NombreBox nombre={nomProd.toUpperCase()} color={coloresAIQ.negro}/>
-            <NombreBox nombre={`$${precio}`} color={coloresAIQ.azulOscuroAIQ}/>
+            <NombreBox nombre={`$${precio}`} color={coloresAIQ.azulAIQ                                            }/>
         </Center>
         {/* Descripcion y tiempo de producto */}
         <View paddingY={2} paddingX={8}>
@@ -102,7 +102,7 @@ const Producto = (props) => {
           <InfoProducto info={'Cantidad:'}/>
           <Flex direction={"row"} alignItems='flex-start'>
             <Button
-              bg={coloresAIQ.azulOscuroAIQ}
+              bg={coloresAIQ.azulAIQ}
               style={{...estilosAIQ.btnCantidadProd, 
                 borderTopLeftRadius: 8,
                 borderBottomLeftRadius: 8}}
@@ -118,7 +118,7 @@ const Producto = (props) => {
             <Text
               h={16}
               w={12}
-              bg={coloresAIQ.azulOscuroAIQ}
+              bg={coloresAIQ.azulAIQ}
               fontSize={"md"}
               style={{ textAlignVertical: "center", textAlign: "center" }}
               color={coloresAIQ.blanco}
@@ -126,7 +126,7 @@ const Producto = (props) => {
               {cantP}
             </Text>
             <Button
-              bg={coloresAIQ.azulOscuroAIQ}
+              bg={coloresAIQ.azulAIQ}
               style={{...estilosAIQ.btnCantidadProd, 
                 borderTopRightRadius: 8,
                 borderBottomRightRadius: 8}}

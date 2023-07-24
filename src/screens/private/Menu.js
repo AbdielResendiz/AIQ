@@ -260,7 +260,7 @@ const Menu = (props) => {
                             />
                             <Box m={2} style={{width: 0, flexGrow: 1, flex: 1}}>
                             {/* Nombre platillo */}
-                            <NombreBoxProd color={coloresAIQ.azulOscuroAIQ} nombre={item.nombre} />
+                            <NombreBoxProd color={coloresAIQ.negro} nombre={item.nombre} />
                             {/* Costo de platillo */}
                             <TextBoxProd dato={`Costo: $${item.precio}`} />
                             </Box>
@@ -293,7 +293,7 @@ const Menu = (props) => {
                             />
                             <Box m={2} style={{width: 0, flexGrow: 1, flex: 1}}>
                             {/* Nombre platillo */}
-                            <NombreBoxProd color={coloresAIQ.azulOscuroAIQ} nombre={item.nombre} />
+                            <NombreBoxProd color={coloresAIQ.negro} nombre={item.nombre} />
                             {/* Costo de platillo */}
                             <TextBoxProd dato={`Costo: $${item.precio}`} />
                             </Box>
@@ -332,7 +332,7 @@ const Menu = (props) => {
                               />
                               <Box m={2} style={{width: 0, flexGrow: 1, flex: 1}}>
                               {/* Nombre platillo */}
-                              <NombreBoxProd color={coloresAIQ.azulOscuroAIQ} nombre={item.nombre} />
+                              <NombreBoxProd color={coloresAIQ.negro} nombre={item.nombre} />
                               {/* Costo de platillo */}
                               <TextBoxProd dato={`Costo: $${item.precio}`} />
                               </Box>
@@ -366,7 +366,7 @@ const Menu = (props) => {
                               />
                               <Box m={2} style={{width: 0, flexGrow: 1, flex: 1}}>
                               {/* Nombre platillo */}
-                              <NombreBoxProd color={coloresAIQ.azulOscuroAIQ} nombre={item.nombre} />
+                              <NombreBoxProd color={coloresAIQ.negro} nombre={item.nombre} />
                               {/* Costo de platillo */}
                               <TextBoxProd dato={`Costo: $${item.precio}`} />
                               </Box>

@@ -6,6 +6,10 @@ const coloresAIQ = StyleSheet.create({
     azulAIQ: '#ACB115', //es el color verde 
     azul: '#ACB115', 
    // azulAIQ: '#0071CE', 
+    //Agrgados 
+    verdeoscuro: '#7c800f',
+    rojo: '#c90404',
+    //---
     azulOscuroAIQ: '#003764',
     azulBtn:'black', //'#0282EC', 
     blanco: 'white',
