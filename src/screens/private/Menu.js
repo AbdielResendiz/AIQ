@@ -153,7 +153,7 @@ const Menu = (props) => {
                       onPress={() => {
                         navCategoria('Alimentos')
                         }}>
-                      <Text style={estilosAIQ.textCategoriasSelect}>Productos</Text>
+                      <Text style={estilosAIQ.azulAIQ}>Productos</Text>
                   </TouchableOpacity>) : 
                   (null)}
                 {arrPlatillos.length > 0 ? 
