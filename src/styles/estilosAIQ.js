@@ -116,8 +116,8 @@ const estilosAIQ = StyleSheet.create({
     },
     btnCantidadProd: {
       borderRadius:0,
-      width: 64,
-      height: 64
+      width: 58,
+      height: 48
     },
     input: {
       padding: 14,

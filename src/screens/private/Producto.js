@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react'
-import { View, Text, Center, Image, ScrollView, Button, Box, Flex} from 'native-base'
+import { View, Text, Center, Image, ScrollView, Button, Box, Flex, Divider} from 'native-base'
 import {MaterialCommunityIcons, FontAwesome} from '@expo/vector-icons'
 import { urlImg } from '../../api/controlWS'
 import coloresAIQ from '../../styles/coloresAIQ'
@@ -76,8 +76,9 @@ const Producto = (props) => {
             <NombreBox nombre={`$${precio}`} color={coloresAIQ.azulAIQ                                            }/>
         </Center>
         {/* Descripcion y tiempo de producto */}
+        <Divider></Divider>
         <View paddingY={2} paddingX={8}>
-          <InfoProducto info={'Información del producto'}/>
+           {/* Descripcion y tiempo de producto <InfoProducto info={'Información del producto'}/>*/}
           <DetalleProducto detalle={desc}/>
           <View margin={2}/>
           <InfoProducto info={'Tiempo de entrega aproximado:'}/>
@@ -100,71 +101,81 @@ const Producto = (props) => {
         {/* Input spinner cantidad */}
         <Box w='50%' alignContent='center' marginLeft={8} marginTop={3}>
           <InfoProducto info={'Cantidad:'}/>
-          <Flex direction={"row"} alignItems='flex-start'>
+          <Flex direction={"row"} alignItems='flex-start' marginTop={3}>
             <Button
-              bg={coloresAIQ.azulAIQ}
+              bg={coloresAIQ.blanco}
               style={{...estilosAIQ.btnCantidadProd, 
-                borderTopLeftRadius: 8,
-                borderBottomLeftRadius: 8}}
+                borderTopLeftRadius: 30,
+                borderBottomLeftRadius: 30}}
               startIcon={
                 <FontAwesome
                   name='minus'
-                  color={coloresAIQ.blanco}
+                  color={coloresAIQ.negro}
                 />
               }
-              _pressed={{ bg: coloresAIQ.azulBtn}}
+              _pressed={{ bg: coloresAIQ.grisClaroAiq}}
               onPress={disminCarrito}
             />
             <Text
-              h={16}
-              w={12}
-              bg={coloresAIQ.azulAIQ}
+              h={12}
+              w={8}
+              bg={coloresAIQ.blanco}
               fontSize={"md"}
               style={{ textAlignVertical: "center", textAlign: "center" }}
-              color={coloresAIQ.blanco}
+              color={coloresAIQ.negro}
             >
               {cantP}
             </Text>
             <Button
-              bg={coloresAIQ.azulAIQ}
+              bg={coloresAIQ.blanco}
               style={{...estilosAIQ.btnCantidadProd, 
-                borderTopRightRadius: 8,
-                borderBottomRightRadius: 8}}
+                borderTopRightRadius: 30,
+                borderBottomRightRadius: 30}}
               endIcon={
                 <FontAwesome
                   name='plus'
-                  color={coloresAIQ.blanco}
+                  color={coloresAIQ.negro}
                 />
               }
-              _pressed={{ bg: coloresAIQ.azulBtn }}
+              _pressed={{ bg: coloresAIQ.grisClaroAiq }}
               onPress={upCarrito}
             />
-          </Flex>
-        </Box>
 
-        {/* btn AddCarrito */}
-        <Center marginY={4}>
-            <Button
+          <Button
                 leftIcon={<MaterialCommunityIcons
                     name='cart-plus'
-                    size={28}
+                    size={23}
                     color={coloresAIQ.blanco}/>}
                 bg={coloresAIQ.azulAIQ}
-                mt='3'
-                width={270}
-                height={70}
-                borderRadius={32}
+                mt='0'
+                mx={5}
+                mb=''
+                width={160}
+                height={49}
+                borderRadius={30}
+               
                 onPress={() => {enviaDatos(comentario, precio, idRes, cantP, idComida)}}
                 _pressed={{
-                    bg: coloresAIQ.azulBtn}}>
+                    bg: coloresAIQ.grisClaroAiq}}>
                 <Text
                     color={coloresAIQ.blanco}
                     fontSize='lg'
                     fontFamily='body'>
-                    Agregar producto
+                    Agregar
                 </Text>
             </Button>
-        </Center>
+
+
+
+          </Flex>
+
+         
+
+
+        </Box>
+
+        {/* btn AddCarrito */}
+       
     </ScrollView>
   )
 }

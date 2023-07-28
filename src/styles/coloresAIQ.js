@@ -11,7 +11,7 @@ const coloresAIQ = StyleSheet.create({
     rojo: '#c90404',
     //---
     azulOscuroAIQ: '#003764',
-    azulBtn:'black', //'#0282EC', 
+    azulBtn:'#a3a3a3                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              ', //'#0282EC', 
     blanco: 'white',
     negro: 'black',
     grisClaroAiq: '#a3a3a3',

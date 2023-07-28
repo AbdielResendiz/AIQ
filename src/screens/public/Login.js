@@ -30,11 +30,11 @@ const Login = (props) => {
 	const demoServiciosAxios = async () => {	
 		setCargando(true);
         var data = new FormData()
-        data.append('nombre',usuario)
+        data.append('descripcion',usuario)
         data.append('password',contrasena)
           
         //conexion con wb login
-        await fetch('https://appaiq.com/Mesas/existsMesa/', {
+        await fetch('http://persianasdecorsilv.com/speedyeats/Mesas/existsMesa/', {
                 method: 'post',
                   body: data,
                   
@@ -42,6 +42,7 @@ const Login = (props) => {
         .then((response) => response.json())
         .then((result) => {
             var acceso = result.res
+            console.log("user:", result.user.id_mesa);
             //validando mesa y contraseña
             if (usuario.length == 0) {
                 setValidoC(true);
@@ -61,20 +62,18 @@ const Login = (props) => {
                 //datos login correctos
                 if (acceso === true) {
                     //navegacion inicioAds
-                    props.navigation.navigate('InicioAds')
                     //guarda sesion localStorage
-                    //const idMesa = result.user.id_mesa;
-                    //const idZona = result.user.zona;
-                    const idMesa = 1
-                    const idZona = 1
+                  //  const idMesa = result.user.id_mesa;
+                   
+                  //const idZona = result.user.zona;
+                   //const idMesa = 2
+                   //const idZona = 2
                     AsyncStorage.setItem(
-                        'ID_MESA',
-                        JSON.stringify(idMesa),
+                        'idUser',
+                        JSON.stringify(result.user.id_mesa),
                     );
-                    AsyncStorage.setItem(
-                        'ID_ZONA',
-                        JSON.stringify(idZona),
-                    );
+                    props.navigation.navigate('InicioAds');
+              
                 }
                 //datos login incorrectos
                 else {
@@ -102,20 +101,21 @@ const Login = (props) => {
             }
         })
         .catch((ex) => {
-            Alert.alert('ERROR', ex.toString());
+            Alert.alert('ERROR!', ' Correo o contraseña incorrecto');
         });
         setCargando(false)
+
 	}; //fin demoServiciosAxios
 
     const loginUWU = async()=> {
         const idMesa = 1;
         const idZona = 1;
         await AsyncStorage.setItem(
-            'ID_MESA',
+            'descripcion',
             JSON.stringify(idMesa),
         );
         await AsyncStorage.setItem(
-            'ID_ZONA',
+            'password',
             JSON.stringify(idZona),
         );
         props.navigation.navigate('InicioAds');
@@ -230,7 +230,7 @@ const Login = (props) => {
                 height={16}
                 borderRadius={32}
                 onPress={()=>{
-                    loginUWU();
+                    demoServiciosAxios();
                     //demoServiciosAxios();
                     // validarDatos();
                 }}

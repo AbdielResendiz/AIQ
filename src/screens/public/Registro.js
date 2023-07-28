@@ -15,6 +15,7 @@ const Registro = (props) => {
 	const [usuario, setUsuario] = useState('');
     const borraUser = () => setUsuario('');
 	const [contrasena, setContrasena] = useState('');
+    const [correo, setCorreo] = useState('');
     const [contrasena2, setContrasena2] = useState('');
     //show/hide pass
 	const [show, setShow] = useState(false);
@@ -32,100 +33,67 @@ const Registro = (props) => {
     const cambioP2 = () => setValidoP2(false);
 
     //funcion login
-	const demoServiciosAxios = async () => {	
-		setCargando(true);
-        var data = new FormData()
-        data.append('nombre',usuario)
-        data.append('password',contrasena)
-          
-        //conexion con wb login
-        await fetch('https://appaiq.com/Mesas/existsMesa/', {
+	const demoServiciosAxios = async () => {
+        setCargando(true);
+        
+        // Validar que los campos no estén vacíos
+        if (nombre.length === 0 || usuario.length === 0 || contrasena.length === 0) {
+            toast.show({
+                status: 'warning',
+                description: 'Por favor, completa todos los campos.',
+                placement: 'top',
+            });
+            setCargando(false);
+            return;
+        }
+        
+        var data = new FormData();
+        data.append('nombre', nombre);
+        data.append('descripcion', usuario);
+        data.append('password', contrasena);
+        
+        try {
+            const response = await fetch('http://persianasdecorsilv.com/speedyeats/Mesas/addMesa', {
                 method: 'post',
-                  body: data,
-                  
-        })
-        .then((response) => response.json())
-        .then((result) => {
-            var acceso = result.res
-            //validando mesa y contraseña
-            if (usuario.length == 0) {
-                setValidoC(true);
-                setUsuario('');
-                return;
-            }
-
-            if (contrasena.length == 0) {
-                setValidoP(true);
-                setContrasena('');
-                return;
-            }
-
-		    setCargando(true);
-
-            try {
-                //datos login correctos
-                if (acceso === true) {
-                    //navegacion inicioAds
-                    props.navigation.navigate('InicioAds');
-                    //guarda sesion localStorage
-                    //const idMesa = result.user.id_mesa;
-                    //const idZona = result.user.zona;
-                    const idMesa = 1;
-                    const idZona = 1;
-                    AsyncStorage.setItem(
-                        'ID_MESA',
-                        JSON.stringify(idMesa),
-                    );
-                    AsyncStorage.setItem(
-                        'ID_ZONA',
-                        JSON.stringify(idZona),
-                    );
-                }
-                //datos login incorrectos
-                else {
-                    toast.show({
-                        status: 'warning',
-                        description: "Mesa o contraseña erroneo",
-                        placement: 'top',
-                    });
-                
-                }
-                setUsuario('');
-                setContrasena('');
-                setCargando(false);
-            
-            //error en la conexion
-            } catch (e) {			
+                body: data,
+            });
+    
+            const result = await response.json();
+    
+            if (result.res === true) {
+                // Registro exitoso
                 toast.show({
-                    status: 'warning',
-                    description: "Error, favor de intentarlo más tarde",
+                    status: 'success',
+                    description: 'Registro exitoso.',
                     placement: 'top',
                 });
+    
+                // Limpia los campos después del registro exitoso
+                setNombre('');
                 setUsuario('');
                 setContrasena('');
-                setCargando(false);
+            } else {
+                // Registro fallido
+                toast.show({
+                    status: 'warning',
+                    description: 'Error al registrar. Mesa o contraseña incorrecto.',
+                    placement: 'top',
+                });
             }
-        })
-        .catch((ex) => {
-            Alert.alert('ERROR', ex.toString());
-        });
-        setCargando(false)
-	}; //fin demoServiciosAxios
+        } catch (error) {
+            // Error en la conexión
+            toast.show({
+                status: 'warning',
+                description: 'Error de conexión. Por favor, intenta nuevamente más tarde.',
+                placement: 'top',
+            });
+        }
+    
+        setCargando(false);
+    };
+     //fin demoServiciosAxios
 
-    const loginUWU = async()=> {
-        const idMesa = 1;
-        const idZona = 1;
-        await AsyncStorage.setItem(
-            'ID_MESA',
-            JSON.stringify(idMesa),
-        );
-        await AsyncStorage.setItem(
-            'ID_ZONA',
-            JSON.stringify(idZona),
-        );
-        props.navigation.navigate('InicioAds');
-    }
-
+   
   return (
     <>
     {cargando ? <ProcesandoAir /> : null}
@@ -165,6 +133,48 @@ const Registro = (props) => {
                                 />
                             </Button>
                         )}
+                        value={correo}
+                        onChangeText={(val) =>
+                            setCorreo(val)
+                        }
+                        onChange={cambioC}
+                    />
+                    <FormControl.ErrorMessage>
+                        Ingresa una mesa valida.
+                    </FormControl.ErrorMessage>
+                </Stack>
+            </FormControl>
+            
+            <FormControl isInvalid={validoC}>
+                <Stack>
+                    <TituloInput titulo={'NOMBRE'} />
+                    <Input
+                        fontSize={14}
+                        height={12}
+                        rounded={12}
+                        variant='outline'
+                        placeholder='Nombre'
+                        fontFamily='body'
+                        keyboardType='default'
+                        autoCapitalize='none'
+                        autoCorrect={false}
+                        InputRightElement={(
+                            <Button
+                            ml={1}
+                            variant='link'
+                            roundedLeft={0}
+                            roundedRight='md'
+                            onPress={borraUser}
+                            _pressed={{
+                                bg: coloresAIQ.grisClaroAiq,
+                            }}>
+                                <MaterialIcons
+                                    name='cancel'
+                                    size={20}
+                                    color={coloresAIQ.grisOscuroAIQ}
+                                />
+                            </Button>
+                        )}
                         value={usuario}
                         onChangeText={(val) =>
                             setUsuario(val)
@@ -176,7 +186,9 @@ const Registro = (props) => {
                     </FormControl.ErrorMessage>
                 </Stack>
             </FormControl>
-            
+
+
+
             {/* Input Password */}
             <FormControl isInvalid={validoP}>
                 <Stack>
@@ -283,8 +295,8 @@ const Registro = (props) => {
                 height={16}
                 borderRadius={32}
                 onPress={()=>{
-                    loginUWU();
-                    //demoServiciosAxios();
+                    //loginUWU();
+                    demoServiciosAxios();
                     // validarDatos();
                 }}
                 _pressed={{
@@ -345,5 +357,4 @@ const Registro = (props) => {
     </>
   )
 }
-
 export default Registro
