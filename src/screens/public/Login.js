@@ -227,7 +227,7 @@ const Login = (props) => {
                 bg={coloresAIQ.azulAIQ}
                 mt={10}
                 mb={2}
-                height={16}
+                height={12}
                 borderRadius={32}
                 onPress={()=>{
                     demoServiciosAxios();
@@ -248,7 +248,7 @@ const Login = (props) => {
                 bg={coloresAIQ.azulAIQ}
                 mt={4}
                 mb={5}
-                height={16}
+                height={12}
                 borderRadius={32}
                 onPress={()=>{
                     props.navigation.navigate('Registro');
@@ -271,7 +271,7 @@ const Login = (props) => {
                 mb={5}
                 borderWidth={1}
                 borderColor={coloresAIQ.azulAIQ}
-                height={16}
+                height={12}
                 borderRadius={32}
                 onPress={()=>{
                     props.navigation.navigate('Restaurante')

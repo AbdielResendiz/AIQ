@@ -6,17 +6,19 @@ import { Alert } from 'react-native';
 import ProcesandoAir from '../components/ProcesandoAir';
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import Logo from '../components/Logo';
-import {Indicaciones, TituloInput} from '../components/Textos';
+import {Indicaciones, TituloInput,color} from '../components/Textos';
 
 const Registro = (props) => {
     //aviso mesa o contra erroneos
     const toast = useToast();
     //datos mesa
-	const [usuario, setUsuario] = useState('');
+	
     const borraUser = () => setUsuario('');
-	const [contrasena, setContrasena] = useState('');
-    const [correo, setCorreo] = useState('');
+    const [usuario, setUsuario] = useState('');
+    const [nombre, setNombre] = useState('');
+    const [contrasena, setContrasena] = useState('');
     const [contrasena2, setContrasena2] = useState('');
+    const [zona_mesas, setZona] = useState('');
     //show/hide pass
 	const [show, setShow] = useState(false);
     const [show2, setShow2] = useState(false);
@@ -28,60 +30,72 @@ const Registro = (props) => {
 	const [validoC, setValidoC] = useState(false);
 	const [validoP, setValidoP] = useState(false);
     const [validoP2, setValidoP2] = useState(false);
+    const [validoP3, setValidoP3] = useState(false);
 	const cambioC = () => setValidoC(false);
 	const cambioP = () => setValidoP(false);
     const cambioP2 = () => setValidoP2(false);
+    const cambioP3 = () => setValidoP3(false);
 
     //funcion login
-	const demoServiciosAxios = async () => {
-        setCargando(true);
-        
-        // Validar que los campos no estén vacíos
-        if (nombre.length === 0 || usuario.length === 0 || contrasena.length === 0) {
+	
+    const demoServiciosAxios = async () => {
+        if (nombre.length === 0 || usuario.length === 0  || contrasena.length === 0 ) {
             toast.show({
                 status: 'warning',
                 description: 'Por favor, completa todos los campos.',
                 placement: 'top',
             });
-            setCargando(false);
             return;
         }
-        
-        var data = new FormData();
-        data.append('nombre', nombre);
-        data.append('descripcion', usuario);
-        data.append('password', contrasena);
-        
+    
+        setCargando(true);
+    
         try {
-            const response = await fetch('http://persianasdecorsilv.com/speedyeats/Mesas/addMesa', {
+            const data = new FormData();
+            data.append('nombre_mesa', nombre);
+            data.append('descripcion_mesas', usuario);
+            data.append('password_mesas', contrasena);
+            data.append('zona_mesas', zona_mesas);
+            console.log('ZONA MESA', zona_mesas);
+            console.log('NOMBRE', nombre);
+            console.log('USUARIO', usuario);
+            
+            //console.log('PASSWORD', contrasena);
+            const response = await fetch('http://persianasdecorsilv.com/speedyeats/Mesas/addMesa/', {
                 method: 'post',
                 body: data,
+
+
+               
             });
-    
+          
             const result = await response.json();
-    
-            if (result.res === true) {
+            const acceso = result.res;
+
+            console.log(result);
+            if (acceso === true) {
                 // Registro exitoso
+               // AsyncStorage.setItem('idUser', JSON.stringify(result.user.id_mesa));
+                props.navigation.navigate('InicioAds');
+    
                 toast.show({
                     status: 'success',
                     description: 'Registro exitoso.',
                     placement: 'top',
                 });
-    
-                // Limpia los campos después del registro exitoso
-                setNombre('');
-                setUsuario('');
-                setContrasena('');
             } else {
-                // Registro fallido
+                // Datos de inicio de sesión incorrectos
                 toast.show({
                     status: 'warning',
-                    description: 'Error al registrar. Mesa o contraseña incorrecto.',
+                    description: 'ups! intentalo de nuevo',
                     placement: 'top',
                 });
             }
+    
+           
         } catch (error) {
-            // Error en la conexión
+            // Error en la conexión o procesamiento de la respuesta
+            console.log(error);
             toast.show({
                 status: 'warning',
                 description: 'Error de conexión. Por favor, intenta nuevamente más tarde.',
@@ -91,8 +105,7 @@ const Registro = (props) => {
     
         setCargando(false);
     };
-     //fin demoServiciosAxios
-
+    
    
   return (
     <>
@@ -133,14 +146,14 @@ const Registro = (props) => {
                                 />
                             </Button>
                         )}
-                        value={correo}
+                        value={usuario}
                         onChangeText={(val) =>
-                            setCorreo(val)
+                            setUsuario(val)
                         }
                         onChange={cambioC}
                     />
                     <FormControl.ErrorMessage>
-                        Ingresa una mesa valida.
+                        Ingresa un correo valido bro
                     </FormControl.ErrorMessage>
                 </Stack>
             </FormControl>
@@ -175,25 +188,24 @@ const Registro = (props) => {
                                 />
                             </Button>
                         )}
-                        value={usuario}
+                        value={nombre}
                         onChangeText={(val) =>
-                            setUsuario(val)
+                            setNombre(val)
                         }
                         onChange={cambioC}
                     />
                     <FormControl.ErrorMessage>
-                        Ingresa una mesa valida.
+                        Ingresa tu nombre
                     </FormControl.ErrorMessage>
                 </Stack>
             </FormControl>
-
-
-
             {/* Input Password */}
             <FormControl isInvalid={validoP}>
                 <Stack>
-                    <TituloInput titulo={'CONTRASEÑA'} />
+                    <TituloInput titulo={'CONTRASEÑA'} color={coloresAIQ.negro} />
                     <Input fontSize={12}
+                        borderColor={coloresAIQ.azulAIQ}
+                      
                         height={10}
                         rounded={12}
                         fontFamily='body'
@@ -206,6 +218,7 @@ const Registro = (props) => {
                                 variant='link'
                                 roundedLeft={0}
                                 roundedRight='md'
+                                background={coloresAIQ.azulAIQ}
                                 onPress={handleClick}
                                 _pressed={{
                                     bg: coloresAIQ.grisClaroAiq,
@@ -238,10 +251,62 @@ const Registro = (props) => {
                 </Stack>
             </FormControl>
 
-             {/* Input Password */}
-             <FormControl isInvalid={validoP2}>
+           {/* Input confirmar Password */}
+           <FormControl isInvalid={validoP}>
                 <Stack>
-                    <TituloInput titulo={'CONFIRMA CONTRASEÑA'} />
+                    <TituloInput style={coloresAIQ.negro} titulo={'CONFIRMA TU CONTRASEÑA'} />
+                    <Input fontSize={12}
+                        height={10}
+                        rounded={12}
+                        fontFamily='body'
+                        type={
+                            show ? 'text' : 'password'
+                        }
+                        InputRightElement={
+                            <Button
+                                ml={1}
+                                variant='link'
+                                roundedLeft={0}
+                                roundedRight='md'
+                                onPress={handleClick}
+                                _pressed={{
+                                    bg: coloresAIQ.grisClaroAiq,
+                                }}>
+                                {show ? (
+                                    <FontAwesome
+                                        name='eye-slash'
+                                        size={20}
+                                        color={coloresAIQ.grisOscuroAIQ}
+                                    />
+                                ) : (
+                                    <FontAwesome
+                                        name='eye'
+                                        size={20}
+                                        color={coloresAIQ.grisOscuroAIQ}
+                                    />
+                                )}
+                            </Button>
+                        }
+                        placeholder='Confirma contraseña'
+                        value={contrasena2}
+                        onChangeText={(val) =>
+                            setContrasena2(val)
+                        }
+                        onChange={cambioP}
+                    />
+                    <FormControl.ErrorMessage>
+                        Ingresa una contraseña valida.
+                    </FormControl.ErrorMessage>
+                </Stack>
+            </FormControl>
+
+
+
+
+             {/* Input 
+             <FormControl isInvalid={validoP3}>
+                <Stack>
+                    <TituloInput titulo={'ZONA'} />
                     <Input fontSize={12}
                         height={10}
                         rounded={12}
@@ -275,49 +340,31 @@ const Registro = (props) => {
                             </Button>
                         }
                         placeholder='Confirma Contraseña'
-                        value={contrasena2}
+                        value={zona_mesas}
                         onChangeText={(val) =>
-                            setContrasena2(val)
+                            setZona(val)
                         }
-                        onChange={cambioP2}
+                        onChange={cambioP3}
                     />
                     <FormControl.ErrorMessage>
-                        Ingresa una contraseña valida.
+                        Ingresa una zona valida.
                     </FormControl.ErrorMessage>
                 </Stack>
             </FormControl>
 
+            Password */}
             {/* Boton Vincular */}
-            <Button
-                bg={coloresAIQ.azulAIQ}
-                mt={10}
-                mb={2}
-                height={16}
-                borderRadius={32}
-                onPress={()=>{
-                    //loginUWU();
-                    demoServiciosAxios();
-                    // validarDatos();
-                }}
-                _pressed={{
-                    bg: coloresAIQ.azulBtn}}>
-                <Text
-                    color={coloresAIQ.blanco}
-                    fontSize='lg'
-                    fontFamily='body'>
-                    Iniciar sesión
-                </Text>
-            </Button>
+          
 
             <Button
                 bg={coloresAIQ.azulAIQ}
-                mt={4}
+                mt={10}
                 mb={5}
-                height={16}
+                height={12}
                 borderRadius={32}
                 onPress={()=>{
-                    props.navigation.navigate('Registro')
-                    //demoServiciosAxios();
+                   
+                    demoServiciosAxios();
                     // validarDatos();
                 }}
                 _pressed={{
@@ -326,32 +373,11 @@ const Registro = (props) => {
                     color={coloresAIQ.blanco} 
                     fontSize='lg'
                     fontFamily='body'>
-                    Registro
+                    Registrarse
                 </Text>
             </Button>
 
-            <Button
-                bg={coloresAIQ.blanco}
-                mt={4} bold
-                mb={5}
-                borderWidth={1}
-                borderColor={coloresAIQ.azulAIQ}
-                height={16}
-                borderRadius={32}
-                onPress={()=>{
-                    props.navigation.navigate('Registro')
-                    //demoServiciosAxios();
-                    // validarDatos();
-                }}
-                _pressed={{
-                    bg: coloresAIQ.azulBtn}}>
-                <Text
-                    color={coloresAIQ.azulAIQ}
-                    fontSize='lg'
-                    fontFamily='body'>
-                    Invitado
-                </Text>
-            </Button>
+           
 
         </ScrollView>
     </>
