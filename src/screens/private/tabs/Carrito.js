@@ -128,7 +128,7 @@ const Carrito = (props) => {
                   />
                   <Box m={2} style={{width: 0, flexGrow: 1, flex: 1}}>
                     {/* Nombre platillo */}
-                    <NombreBoxProd color={coloresAIQ.azulOscuroAIQ} nombre={item.nombre} />
+                    <NombreBoxProd color={coloresAIQ.negro} nombre={item.nombre} />
                     {/* Costo de platillo */}
                     <TextBoxProd dato={`Costo: $${item.precio}`}/>
                     {/* Cantidad */}
@@ -142,7 +142,7 @@ const Carrito = (props) => {
                     onPress={() => {
                       deleteItem(item.id_comida)
                       }}>
-                    <MaterialCommunityIcons name="delete-empty-outline" size={50} color={coloresAIQ.azulOscuroAIQ}/>
+                    <MaterialCommunityIcons name="trash-can-outline" size={50} color={coloresAIQ.rojo}/>
                   </TouchableOpacity>
                 </Flex>
               </Box>)
@@ -154,7 +154,7 @@ const Carrito = (props) => {
               paddingTop={3}
               fontSize={26}
               fontFamily='heading'
-              colorScheme={coloresAIQ.negro}>
+              colorScheme={coloresAIQ.azulAIQ}>
               Total: ${total}
             </Text>
           </Center>

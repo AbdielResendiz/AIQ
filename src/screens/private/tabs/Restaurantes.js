@@ -143,9 +143,9 @@ const Restaurantes = (props) => {
                             alt={item.nombre}
                             style={estilosAIQ.imagenAnuncios} />
                           <Center
-                            bg={coloresAIQ.azulOscuroAIQ}
+                            bg={coloresAIQ.azulAIQ}
                             _text={{
-                              color: coloresAIQ.blanco,
+                              color: coloresAIQ.negro,
                               fontWeight: '700',
                               fontSize: 'xl',
                             }}

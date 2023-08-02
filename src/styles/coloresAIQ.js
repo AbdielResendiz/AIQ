@@ -3,11 +3,15 @@ import { StyleSheet } from "react-native"
 const coloresAIQ = StyleSheet.create({
     //azulClaroAIQ: "#00ACC8", 
     azulClaroAIQ: "#ACB115", 
-    azulAIQ: '#ACB115', 
+    azulAIQ: '#ACB115', //es el color verde 
     azul: '#ACB115', 
    // azulAIQ: '#0071CE', 
+    //Agrgados 
+    verdeoscuro: '#7c800f',
+    rojo: '#c90404',
+    //---
     azulOscuroAIQ: '#003764',
-    azulBtn: '#0282EC',
+    azulBtn:'#a3a3a3                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              ', //'#0282EC', 
     blanco: 'white',
     negro: 'black',
     grisClaroAiq: '#a3a3a3',

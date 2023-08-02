@@ -5,7 +5,7 @@ const { width, height } = Dimensions.get('window');
 
 const estilosAIQ = StyleSheet.create({
     textCategoriasSelect: {
-      color: coloresAIQ.azulOscuroAIQ,
+      color: coloresAIQ.azulAIQ,//coloresAIQ.azulOscuroAIQ,
       fontSize: 16,
       fontWeight: 'bold',
       textAlign: 'center',
@@ -116,8 +116,8 @@ const estilosAIQ = StyleSheet.create({
     },
     btnCantidadProd: {
       borderRadius:0,
-      width: 64,
-      height: 64
+      width: 58,
+      height: 48
     },
     input: {
       padding: 14,
