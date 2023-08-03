@@ -12,9 +12,9 @@ const Login = (props) => {
     //aviso mesa o contra erroneos
     const toast = useToast();
     //datos mesa
-	const [usuario, setUsuario] = useState('');
+	const [usuario, setUsuario] = useState('1234');
     const borraUser = () => setUsuario('');
-	const [contrasena, setContrasena] = useState('');
+	const [contrasena, setContrasena] = useState('1234');
     //show/hide pass
 	const [show, setShow] = useState(false);
 	const handleClick = () => setShow(!show);
@@ -43,6 +43,9 @@ const Login = (props) => {
         .then((result) => {
             var acceso = result.res
             console.log("user:", result.user.id_mesa);
+            console.log("nombree:", result.user.nombre);
+            console.log("correo:", result.user.descripcion);
+            
             //validando mesa y contraseña
             if (usuario.length == 0) {
                 setValidoC(true);
@@ -66,8 +69,8 @@ const Login = (props) => {
                   //  const idMesa = result.user.id_mesa;
                    
                   //const idZona = result.user.zona;
-                   //const idMesa = 2
-                   //const idZona = 2
+                   //const idMesa = 60
+                   
                     AsyncStorage.setItem(
                         'idUser',
                         JSON.stringify(result.user.id_mesa),
@@ -108,8 +111,8 @@ const Login = (props) => {
 	}; //fin demoServiciosAxios
 
     const loginUWU = async()=> {
-        const idMesa = 1;
-        const idZona = 1;
+        //const idMesa = 1;
+        //const idZona = 1;
         await AsyncStorage.setItem(
             'descripcion',
             JSON.stringify(idMesa),
@@ -235,7 +238,7 @@ const Login = (props) => {
                     // validarDatos();
                 }}
                 _pressed={{
-                    bg: coloresAIQ.azulBtn}}>
+                    bg: coloresAIQ.azulAIQ}}>
                 <Text
                     color={coloresAIQ.blanco}
                     fontSize='lg'

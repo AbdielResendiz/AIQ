@@ -145,7 +145,7 @@ const Restaurantes = (props) => {
                           <Center
                             bg={coloresAIQ.azulAIQ}
                             _text={{
-                              color: coloresAIQ.negro,
+                              color: coloresAIQ.blanco,
                               fontWeight: '700',
                               fontSize: 'xl',
                             }}
