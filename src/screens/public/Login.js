@@ -34,7 +34,7 @@ const Login = (props) => {
         data.append('password',contrasena)
           
         //conexion con wb login
-        await fetch('http://persianasdecorsilv.com/speedyeats/Mesas/existsMesa/', {
+        await fetch('https://speedyeats.app/Mesas/existsMesa/', {
                 method: 'post',
                   body: data,
                   
@@ -73,7 +73,7 @@ const Login = (props) => {
                    
                     AsyncStorage.setItem(
                         'idUser',
-                        JSON.stringify(result.user.id_mesa),
+                        (result.user.id_mesa),
                     );
                     props.navigation.navigate('InicioAds');
               

@@ -61,7 +61,7 @@ const Registro = (props) => {
             console.log('USUARIO', usuario);
             
             //console.log('PASSWORD', contrasena);
-            const response = await fetch('http://persianasdecorsilv.com/speedyeats/Mesas/addMesa/', {
+            const response = await fetch('https://speedyeats.app/Mesas/addMesa/', {
                 method: 'post',
                 body: data,
 
