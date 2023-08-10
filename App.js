@@ -39,6 +39,7 @@ import ConfirmarPedido from './src/screens/private/ConfirmarPedido';
 import coloresAIQ from './src/styles/coloresAIQ';
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import Perfil from './src/screens/private/Perfil';
+import Direcciones from './src/screens/private/Direcciones';
 const Stack = createStackNavigator();
 
 const App = () => {
@@ -116,7 +117,11 @@ const App = () => {
     setSelected(4)
     navigationRef.navigate('Cuenta');
   };
-  
+
+  const IrDirecciones = () => {
+    setSelected(4)
+    navigationRef.navigate('Direcciones');
+  };
   return (
     <NativeBaseProvider theme={theme}>
       <StatusBar
@@ -174,6 +179,13 @@ const App = () => {
               title: 'Perfil',
             }}
             component={Perfil}
+          />    
+           <Stack.Screen
+            name='Direcciones'
+            options={{
+              title: 'Direcciones',
+            }}
+            component={Direcciones}
           />    
 
           <Stack.Screen
@@ -292,6 +304,14 @@ const App = () => {
                       <Text   color={ selected === 1 ? coloresAIQ.azul : coloresAIQ.footerIcon} fontSize={12}>Pedidos</Text>
                   </Center>
                 </Pressable>
+                <Pressable cursor="pointer"  py="2" flex={1} onPress={() => {IrDirecciones()}}>
+                  <Center>
+                      <Icon  as={<Entypo name="back-in-time" />} color={ selected === 1 ? coloresAIQ.azul : coloresAIQ.footerIcon} size="md" />
+                      <Text   color={ selected === 1 ? coloresAIQ.azul : coloresAIQ.footerIcon} fontSize={12}>Direcciones</Text>
+                  </Center>
+                </Pressable>
+                
+                
                 
                 {/* <Pressable cursor="pointer"  py="2" flex={1} onPress={() => {IrCarrito()} }>
                   <Center>

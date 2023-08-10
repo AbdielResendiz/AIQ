@@ -5,12 +5,14 @@ import Loader from "../components/Loader";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import fetchPost from "./fetchPost";
 import coloresAIQ from "../../styles/coloresAIQ";
+import { Alert } from "react-native";
 
 export default function Perfil(props) {
   const [show, setShow] = useState(false);
   const [ loading, setLoading ] = useState(true);
   //const [ idMesa, setIdMesa ] = useState(true);
   const [nombre, setNombre] = useState("");
+  const [zona, setZona] = useState("");
   const handleNombre = (value) => {
     setNombre(value);
   };
@@ -25,7 +27,7 @@ export default function Perfil(props) {
     try {
       const value = await AsyncStorage.getItem('idUser')
       if(value !== null) {
-        console.log("valor id getData", value)
+        console.log("valor id getData", parseInt(value))
         setIdUser(value);
         getDatos(value);
         
@@ -43,31 +45,36 @@ export default function Perfil(props) {
   //get datos
   const getDatos = async(value) => {
     const dataUser = new FormData();
-    dataUser.append("id_mesa",value)
-    const url = `https://speedyeats.app/Mesas/infoUsu/`
+    dataUser.append("id_mesa", value)
+    const url = `https://speedyeats.app/Mesas/infoUsu/`;
     const options = {
       method:'POST',
       body: dataUser
     };
     const res = await fetchPost(url, options);
-    console.log("res:", res)
-  //  console.log("res.data.nombre", res.mesas.nombre);
-    //console.log("user:", res.mesas.id_mesa);
-   // setApellidos(res.data.apellidos);
-  //  setNombre(res.mesas.nombre);
-    //setCorreo(res.mesas.descripcion);
-    //setCelular(res.data.telefono);
-    //setSelected( res.data.nombre);
+    console.log("idmesa paserint", parseInt(value))
+    console.log("idmesa normal", value)
+    console.log("idmesa tipo", typeof(value))
+
+    console.log("res getDatos :", res)
+  //console.log("res.data.nombre", res.mesas.nombre);s
+  //console.log("user:", res.mesas.id_mesa);
+  //setApellidos(res.data.apellidos);
+ //setCorreo(res.data.descripcion);
+  //setCorreo(res.data.zona);
+ // setCorreo(res.data.nombre);
+  
+  //setCelular(res.data.telefono);
+  //setSelected( res.data.nombre);
    
     setLoading(false);
 }
 
-  const DatosRender=()=>{
-    if (nombre !== ""){
-      setLoading(false)
-    }setLoading(true)
-  }
 
+
+
+
+  
 
   const [ actualizando, setActualizando] = useState(false);
     //ACTUALIZA DATOS
@@ -85,12 +92,12 @@ export default function Perfil(props) {
             }else{
   
           const dataNew = new FormData();
-          dataNew.append("nombre_mesa", nombre);
-          dataNew.append("descripcion_mesas", descripcion);
+          dataNew.append('nombre', nombre);
+          dataNew.append('descripcion', correo);
          // dataNew.append("password_mesas", );
-          dataNew.append("id_mesa", idUser);
+          dataNew.append('id_mesa', idUser);
   
-          const url = `http://persianasdecorsilv.com/speedyeats/Mesas/updateMesa`
+          const url = `https://speedyeats.app/Mesas/updateMesa`
           const options ={
             method:'POST',
             body: dataNew
@@ -144,8 +151,8 @@ export default function Perfil(props) {
 
     const borrarCuenta = async()=>{
       const dataUser= new FormData();
-      dataUser.append("id_mesa", idUser);
-      const url = `${BASE_URL}http://persianasdecorsilv.com/speedyeats/Mesas/deleteMesa`
+      dataUser.append('id_mesa', idUser);
+      const url = `${BASE_URL}https://speedyeats.app/Mesas/deleteMesa`
       const options = {
         method:'POST',
         body: dataUser
@@ -202,18 +209,31 @@ export default function Perfil(props) {
             value={correo} isreadOnly={true} size="lg"
             InputLeftElement={<Icon as={<Ionicons name="mail" />} size={8} ml={2} mr={3} color={coloresAIQ.azulAIQ} />}  />
 
-            <Button size="lg"   w="50%" colorScheme="secondary"  isLoading={actualizando} isLoadingText="Guardando" onPress={()=>Actualizar()}> Guardar</Button>
-
-            {/*<Button size="lg"   onPress={()=>props.navigation.navigate("Password", { IdU: idUser })} w="50%"> Cambiar contraseña</Button>
-*/}
-
-            {/* eliminar cuenta */}
-            <Pressable w="90%" mx="5%" flexDirection={"row"} my={5} onPress={()=> borrarAviso()}>
-                <Icon as={AntDesign} name="deleteuser" mx={2} mt={1} size="lg"  color="black"  />
-                <Text bold   ml={2} fontSize="xl">Eliminar cuenta</Text>
-            </Pressable>
           
-    
+           
+
+           {/* <Button size="lg"   w="50%" color={coloresAIQ.azulAIQ}  isLoading={actualizando} isLoadingText="Guardando" onPress={()=>Actualizar()}> Guardar</Button>
+
+           *<Button size="lg"   color={coloresAIQ.azulAIQ} onPress={()=>props.navigation.navigate("Password", { IdU: idUser })} w="50%"> Cambiar contraseña</Button> */
+
+           } 
+
+       <Button  bg={coloresAIQ.blanco}   width={200} bold mb={1} borderWidth={1} borderColor={coloresAIQ.azulAIQ} height={12} borderRadius={32} isLoading={actualizando} isLoadingText="Guardando" 
+         onPress={()=>Actualizar()} _pressed={{
+         bg: coloresAIQ.azulAIQ}}>
+         <Text color={coloresAIQ.azulAIQ} fontSize='lg'  fontFamily='body'> Guardar</Text>
+      </Button>
+
+      <Button  bg={coloresAIQ.blanco}    width={200} bold mb={4} borderWidth={1} borderColor={coloresAIQ.azulAIQ} height={12} borderRadius={32} onPress={()=>props.navigation.navigate("Password", { IdU: idUser })} _pressed={{
+         bg: coloresAIQ.azulAIQ}}>
+         <Text color={coloresAIQ.azulAIQ} fontSize='lg' fontFamily='body'> Cambiar contraseña </Text>
+      </Button>
+
+       {/* eliminar cuenta */}
+       <Pressable w="90%" mx="5%" flexDirection={"row"} my={5} onPress={()=> borrarAviso()}>
+                <Icon as={AntDesign} name="deleteuser" mx={2}  size="lg"  color={coloresAIQ.azulAIQ}  />
+                <Text bold   ml={2} fontSize="xl">Eliminar cuenta</Text>
+       </Pressable>
 
         </Stack>
 

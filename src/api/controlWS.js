@@ -1,7 +1,7 @@
 import axios from "axios";
-export const urlImg = 'http://persianasdecorsilv.com/speedyeats/static/img/';
+export const urlImg = 'https://speedyeats.app/static/img/';
 const source = axios.CancelToken.source();
-const baseUrl = 'http://persianasdecorsilv.com/speedyeats/index.php';
+const baseUrl = 'https://speedyeats.app/index.php';
 const urlRes = `${baseUrl}/MovilR/getRestaurantes/`;
 const urlAD = `${baseUrl}/MovilR/getPublicidad`;
 const urlAddCart = `${baseUrl}/Carrito/addCart/`;

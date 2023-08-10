@@ -8,7 +8,7 @@ import fetchPost from './fetchPost';
 import coloresAIQ from '../../styles/coloresAIQ';
 
 const CuentaMenu=(props)=> {
-  const BASE_URL = '';
+  const BASE_URL = URL.BASE_URL;
   const navegacion= (item) => {
     props.navigation.navigate(item);
   }; 
@@ -47,7 +47,7 @@ const CuentaMenu=(props)=> {
             <Pressable w="90%" mx="5%" flexDirection={"row"} my={3} onPress={()=>navegacion(nav)}>
                 <Icon as={as} name={name} mx={2} mt={1} size="lg"  color="black"  />
                 
-                <Text bold color={coloresAIQ.negro}  ml={2} fontSize="xl" style={{ whiteSpace: 'pre-wrap' }}> {text} </Text>
+                <Text bold color={coloresAIQ.negro}  ml={2} fontSize="xl"> {text} </Text>
                 
             </Pressable>
             
@@ -164,7 +164,7 @@ const CuentaMenu=(props)=> {
             
             <Stack shadow={6} mx={8} mb={3}  mt={6} borderRadius={10} bg={coloresAIQ.blanco} space={2}  p={3} borderColor={"#dcdcdc"} borderWidth={2}>
             
-           <PerfilButton as={FontAwesome5} name="user-alt" text="Mi Perfil" nav="Perfil" />
+           <PerfilButton as={FontAwesome5}  name="user-alt" text="Mi Perfil" nav="Perfil" />
            <Divider h={0.5} bg={coloresAIQ.azulAIQ} w="90%" mx="5%"/>
 
             <Pressable w="90%" mx="5%" flexDirection={"row"} my={3} onPress={()=> salirAviso()}>
@@ -180,7 +180,7 @@ const CuentaMenu=(props)=> {
                {/*<Icon as={Entypo} name="log-out" mx={2} mt={1} size="lg"  color="black"  />*/}
 
               
-              <Text bold color={coloresAIQ.negro}  ml={2} fontSize="xl">Direcciones</Text>
+              <Text bold color={coloresAIQ.negro}  ml={2} fontSize="xl" onPress={() => {IrDirecciones()}} >Direcciones</Text>
             </Pressable>
 
 
@@ -198,5 +198,9 @@ const CuentaMenu=(props)=> {
         
     </NativeBaseProvider>
   );
+
+
+ 
+
 }
 export default CuentaMenu;
