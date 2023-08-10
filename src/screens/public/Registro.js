@@ -204,7 +204,7 @@ const Registro = (props) => {
                 <Stack>
                     <TituloInput titulo={'CONTRASEÑA'} color={coloresAIQ.negro} />
                     <Input fontSize={12}
-                        borderColor={coloresAIQ.azulAIQ}
+                       // borderColor={coloresAIQ.azulAIQ}
                       
                         height={10}
                         rounded={12}
@@ -218,7 +218,7 @@ const Registro = (props) => {
                                 variant='link'
                                 roundedLeft={0}
                                 roundedRight='md'
-                                background={coloresAIQ.azulAIQ}
+                                //background={coloresAIQ.azulAIQ}
                                 onPress={handleClick}
                                 _pressed={{
                                     bg: coloresAIQ.grisClaroAiq,

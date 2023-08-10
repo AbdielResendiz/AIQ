@@ -38,6 +38,7 @@ import MetodoPago from './src/screens/private/MetodoPago';
 import ConfirmarPedido from './src/screens/private/ConfirmarPedido';
 import coloresAIQ from './src/styles/coloresAIQ';
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import Perfil from './src/screens/private/Perfil';
 const Stack = createStackNavigator();
 
 const App = () => {
@@ -120,7 +121,7 @@ const App = () => {
     <NativeBaseProvider theme={theme}>
       <StatusBar
         barStyle='light-content'
-        backgroundColor={coloresAIQ.azulClaroAIQ}
+        backgroundColor={coloresAIQ.azulAIQ}
       />
       <NavigationContainer  ref={navigationRef}  onStateChange={(state) => setShowFooter(shouldShowFooter(state.routes[state.index]))}>
         <Stack.Navigator
@@ -128,7 +129,7 @@ const App = () => {
             headerMode:'float',
             headerStyle: {
               backgroundColor:
-                coloresAIQ.azulClaroAIQ
+                coloresAIQ.azulAIQ
             },
             headerTintColor: '#FFF',
             headerBackTitleVisible: false,
@@ -140,7 +141,7 @@ const App = () => {
             options={{title: 'Bienvenido',
             headerTintColor:coloresAIQ.blanco,
             headerStyle: {
-              backgroundColor: coloresAIQ.azul,
+              backgroundColor: coloresAIQ.azulAIQ,
             },
             headerShadowVisible: true
           }} />
@@ -166,6 +167,13 @@ const App = () => {
               title: 'Cuenta',
             }}
             component={Cuenta}
+          />    
+          <Stack.Screen
+            name='Perfil'
+            options={{
+              title: 'Perfil',
+            }}
+            component={Perfil}
           />    
 
           <Stack.Screen
