@@ -10,14 +10,14 @@ import { Alert } from "react-native";
 export default function Perfil(props) {
   const [show, setShow] = useState(false);
   const [ loading, setLoading ] = useState(true);
-  //const [ idMesa, setIdMesa ] = useState(true);
+  //const [ idMesa, setIdMesa ] = useState(true);c
   const [nombre, setNombre] = useState("");
-  const [zona, setZona] = useState("");
   const handleNombre = (value) => {
     setNombre(value);
   };
-  console.log("nombres", nombre)
-  
+  console.log("nombre ingresado: ", nombre)
+
+  const [ Password, setPassword] = useState("");
   const[correo, setCorreo] = useState("")
   
   //Conseguir el ID  de usuario almacenado en login Asyncstorage.
@@ -59,22 +59,15 @@ export default function Perfil(props) {
     console.log("res getDatos :", res)
   //console.log("res.data.nombre", res.mesas.nombre);s
   //console.log("user:", res.mesas.id_mesa);
-  //setApellidos(res.data.apellidos);
- //setCorreo(res.data.descripcion);
   //setCorreo(res.data.zona);
- // setCorreo(res.data.nombre);
+  setCorreo(res.data.descripcion);
+  setNombre(res.data.nombre);
   
   //setCelular(res.data.telefono);
   //setSelected( res.data.nombre);
    
     setLoading(false);
 }
-
-
-
-
-
-  
 
   const [ actualizando, setActualizando] = useState(false);
     //ACTUALIZA DATOS
@@ -92,19 +85,23 @@ export default function Perfil(props) {
             }else{
   
           const dataNew = new FormData();
-          dataNew.append('nombre', nombre);
-          dataNew.append('descripcion', correo);
-         // dataNew.append("password_mesas", );
+          dataNew.append('nombre_mesa', nombre);
+          dataNew.append('descripcion_mesas', correo);
+          console.log('appenddescc',correo)
+          console.log('appendnombrer',nombre)
+         //dataNew.append("password_mesas",Password );
           dataNew.append('id_mesa', idUser);
   
           const url = `https://speedyeats.app/Mesas/updateMesa`
           const options ={
             method:'POST',
             body: dataNew
+           
           };
+          console.log("nueva data", dataNew);
           {/**respuesta */}
           const response = await fetchPost(url, options);
-          console.log("response", response);
+          console.log("respuesta: ", response);
           if (response===true) {
              
                 Alert.alert(
@@ -152,7 +149,7 @@ export default function Perfil(props) {
     const borrarCuenta = async()=>{
       const dataUser= new FormData();
       dataUser.append('id_mesa', idUser);
-      const url = `${BASE_URL}https://speedyeats.app/Mesas/deleteMesa`
+      const url = `https://speedyeats.app/Mesas/deleteMesa`
       const options = {
         method:'POST',
         body: dataUser
