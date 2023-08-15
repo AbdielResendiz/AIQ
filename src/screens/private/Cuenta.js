@@ -180,7 +180,7 @@ const CuentaMenu=(props)=> {
                {/*<Icon as={Entypo} name="log-out" mx={2} mt={1} size="lg"  color="black"  />*/}
 
               
-              <Text bold color={coloresAIQ.negro}  ml={2} fontSize="xl" onPress={() => {IrDirecciones()}} >Direcciones</Text>
+              <Text bold color={coloresAIQ.negro}  ml={2} fontSize="xl" >Direcciones</Text>
             </Pressable>
 
 

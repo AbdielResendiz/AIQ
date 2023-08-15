@@ -133,6 +133,7 @@ const Registro = (props) => {
                             <Button
                             ml={1}
                             variant='link'
+                            
                             roundedLeft={0}
                             roundedRight='md'
                             onPress={borraUser}
