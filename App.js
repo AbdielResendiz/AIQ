@@ -40,6 +40,7 @@ import coloresAIQ from './src/styles/coloresAIQ';
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import Perfil from './src/screens/private/Perfil';
 import Direcciones from './src/screens/private/Direcciones';
+import DetallePedido from './src/screens/private/DetallePedido';
 const Stack = createStackNavigator();
 
 const App = () => {
@@ -275,10 +276,19 @@ const App = () => {
           <Stack.Screen
             name='Pedidos'
             options={{
-              title: 'DETALLE PEDIDO',
+              title: 'PEDIDOS',
               headerLeft: () => null,
             }}
             component={Pedidos}
+          />
+
+        <Stack.Screen
+            name='DetallePedido'
+            options={{
+              title: 'Detalle del Pedido',
+              headerLeft: () => null,
+            }}
+            component={DetallePedido}
           />
 
         </Stack.Navigator>

@@ -12,9 +12,9 @@ const Login = (props) => {
     //aviso mesa o contra erroneos
     const toast = useToast();
     //datos mesa
-	const [usuario, setUsuario] = useState('1234');
+	const [usuario, setUsuario] = useState('Mesa Vip en area B');
     const borraUser = () => setUsuario('');
-	const [contrasena, setContrasena] = useState('1234');
+	const [contrasena, setContrasena] = useState('12345');
     //show/hide pass
 	const [show, setShow] = useState(false);
 	const handleClick = () => setShow(!show);
