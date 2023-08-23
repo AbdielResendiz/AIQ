@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {extendTheme, NativeBaseProvider, Image, Box, HStack, Center, Pressable, Icon, Text } from 'native-base';
+import {extendTheme, NativeBaseProvider, Image, Box, HStack, Center, Pressable, Icon, Text, HeaderRightCustom } from 'native-base';
 import { StatusBar } from 'expo-status-bar';
 import { NavigationContainer, useNavigationContainerRef } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -8,6 +8,7 @@ import { FontAwesome,  AntDesign , MaterialCommunityIcons, Ionicons, Entypo} fro
 import { View, TouchableOpacity, Alert} from 'react-native';
 import Cuenta from './src/screens/private/Cuenta';
 import Pedidos2 from './src/screens/private/Pedidos2';
+
 import { deleteCart } from './src/api/controlWS';
 import {
 	useFonts,
@@ -41,6 +42,14 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import Perfil from './src/screens/private/Perfil';
 import Direcciones from './src/screens/private/Direcciones';
 import DetallePedido from './src/screens/private/DetallePedido';
+import SelectDireccion from './src/screens/private/SelectDireccion';
+
+//Stripe
+
+import PasarelaStripe from './src/screens/private/Stripe/PasarelaStripe';
+
+
+
 const Stack = createStackNavigator();
 
 const App = () => {
@@ -174,6 +183,7 @@ const App = () => {
             }}
             component={Cuenta}
           />    
+
           <Stack.Screen
             name='Perfil'
             options={{
@@ -282,6 +292,16 @@ const App = () => {
             component={Pedidos}
           />
 
+          <Stack.Screen
+            name='PasarelaStripe'
+            options={{
+              title: 'Realiza el Pago ',
+              headerLeft: () => null,
+            }}
+            component={PasarelaStripe}
+          />
+
+
         <Stack.Screen
             name='DetallePedido'
             options={{
@@ -291,7 +311,17 @@ const App = () => {
             component={DetallePedido}
           />
 
+          <Stack.Screen
+            name='SelectDireccion'
+            options={{
+              title: 'Seleccionar la direccion',
+            }}
+            component={SelectDireccion}
+          />
+
         </Stack.Navigator>
+
+       
 
 
         {/* Footer navegation */}

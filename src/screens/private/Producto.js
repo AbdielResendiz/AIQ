@@ -77,11 +77,11 @@ const Producto = (props) => {
         </Center>
         {/* Descripcion y tiempo de producto */}
         <Divider></Divider>
-        <View paddingY={2} paddingX={8}>
+        <View paddingY={2} paddingX={8} >
            {/* Descripcion y tiempo de producto <InfoProducto info={'Información del producto'}/>*/}
           <DetalleProducto detalle={desc}/>
           <View margin={2}/>
-          <InfoProducto info={'Tiempo de entrega aproximado:'}/>
+          <InfoProducto info={'Tiempo de entrega aproximado:'} />
           <DetalleProducto detalle={`${tiempo}min.`}/>
         </View>
         {/* Comentarios */}

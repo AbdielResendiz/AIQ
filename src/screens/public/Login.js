@@ -14,7 +14,7 @@ const Login = (props) => {
     //datos mesa
 	const [usuario, setUsuario] = useState('Mesa Vip en area B');
     const borraUser = () => setUsuario('');
-	const [contrasena, setContrasena] = useState('12345');
+	const [contrasena, setContrasena] = useState('1234');
     //show/hide pass
 	const [show, setShow] = useState(false);
 	const handleClick = () => setShow(!show);
@@ -75,8 +75,14 @@ const Login = (props) => {
                         'idUser',
                         (result.user.id_mesa),
                     );
-                    props.navigation.navigate('InicioAds');
+                  
+                    //controlador obtiene carrito
+
+                    //AsyncStorage "Id_carrito"
               
+
+                     //navegacion
+                    props.navigation.navigate('InicioAds');
                 }
                 //datos login incorrectos
                 else {

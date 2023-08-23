@@ -1,51 +1,21 @@
 import React from "react";
-import { View } from "react-native";
-import LottieAirplane from "./Lotties/LottieAirplane";
+import { Spinner, HStack, Heading, Center, NativeBaseProvider } from "native-base";
 
-//componente para espera de carga de datos
-const ProcesandoAir = (props) => {
-  return (
-    <View
-      style={{
-        position: "absolute",
-        alignContent: "center",
-        alignItems: "center",
-        justifyContent: "center",
-        width: "100%",
-        height: "100%",
-        zIndex: 1001,
-      }}
-    >
-      <View
-        style={{
-          position: "absolute",
-          alignContent: "center",
-          alignItems: "center",
-          justifyContent: "center",
-          width: "100%",
-          height: "100%",
-          zIndex: 1,
-          backgroundColor: "#FFF",
-          opacity: 0.8,
-        }}
-      />
-      <View
-        style={{
-          position: "relative",
-          zIndex: 2,
-          padding: 10,
-          overflow: "hidden",
-          borderRadius: 8,
-          opacity: 0.7,
-          alignItems: "center",
-          alignContent: "center",
-          justifyContent: "center",
-        }}
-      >
-        <LottieAirplane/>
-      </View>
-    </View>
-  );
+const ProcesandoAir = () => {
+  return <HStack space={2} justifyContent="center">
+      <Spinner accessibilityLabel="Loading posts" />
+      <Heading color="primary.500" fontSize="md">
+        Loading
+      </Heading>
+    </HStack>;
 };
 
-export default ProcesandoAir;
+    export default () => {
+        return (
+          <NativeBaseProvider>
+            <Center flex={1} px="3">
+                <ProcesandoAir />
+            </Center>
+          </NativeBaseProvider>
+        );
+    };
