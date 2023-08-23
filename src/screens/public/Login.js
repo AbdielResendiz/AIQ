@@ -7,28 +7,145 @@ import ProcesandoAir from '../components/ProcesandoAir';
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import Logo from '../components/Logo';
 import {Indicaciones, TituloInput} from '../components/Textos';
+import fetchPost from '../private/fetchPost';
 
-const Login = (props) => {
-    //aviso mesa o contra erroneos
+import {useRef , useEffect} from 'react';
+import { Platform } from 'react-native';
+import * as Device from 'expo-device';
+import * as Notifications from 'expo-notifications';
+import Constants from "expo-constants";
+
+
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: false,
+    shouldSetBadge: false,
+  }),
+});
+
+async function registerForPushNotificationsAsync() {
+    let token;
+    if (Device.isDevice) {
+      const { status: existingStatus } = await Notifications.getPermissionsAsync();
+      let finalStatus = existingStatus;
+      if (existingStatus !== 'granted') {
+        const { status } = await Notifications.requestPermissionsAsync();
+        finalStatus = status;
+      }
+      if (finalStatus !== 'granted') {
+        alert('Failed to get push token for push notification!');
+        return;
+      }
+
+      token = await Notifications.getExpoPushTokenAsync({
+        projectId: Constants.expoConfig.extra.eas.projectId,
+      });
+      
+      console.log('tokenn', token);
+    } else {
+      alert('Must use physical device for Push Notifications');
+    }
+  
+    if (Platform.OS === 'android') {
+      Notifications.setNotificationChannelAsync('default', {
+        name: 'default',
+        importance: Notifications.AndroidImportance.MAX,
+        vibrationPattern: [0, 250, 250, 250],
+        lightColor: '#FF231F7C',
+      });
+    }
+  
+    return token;
+  }
+
+    const Login = (props) => {
+    //para las notificaciones
+
+    const [expoPushToken, setExpoPushToken] = useState('');
+    const [notification, setNotification] = useState(false);
+    const notificationListener = useRef();
+    const responseListener = useRef();
+  
+    useEffect(() => {
+      registerForPushNotificationsAsync().then(token => setExpoPushToken(token));
+  
+      notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
+        setNotification(notification);
+      });
+  
+      responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
+        console.log("response", esponse);
+      });
+  
+      return () => {
+        Notifications.removeNotificationSubscription(notificationListener.current);
+        Notifications.removeNotificationSubscription(responseListener.current);
+      };
+    }, []);
+
+    // fin notificanones
+
+
     const toast = useToast();
     //datos mesa
-	const [usuario, setUsuario] = useState('');
+	const [usuario, setUsuario] = useState('1234');
     const borraUser = () => setUsuario('');
-	const [contrasena, setContrasena] = useState('');
+	const [contrasena, setContrasena] = useState('1234');
     //show/hide pass
 	const [show, setShow] = useState(false);
 	const handleClick = () => setShow(!show);
     //carga
 	const [cargando, setCargando] = useState(false);
+    const [ loading, setLoading ] = useState(true);
     //validaciones C=Mesa, P=Password
 	const [validoC, setValidoC] = useState(false);
 	const [validoP, setValidoP] = useState(false);
 	const cambioC = () => setValidoC(false);
 	const cambioP = () => setValidoP(false);
+     
+   
 
-    //funcion login
-	const demoServiciosAxios = async () => {	
+    //insertar el token a la base de datos
+    const insertToken = async () => {
+        if (expoPushToken) {
+          console.log("login tokn", expoPushToken);
+      
+          const id_mesa = await AsyncStorage.getItem('idUser');
+          const dataUser = new FormData();
+      
+          dataUser.append("id_mesa", id_mesa);
+          dataUser.append("tokenNotifi", expoPushToken.data);
+          console.log("LAMSA-. ", id_mesa)
+          console.log("tokeeen UWU ", expoPushToken.data)
+      
+          const url = `https://speedyeats.app/Mesas/insertToken`;
+          const options = {
+            method: 'POST',
+            body: dataUser,
+          };
+          const res = await fetchPost(url, options);
+          console.log("res insert token :", res);
+      
+          setLoading(false);
+        } else {
+          console.log("El token de notificación es undefined.");
+        }
+      };
+      
+    useEffect(() => {
+        registerForPushNotificationsAsync().then(token => {
+          setExpoPushToken(token);
+          insertToken(token); // Insertar el token aquí
+        });
+    }, []);
+    //find
+
+
+      //funcion login
+	const demoServiciosAxios = async () => {
 		setCargando(true);
+
         var data = new FormData()
         data.append('descripcion',usuario)
         data.append('password',contrasena)
@@ -232,11 +349,15 @@ const Login = (props) => {
                 mb={2}
                 height={12}
                 borderRadius={32}
-                onPress={()=>{
-                    demoServiciosAxios();
+                //onPress={()=>{
+                    //demoServiciosAxios();
                     //demoServiciosAxios();
                     // validarDatos();
-                }}
+               //</ScrollView> }}
+                onPress={async () => {
+                          demoServiciosAxios();
+                         await insertToken();
+                  }}
                 _pressed={{
                     bg: coloresAIQ.azulAIQ}}>
                 <Text

@@ -13,7 +13,8 @@
     },
     "privacy": "unlisted",
     "updates": {
-      "fallbackToCacheTimeout": 0
+      "fallbackToCacheTimeout": 0,
+      "url": "https://u.expo.dev/44b35875-1181-47ae-b6a7-10fb01727bb6"
     },
     "assetBundlePatterns": [
       "**/*"
@@ -23,15 +24,16 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.SpeedyEATS",
+      "bundleIdentifier": "com.Speedyeats",
       "buildNumber": "1.0.0"
     },
     "android": {
+      "googleServicesFile": "./google-services.json",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       },
-      "package": "com.AIQ"
+      "package": "com.speedyeats"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -39,7 +41,7 @@
     "description": "",
     "extra": {
       "eas": {
-        "projectId": ""
+        "projectId": "44b35875-1181-47ae-b6a7-10fb01727bb6"
       }
     }
   }

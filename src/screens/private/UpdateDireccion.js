@@ -6,22 +6,21 @@ import ProcesandoAir from '../components/ProcesandoAir';
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import Logo from '../components/Logo';
 import {Indicaciones, TituloInput} from '../components/Textos';
+import fetchPost from './fetchPost';
+import { Alert } from 'react-native';
 
-const Direcciones = (props) => {
+const UpdateDirecciones = (props) => {
     //aviso mesa o contra erroneos
     const toast = useToast();
     //datos mesa
 	
     const borraUser = () => setUsuario('');
-    
-	
 
 	const [cargando, setCargando] = useState(false);
     //validaciones C=Mesa, P=Password
 	const [validoC, setValidoC] = useState(false);
-	const [validoP, setValidoP] = useState(false);
 	const cambioC = () => setValidoC(false);
-	const cambioP = () => setValidoP(false);
+
 
     const [municipio, setMunicipio] = useState("");
     const [colonia, setColonia] = useState("");
@@ -32,99 +31,113 @@ const Direcciones = (props) => {
     const [estado, setEstado] = useState("");
     const [referencias, setReferencias] = useState("");
    
+    const [ loading, setLoading ] = useState(true);
 
-//Conseguir el ID  de usuario almacenado en login Asyncstorage.
+//extrae el id direcion seleccionadon y el iduser, que se pasa al presionar el botón.
+ const { idDi, idUser } = props.route.params;
+//
 
-    const [ idUser, setIdUser ] = useState(null);
-
-    const getData = async () => {
-      try {
-        const value = await AsyncStorage.getItem('idUser')
-        if(value !== null) {
-         // console.log("valor id getData direccioes", parseInt(value))
-          setIdUser(value);
-       
-          
-        }
-      } catch(e) {
-        console.log("error", e);
-      }
-    }
-    useEffect(() => {
-     getData()
-      console.log("id user para direcciones", idUser)
-    }, [idUser]);
-    // Fin ID USER
-	
-    const demoServiciosAxios = async () => {
-      /*  if (nombre.length === 0 || usuario.length === 0  || contrasena.length === 0 ) {
-            toast.show({
-                status: 'warning',
-                description: 'Por favor, completa todos los campos.',
-                placement: 'top',
-            });
-            return;
-        }*/
+  const getDatos = async() => {
+    const dataUser = new FormData();
+    dataUser.append("idDi", idDi)
     
-        setCargando(true);
+    const url = `https://speedyeats.app/Direcciones/infoDireccion`;
+    const options = {
+      method:'POST',
+      body: dataUser
+    };
+    const res = await fetchPost(url, options);
+    console.log("res getDatos :", res)
+
+  setMunicipio(res.data.municipio);
+  setEstado(res.data.estado);
+  setColonia(res.data.colonia);
+  setCalle(res.data.calle);
+  setNInt(res.data.no_Int);
+  setNExt(res.data.no_ext);
+  setCp(res.data.cp);
+  setReferencias(res.data.referencias);
+   
+    setLoading(false);
+}
+useEffect(() => {
+  getDatos();
+}, []);
+
+  const [ actualizando, setActualizando] = useState(false);
+    //ACTUALIZA DATOS
+    const Actualizar = async () => {
+      setActualizando(true);
+      if (municipio.trim() === '' || colonia.trim() === '' || calle.trim() === '' || cp.trim() === '' || estado.trim() === '') {
+        Alert.alert(
+            'Campos vacíos',
+            'Por favor, completa todos los campos obligatorios.',
+            [
+                { text: 'OK', onPress: () => console.log("Completa los campos") },
+            ],
+            { cancelable: false },
+        );
+    }
+    else {
+    
+        const dataNew = new FormData();
+        dataNew.append('estado', estado);
+        dataNew.append('municipio', municipio);
+        dataNew.append('colonia', colonia);
+        dataNew.append('calle', calle);
+        dataNew.append('no_Int', nInt);
+        dataNew.append('no_ext', nExt);
+        dataNew.append('cp', cp);
+        dataNew.append('referencias', referencias);
+        dataNew.append("id_mesa", idUser); 
+        dataNew.append("idDi", idDi); 
+
+        console.log(" id_mesa mando: ", idUser)
+        console.log(" id de direccion mando: ", idDi)
+        console.log(" municipio mandado: ", municipio)
+        console.log(" estado mandado: ", estado)
+        console.log(" colonia mandado: ", colonia)
+        console.log(" calle mandado: ", calle)
+        console.log(" no int mandado: ", nInt)
+        console.log(" no ext mandado: ", nExt)
+        console.log(" cp mandado: ", cp)
+        console.log(" referencias mandado: ", referencias)
+
+    
+        const url = `https://speedyeats.app/Direcciones/updateDirec`;
+        const options = {
+          method: 'POST',
+          body: dataNew,
+        };
     
         try {
-            const data = new FormData();
-            console.log("este es el id", idUser);
-            data.append('id_mesa', idUser);
-            data.append("municipio", municipio );
-            data.append("colonia",colonia);
-            data.append("calle", calle);
-            data.append("cp", cp);
-            data.append("no_int", nInt);
-            data.append("no_ext", nExt);
-            data.append("estado", estado);
-            data.append("referencias", referencias);
-            
-            //console.log('PASSWORD', contrasena);
-            const response = await fetch('https://speedyeats.app/Direcciones/addDireccion', {
-                method: 'post',
-                body: data,
-            });
-          
-            const result = await response.json(); 
-            const acceso = result.res;
-
-            console.log(result);
-            if (acceso === true) {
-                // Registro exitoso
-               // AsyncStorage.setItem('idUser', JSON.stringify(result.user.id_mesa));
-    
-                toast.show({
-                    status: 'success',
-                    description: 'Registro exitoso.',
-                    placement: 'top',
-                });
-            } else {
-                // Datos de inicio de sesión incorrectos
-                toast.show({
-                    status: 'warning',
-                    description: 'ups! intentalo de nuevo',
-                    placement: 'top',
-                });
-            }
-
-
-
-           
+          const response = await fetchPost(url, options);
+          console.log("respuesta: ", response);
+          if (response.success === true) {
+            Alert.alert(
+              '!Éxito!',
+              "!Se actualizaron tus datos!'",
+              [
+                { text: 'OK', onPress: () => props.navigation.navigate("ViewDirecciones") },
+              ],
+              { cancelable: false },
+            );
+          } else {
+            Alert.alert(
+              '!Ups....!',
+              'Hubo un error, intenta más tarde',
+              [
+                { text: 'OK', onPress: () => console.log("error editar direccion ") },
+              ],
+              { cancelable: false },
+            );
+          }
         } catch (error) {
-            // Error en la conexión o procesamiento de la respuesta
-            console.log(error);
-            toast.show({
-                status: 'warning',
-                description: 'Error de conexión. Por favor, intenta nuevamente más tarde.',
-                placement: 'top',
-            });
+          console.error("Error en Actualizar:", error);
         }
-    
-        setCargando(false);
+      }
+      setActualizando(false);
     };
-    
    
   return (
     <>
@@ -137,7 +150,8 @@ const Direcciones = (props) => {
             <TituloInput titulo={'Municipio'} />
             <Input fontSize={14} height={12} rounded={12} variant='outline' placeholder='Municipio' fontFamily='body'keyboardType='default'
               autoCapitalize='none' autoCorrect={false}
-               InputRightElement={(
+              
+              InputRightElement={(
               <Button ml={1} variant='link' roundedLeft={0} roundedRight='md' onPress={borraUser} _pressed={{ bg: coloresAIQ.grisClaroAiq, }}>
               <MaterialIcons name='cancel' size={20} color={coloresAIQ.grisOscuroAIQ} /> </Button>
 
@@ -324,8 +338,8 @@ const Direcciones = (props) => {
 
            
             <Center mt={6}>
-        <Button  bg={coloresAIQ.blanco}  onPress={()=>{  demoServiciosAxios(); }}  width={200} bold mb={4} borderWidth={1} borderColor={coloresAIQ.azulAIQ} height={12} borderRadius={32}>
-         <Text color={coloresAIQ.azulAIQ} fontSize='lg' fontFamily='body'>Guardar Direccion</Text>
+        <Button  bg={coloresAIQ.blanco}  isLoading={actualizando} isLoadingText="Guardando" onPress={()=>Actualizar()}width={200} bold mb={4} borderWidth={1} borderColor={coloresAIQ.azulAIQ} height={12} borderRadius={32}>
+         <Text color={coloresAIQ.azulAIQ} fontSize='lg' fontFamily='body'>Guardar</Text>
        </Button>
        </Center>
 
@@ -334,4 +348,4 @@ const Direcciones = (props) => {
     </>
   )
 }
-export default Direcciones
+export default UpdateDirecciones

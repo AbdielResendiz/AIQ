@@ -1,3 +1,4 @@
+
 import React, {useState, useEffect} from 'react';
 import {extendTheme, NativeBaseProvider, Image, Box, HStack, Center, Pressable, Icon, Text } from 'native-base';
 import { StatusBar } from 'expo-status-bar';
@@ -40,9 +41,93 @@ import coloresAIQ from './src/styles/coloresAIQ';
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import Perfil from './src/screens/private/Perfil';
 import Direcciones from './src/screens/private/Direcciones';
+import ViewDirecciones from './src/screens/private/ViewDirecciones';
+import UpdateDirecciones from './src/screens/private/UpdateDireccion';
+import SelectDireccion from './src/screens/private/SelectDireccion';
+
+//notificaciones
+import {useRef } from 'react';
+import { Platform } from 'react-native';
+import * as Device from 'expo-device';
+import * as Notifications from 'expo-notifications';
+import Constants from "expo-constants";
+
+
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: false,
+    shouldSetBadge: false,
+  }),
+});
+
+async function registerForPushNotificationsAsync() {
+  let token;
+  if (Device.isDevice) {
+    const { status: existingStatus } = await Notifications.getPermissionsAsync();
+    let finalStatus = existingStatus;
+    if (existingStatus !== 'granted') {
+      const { status } = await Notifications.requestPermissionsAsync();
+      finalStatus = status;
+    }
+    if (finalStatus !== 'granted') {
+      alert('Failed to get push token for push notification!');
+      return;
+    }
+    token = await Notifications.getExpoPushTokenAsync({
+      projectId: Constants.expoConfig.extra.eas.projectId,
+    });
+    console.log(token);
+  } else {
+    alert('Must use physical device for Push Notifications');
+  }
+
+  if (Platform.OS === 'android') {
+    Notifications.setNotificationChannelAsync('default', {
+      name: 'default',
+      importance: Notifications.AndroidImportance.MAX,
+      vibrationPattern: [0, 250, 250, 250],
+      lightColor: '#FF231F7C',
+    });
+  }
+
+  return token;
+}
+
+
+
 const Stack = createStackNavigator();
 
 const App = () => {
+//botificaciones
+
+const [expoPushToken, setExpoPushToken] = useState('');
+const [notification, setNotification] = useState(false);
+const notificationListener = useRef();
+const responseListener = useRef();
+
+useEffect(() => {
+  registerForPushNotificationsAsync().then(token => setExpoPushToken(token));
+
+  notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
+    setNotification(notification);
+  });
+
+  responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
+    console.log(response);
+  });
+
+  return () => {
+    Notifications.removeNotificationSubscription(notificationListener.current);
+    Notifications.removeNotificationSubscription(responseListener.current);
+  };
+}, []);
+
+
+
+// fin notificaciones
+
+
   //screen por default, login
   const [initScreen, setInitScreen] = useState('Principal');
   const [showFooter, setShowFooter] = useState(false);
@@ -117,11 +202,12 @@ const App = () => {
     setSelected(4)
     navigationRef.navigate('Cuenta');
   };
-
+//agregados 
   const IrDirecciones = () => {
     setSelected(4)
     navigationRef.navigate('Direcciones');
   };
+
   return (
     <NativeBaseProvider theme={theme}>
       <StatusBar
@@ -186,7 +272,9 @@ const App = () => {
               title: 'Direcciones',
             }}
             component={Direcciones}
-          />    
+          />   
+          
+           
 
           <Stack.Screen
             name='InicioAds'
@@ -276,10 +364,35 @@ const App = () => {
             name='Pedidos'
             options={{
               title: 'DETALLE PEDIDO',
-              headerLeft: () => null,
+             
             }}
             component={Pedidos}
           />
+
+          <Stack.Screen
+            name='ViewDirecciones'
+            options={{
+              title: 'Mis Direcciones',
+             
+            }}
+            component={ViewDirecciones}
+          />
+          <Stack.Screen
+            name='UpdateDirecciones'
+            options={{
+              title: 'Modidicar dirección',
+             
+            }}
+            component={UpdateDirecciones}
+          />
+          <Stack.Screen
+          name='SelectDireccion'
+          options={{
+            title: 'Selecciona direccion',
+           
+          }}
+          component={SelectDireccion}
+        />
 
         </Stack.Navigator>
 
@@ -302,12 +415,6 @@ const App = () => {
                   <Center>
                       <Icon  as={<Entypo name="back-in-time" />} color={ selected === 1 ? coloresAIQ.azul : coloresAIQ.footerIcon} size="md" />
                       <Text   color={ selected === 1 ? coloresAIQ.azul : coloresAIQ.footerIcon} fontSize={12}>Pedidos</Text>
-                  </Center>
-                </Pressable>
-                <Pressable cursor="pointer"  py="2" flex={1} onPress={() => {IrDirecciones()}}>
-                  <Center>
-                      <Icon  as={<Entypo name="back-in-time" />} color={ selected === 1 ? coloresAIQ.azul : coloresAIQ.footerIcon} size="md" />
-                      <Text   color={ selected === 1 ? coloresAIQ.azul : coloresAIQ.footerIcon} fontSize={12}>Direcciones</Text>
                   </Center>
                 </Pressable>
                 

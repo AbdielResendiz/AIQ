@@ -120,9 +120,11 @@ const Carrito = (props) => {
                 }}>
                 <Flex direction='row'>
                   {/* Img producto */}
+                  
+
                   <Image
-                  style={{...estilosAIQ.imagenMenu, width: (height / 8.5)*1.75,
-                  height: height / 8.5}}
+                  style={{...estilosAIQ.imagenMenu, width: (height / 9.5)*1.75,
+                  height: height / 8.5, }}
                   source={{uri: urlImg+item.imagen}}
                   alt={item.nombre}
                   />
@@ -172,7 +174,9 @@ const Carrito = (props) => {
               width={300}
               height={65}
               borderRadius={32}
-              onPress={() => {irPago();}}
+              onPress={() => {
+                props.navigation.navigate('SelectDireccion');
+              }}
               _pressed={{
                   bg: coloresAIQ.azulBtn}}>
               <Text

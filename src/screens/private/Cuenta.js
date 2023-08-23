@@ -6,6 +6,9 @@ import Loader from '../components/Loader';
 import { useState, useEffect } from 'react';
 import fetchPost from './fetchPost';
 import coloresAIQ from '../../styles/coloresAIQ';
+import ViewDirecciones from './ViewDirecciones';
+import Logo from '../components/Logo';
+
 
 const CuentaMenu=(props)=> {
   const BASE_URL = URL.BASE_URL;
@@ -154,14 +157,16 @@ const CuentaMenu=(props)=> {
 
   return (
     <NativeBaseProvider>
-      
+   
+  
 
         {
           idU === null ? <Loader/> :
 
           <ScrollView bg={coloresAIQ.blanco} flex={1}   >
-
-            
+          {/* Logo */}
+          <Logo/>
+          
             <Stack shadow={6} mx={8} mb={3}  mt={6} borderRadius={10} bg={coloresAIQ.blanco} space={2}  p={3} borderColor={"#dcdcdc"} borderWidth={2}>
             
            <PerfilButton as={FontAwesome5}  name="user-alt" text="Mi Perfil" nav="Perfil" />
@@ -176,13 +181,11 @@ const CuentaMenu=(props)=> {
 
              <Divider h={0.5} bg={coloresAIQ.azulAIQ} w="90%" mx="5%"/> 
 
-             <Pressable w="90%" mx="5%" flexDirection={"row"} my={3} >
+             <Pressable w="90%" mx="5%" flexDirection={"row"} my={3} onPress={() => props.navigation.navigate('ViewDirecciones')}>
                {/*<Icon as={Entypo} name="log-out" mx={2} mt={1} size="lg"  color="black"  />*/}
-
-              
               <Text bold color={coloresAIQ.negro}  ml={2} fontSize="xl" >Direcciones</Text>
             </Pressable>
-
+         
 
             {/* <Pressable w="90%" mx="5%" flexDirection={"row"} my={3} onPress={()=> borrarAviso()}>
               <Icon as={AntDesign} name="deleteuser" mx={2} mt={1} size="lg"  color="black"  />
