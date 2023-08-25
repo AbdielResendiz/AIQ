@@ -11,12 +11,12 @@ import { backgroundColor } from "styled-system";
 export default function SelectDireccion(props) {
   const [ loading, setLoading ] = useState(true);
   const [arrDirecciones, setArrDirecciones] = useState([]);
-  const [id_direccion, setIdDireccion] = useState(null);
+  //const [id_direccion, setIdDireccion] = useState(null);
   const [nombre, setNombre] = useState("");
   const handleNombre = (value) => {
     setNombre(value);
   };
-  console.log("nombre ingresado: ", nombre)
+
 
   const[id_carrito, setIdCarrito] = useState("")
   
@@ -66,105 +66,34 @@ export default function SelectDireccion(props) {
   
 //funcion para insertar la direccion al carrito
 
-const insertDireccionn = async () => {
- 
-    const dataUser = new FormData();
+const insertDireccionn = async (idDiSeleccionado) => {
+  const dataUser = new FormData();
 
-    dataUser.append("id", id_carrito);
-    dataUser.append("idDi", expoPushToken.data);
-    console.log("LAMSA-. ", id_mesa)
-    console.log("tokeeen UWU ", expoPushToken.data)
+  dataUser.append("id", id_carrito);
+  dataUser.append("idDi", idDiSeleccionado); // Usar el ID seleccionado aquí
+  console.log("id carrito XD ", id_carrito);
+  console.log("id direccion XD", idDiSeleccionado);
 
-    const url = `https://speedyeats.app/Mesas/insertToken`;
-    const options = {
-      method: 'POST',
-      body: dataUser,
-    };
-    const res = await fetchPost(url, options);
-    console.log("res insert token :", res);
+  const url = `https://speedyeats.app/Direcciones/insertDire`;
+  const options = {
+    method: 'POST',
+    body: dataUser,
+  };
+  const res = await fetchPost(url, options);
+  console.log("res insert token :", res);
 
-    setLoading(false);
-  
+  setLoading(false);
 };
-
-
-
 
 
 //fin 
   
 
   //funcion checkout
-  const handleCheckboxChange = (idDi) => {
-    if (id_direccion === idDi) {
-      // Si ya está seleccionada, la deseleccionamos
-      setIdDireccion(null);
-    } else {
-      // Si no está seleccionada, la seleccionamos
-      setIdDireccion(idDi);
-    }
+  const handleCheckboxChange = (idDiSeleccionado) => {
+    setIdDi(idDiSeleccionado);
   };
-  const demoServiciosAxios = async () => {
-    if (nombre.length === 0 || usuario.length === 0  || contrasena.length === 0 ) {
-        toast.show({
-            status: 'warning',
-            description: 'Por favor, completa todos los campos.',
-            placement: 'top',
-        });
-        return;
-    }
-
-    setCargando(true);
-
-    try {
-        const data = new FormData();
-        data.append('', nombre);
-        
-        const response = await fetch('https://speedyeats.app/Mesas/addMesa/', {
-            method: 'post',
-            body: data,   
-        });
-      
-        const result = await response.json();
-        const acceso = result.res;
-
-        console.log(result);
-        if (acceso === true) {
-            // Registro exitoso
-           // AsyncStorage.setItem('idUser', JSON.stringify(result.user.id_mesa));
-            props.navigation.navigate('InicioAds');
-
-            toast.show({
-                status: 'success',
-                description: 'Registro exitoso.',
-                placement: 'top',
-            });
-        } else {
-            // Datos de inicio de sesión incorrectos
-            toast.show({
-                status: 'warning',
-                description: 'ups! intentalo de nuevo',
-                placement: 'top',
-            });
-        }
-
-       
-    } catch (error) {
-        // Error en la conexión o procesamiento de la respuesta
-        console.log(error);
-        toast.show({
-            status: 'warning',
-            description: 'Error de conexión. Por favor, intenta nuevamente más tarde.',
-            placement: 'top',
-        });
-    }
-
-    setCargando(false);
-};
-
   
-
-
 
     //ACTUALIZA DATOS
   return (
@@ -189,9 +118,11 @@ const insertDireccionn = async () => {
                 </View>
             
                 <View flexDirection="row" alignItems="center">
-                    <Checkbox aria-label="domicilio checkbox" value="checkbox" style={{ borderColor: coloresAIQ.azulAIQ,}}
-                    isChecked={direcciones.idDi === id_direccion}
-                    onChange={() => handleCheckboxChange(direcciones.idDi)}/>
+                    <Checkbox  aria-label="domicilio checkbox"
+                              value="checkbox"
+                              style={{ borderColor: coloresAIQ.azulAIQ }}
+                              isChecked={direcciones.idDi === idDi}
+                              onChange={() => handleCheckboxChange(direcciones.idDi)}/>
                 </View>
             </View>
          </View>
@@ -199,13 +130,21 @@ const insertDireccionn = async () => {
      </Box>
     ))}
  </ScrollView>
+
         <Center marginTop={2} marginBottom={8}>
              <Pressable w="90%" mx="5%" flexDirection={"row"} my={3} borderRadius={32} bold mb={4} 
              width={150} borderWidth={1} borderColor={coloresAIQ.azulAIQ} 
-             onPress={() => props.navigation.navigate('Direcciones')} _pressed={{
+             onPress={() => {
+              if (idDi !== null) {
+                insertDireccionn(idDi); // Pasar el idDi seleccionado
+              } else {
+                Alert.alert('Selecciona una dirección antes de guardar.');
+              }
+            }} _pressed={{
              bg: coloresAIQ.grisClaroAiq}}/>
             <Text bold color={coloresAIQ.azulAIQ}  ml={2} fontSize="xl" >Guardar Direccion</Text>
         </Center>
+        
 </View>
       } 
 

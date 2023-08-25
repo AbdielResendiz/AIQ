@@ -24,7 +24,7 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.Speedyeats",
+      "bundleIdentifier": "com.speedyeats",
       "buildNumber": "1.0.0"
     },
     "android": {
@@ -43,6 +43,9 @@
       "eas": {
         "projectId": "44b35875-1181-47ae-b6a7-10fb01727bb6"
       }
+    },
+    "runtimeVersion": {
+      "policy": "sdkVersion"
     }
   }
 }
