@@ -17,7 +17,7 @@ const InicioAds = (props) => {
 
   //consume ws getAnuncios
   const getAnuncios = async() => {
-    await fetch('http://validaine.com/speedyeats/index.php/MovilR/getPublicidad', {
+    await fetch('https://speedyeats.app/MovilR/getPublicidad', {
       method: 'post',
     
     }).then((response) => response.json())

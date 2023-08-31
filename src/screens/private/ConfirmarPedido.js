@@ -188,40 +188,6 @@ const ConfirmarPedido = (props) => {
             </Button>
         </Center>
 
-        {/* margen */}
-        {/* <View margin={2}/> */}
-
-        {/* Indicaciones sin Whats */}
-        {/* <Box flex={1} paddingTop={3} paddingX={8}>
-            <Center>
-                <Indicaciones indicacion='¿No cuentas con Whatsapp? Un mesero te compartirá un código.'/>
-            </Center>
-        </Box> */}
-
-        {/* Btn envia mesero */}
-        {/* <Center>
-            <Button
-                leftIcon={<FontAwesome5
-                    name={'running'}
-                    size={16}
-                    color={coloresAIQ.blanco}/>}
-                bg={coloresAIQ.azulAIQ}
-                mt='1'
-                width={150}
-                height={42}
-                borderRadius={18}
-                onPress={() => {enviaMesero()}}
-                _pressed={{
-                    bg: coloresAIQ.azulBtn}}>
-                <Text
-                    color={coloresAIQ.blanco}
-                    fontSize='sm'
-                    fontFamily='body'>
-                    Solicitar mesero
-                </Text>
-            </Button>
-        </Center> */}
-
         {/* Input codigo */}
         <FormControl isInvalid={validoC}>
             <View paddingY={2} paddingX={8}>

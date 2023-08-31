@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, TextInput, Button, Alert } from "react-native";
 import { CardField, useConfirmPayment } from "@stripe/stripe-react-native";
 import { StripeProvider } from '@stripe/stripe-react-native';
 
-const API_URL = "https://us-central1-sdiqro-594ed.cloudfunctions.net/app";
+const API_URL = "https://us-central1-speedyeats-8a166.cloudfunctions.net/app";
 
 
 function PasarelaStripe() {
@@ -66,11 +66,11 @@ function PasarelaStripe() {
       }
      
     };
-  
+   //pk_live_51NaOtaKdBvJTakspwRhEBFsGpRmRwAGHSLPkwmiX63bY2rILCYJZWx4kwTPpsA2sQFUakMXFuBXLTIxR9nhVOi6g00ZJnTpcVm
     return (
         
       <View style={styles.container}>
-        <StripeProvider publishableKey='pk_test_51LlFbaDzNrCwCazaGr27Olsh8foLuQ6ZNzIH0onZPzJniMf375y3srnBxcXMRI3Nu21JfCdX5c8h4CWlW700nzvD00enMjqF2E'>
+        <StripeProvider publishableKey='pk_test_51NaOtaKdBvJTakspItZCcHDSfJKjTO1f58jcqAloxwXgahIGLWhi9VGOBKtQt8U5lTbQSLvYjq5zh2jdJ6sd63gg00yBuNfixW'>
         <TextInput
           autoCapitalize="none"
           placeholder="E-mail"
